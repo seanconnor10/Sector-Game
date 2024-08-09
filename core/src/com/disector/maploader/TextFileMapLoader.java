@@ -312,16 +312,16 @@ public class TextFileMapLoader implements MapLoader {
         str.append(":: ");
 
         //Height
-        str.append("HEIGHT ").append( form(s.floorZ) ).append(" ").append( form(s.ceilZ) ).append(" :: ");
+        str.append("Height ").append( form(s.floorZ) ).append(" ").append( form(s.ceilZ) ).append(" :: ");
 
         //Tex
-        str.append("MAT ").append( form(s.matFloor) ).append(" ").append( form(s.matCeil) ).append(" :: ");
+        str.append("Mat ").append( form(s.matFloor) ).append(" ").append( form(s.matCeil) ).append(" :: ");
 
         //Light
-        str.append("LIGHT ").append( form2(s.lightFloor) ).append(" ").append( form2(s.lightCeil)).append(" :: ");
+        str.append("Light ").append( form2(s.lightFloor) ).append(" ").append( form2(s.lightCeil)).append(" :: ");
 
         //Wall Indices
-        str.append("HAS ");
+        str.append("Has ");
         for (int wInd : s.walls.toArray()) {
             str.append(wInd).append(" ");
         }
@@ -339,7 +339,7 @@ public class TextFileMapLoader implements MapLoader {
 
         str.append(":: ");
 
-        str.append("POS ");
+        str.append("Pos ");
         str.append(form(w.x1)).append(" ");
         str.append(form(w.y1)).append(" ");
         str.append(form(w.x2)).append(" ");
@@ -347,20 +347,20 @@ public class TextFileMapLoader implements MapLoader {
         str.append(":: ");
 
         //Materials
-        str.append("MAT ").append(w.mat).append(" :: ");
+        str.append("Mat ").append(w.mat).append(" :: ");
         if (w.matLower != 0) {
-            str.append("LOWERMAT ").append(w.matLower).append(" :: ");
+            str.append("LowerMat ").append(w.matLower).append(" :: ");
         }
         if (w.matUpper != 0) {
-            str.append("UPPERMAT ").append(w.matUpper).append(" :: ");
+            str.append("UpperMat ").append(w.matUpper).append(" :: ");
         }
 
         //Light
-        str.append("LIGHT ").append( form2(w.light) ).append(" :: ");
+        str.append("Light ").append( form2(w.light) ).append(" :: ");
 
         //Portal Links
         if (w.isPortal) {
-            str.append(String.format("PORT %d -> %d :: ", w.linkA, w.linkB));
+            str.append(String.format("Port %d -> %d :: ", w.linkA, w.linkB));
         }
 
         str.append("\n");
@@ -376,11 +376,11 @@ public class TextFileMapLoader implements MapLoader {
         }
         str.append(":: ");
 
-        str.append("IMG ");
+        str.append("Img ");
         str.append(m.nameReference).append(" :: ");
 
         if (m.isSky)
-            str.append("SKY :: ");
+            str.append("Sky :: ");
 
         str.append("\n");
 
