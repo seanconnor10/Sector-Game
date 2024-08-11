@@ -1,4 +1,6 @@
 buildscript {
+
+    ext.kotlinVersion = '2.0.0'
     
 
     repositories {
@@ -9,14 +11,16 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.20'
-        
-
+        classpath "com.mobidevelop.robovm:robovm-gradle-plugin:2.3.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
+    apply plugin: "kotlin"
 
     version = '1.0'
     ext {
@@ -38,6 +42,8 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
     }
+
+    compileKotlin.compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)   
 }
 
 project(":desktop") {

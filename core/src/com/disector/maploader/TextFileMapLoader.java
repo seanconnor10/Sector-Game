@@ -347,12 +347,21 @@ public class TextFileMapLoader implements MapLoader {
         str.append(":: ");
 
         //Materials
+        /* Save by array index
         str.append("Mat ").append(w.mat).append(" :: ");
         if (w.matLower != 0) {
             str.append("LowerMat ").append(w.matLower).append(" :: ");
         }
         if (w.matUpper != 0) {
             str.append("UpperMat ").append(w.matUpper).append(" :: ");
+        }*/
+        //Save by name reference
+        str.append("Mat ").append( materials.get(w.mat).nameReference ).append(" :: ");
+        if (w.matLower != 0) {
+            str.append("LowerMat ").append( materials.get(w.matLower).nameReference ).append(" :: ");
+        }
+        if (w.matUpper != 0) {
+            str.append("UpperMat ").append( materials.get(w.matUpper).nameReference ).append(" :: ");
         }
 
         //Light

@@ -1,5 +1,6 @@
 package com.disector.editor;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.disector.AppFocusTarget;
 import com.disector.maploader.TextFileMapLoader;
 
@@ -18,7 +19,10 @@ class MenuPanel extends Panel {
 
         Button loadButton = new Button(editor, this, "LOAD");
         loadButton.releaseAction = (Void) -> {
-            editor.loadMap("MAPS/test.txt");
+            FileHandle file = editor.app.activeMapFile;
+            if (file == null)
+                return Void;
+            editor.loadMap(file.path());
             editor.shouldUpdateViewRenderer = true;
             return Void;
         };
@@ -26,8 +30,12 @@ class MenuPanel extends Panel {
 
         Button saveButton = new Button(editor, this, "SAVE");
         saveButton.releaseAction = (Void) -> {
-            new TextFileMapLoader(editor.app).save("MAPS/test.txt");
-            editor.messageLog.log("Saved to MAPS/test.txt");
+            FileHandle file = editor.app.activeMapFile;
+            if (file == null)
+                return Void;
+            String path = file.path();
+            new TextFileMapLoader(editor.app).save(path);
+            editor.messageLog.log("Saved to " + path);
             return Void;
         };
         buttons.add(saveButton);

@@ -12,7 +12,7 @@ import com.disector.assets.PixmapContainer;
 import java.util.Stack;
 
 public class SoftwareRenderer extends DimensionalRenderer {
-    private Pixmap[] ERROR_TEXTURE;
+    private final Pixmap[] ERROR_TEXTURE;
 
     private int[] occlusionBottom;
     private int[] occlusionTop;

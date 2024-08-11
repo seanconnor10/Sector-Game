@@ -385,7 +385,7 @@ public class Application extends ApplicationAdapter {
     }
 
     public void toggleEditor() {
-        if (focus == AppFocusTarget.EDITOR) {
+        if (focus == AppFocusTarget.EDITOR && editor != null ) {
             swapFocus(AppFocusTarget.GAME);
         }
         else {
