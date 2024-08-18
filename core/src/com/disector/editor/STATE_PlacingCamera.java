@@ -1,6 +1,5 @@
 package com.disector.editor;
 
-import com.disector.Physics;
 import com.disector.editor.actions.EditAction;
 
 class STATE_PlacingCamera extends EditorState{

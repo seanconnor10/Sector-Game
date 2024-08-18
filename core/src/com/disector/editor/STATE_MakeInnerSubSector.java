@@ -1,6 +1,5 @@
 package com.disector.editor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.IntArray;
 
@@ -18,7 +17,7 @@ public class STATE_MakeInnerSubSector extends EditorState {
     @Override
     void step() {
         editor.selection.setHighlights(xUnSnapped(), yUnSnapped());
-        if (Gdx.input.isKeyJustPressed(Input.Keys.N))
+        if (editor.input.isJustPressed(Input.Keys.N))
             shouldFinish = true;
     }
 

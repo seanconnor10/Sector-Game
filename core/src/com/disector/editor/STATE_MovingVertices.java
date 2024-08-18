@@ -27,7 +27,7 @@ public class STATE_MovingVertices extends EditorState {
             else
                moveGrabbedWall();
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M))
+        if (editor.input.isJustPressed(Input.Keys.M))
             shouldFinish = true;
     }
 

@@ -16,6 +16,7 @@ import com.disector.Sector;
 import com.disector.Wall;
 import com.disector.assets.Material;
 import com.disector.editor.actions.EditAction;
+import com.disector.inputrecorder.InputChainInterface;
 import com.disector.renderer.SoftwareRenderer;
 
 import java.util.Stack;
@@ -29,6 +30,8 @@ public class Editor {
     final Array<Material> materials;
     final ShapeRenderer shape;
     final SpriteBatch batch;
+
+    final InputChainInterface input;
 
     final NewEditorMapRenderer mapRenderer;
     final SoftwareRenderer viewRenderer;
@@ -65,13 +68,15 @@ public class Editor {
     private float animationCycle = 0f;
     float animationFactor = 0f;
 
-    public Editor(Application app) {
+    public Editor(Application app, InputChainInterface input) {
         this.app = app;
         this.walls = app.walls;
         this.sectors = app.sectors;
         this.materials = app.materials;
         this.shape = app.shape;
         this.batch = app.batch;
+        this.input = input;
+
         this.mapRenderer = new NewEditorMapRenderer(app, this, mapPanel.rect);
         this.viewRenderer = new SoftwareRenderer(app);
         this.viewRenderer.placeCamera(100, 30, -(float)Math.PI/4f);
@@ -493,7 +498,7 @@ public class Editor {
         else if (focusedPanel == viewPanel)
             moveViewWithKeyBoard(dt);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+        if (input.isJustPressed(Input.Keys.P)) {
             app.gameWorld.player1.snagPosition().set(
                 mapPanel.getMouseWorldX(),
                 mapPanel.getMouseWorldY()
@@ -501,32 +506,32 @@ public class Editor {
         }
 
         //Cycle Layout
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+        if (input.isJustPressed(Input.Keys.TAB)) {
+            if (input.isJustPressed(Input.Keys.SHIFT_LEFT))
                 cycleLayoutBackward();
             else
                 cycleLayout();
         }
 
         //Temporary Toggle FullBright
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+        if (input.isJustPressed(Input.Keys.CONTROL_LEFT) && input.isJustPressed(Input.Keys.I)) {
             viewRenderer.fullBright = !viewRenderer.fullBright;
             messageLog.log("Full-Bright " + (viewRenderer.fullBright ? "ON" : "OFF"));
             shouldUpdateViewRenderer = true;
         }
-         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+         if (input.isJustPressed(Input.Keys.U)) {
             viewRenderer.drawFog = !viewRenderer.drawFog;
             messageLog.log("Distance-Fog " + (viewRenderer.drawFog ? "ON" : "OFF"));
             shouldUpdateViewRenderer = true;
         }
 
         //GridSize
-        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+        if (input.isJustPressed(Input.Keys.G)) {
+            if (input.isJustPressed(Input.Keys.CONTROL_LEFT)) {
                 isGridSnapping = !isGridSnapping;
                 messageLog.log("Snapping " + (isGridSnapping ? "Enabled" : "Disabled"));
             } else {
-                if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+                if (!input.isJustPressed(Input.Keys.SHIFT_LEFT))
                     gridSize /= 2;
                 else
                     gridSize *= 2;
@@ -538,27 +543,27 @@ public class Editor {
     }
 
     private void moveMapWithKeyBoard(float dt) {
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
+        boolean shift = input.isDown(Input.Keys.SHIFT_LEFT);
         float speed = shift ? 1000 : 300;
 
         //Temporary Movement
         float mapZoom = mapRenderer.zoom;
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (input.isDown(Input.Keys.W)) {
             mapRenderer.camY += speed * dt / (float)Math.sqrt(mapZoom);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (input.isDown(Input.Keys.D)) {
             mapRenderer.camX += speed * dt / (float)Math.sqrt(mapZoom);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (input.isDown(Input.Keys.S)) {
             mapRenderer.camY -= speed * dt / (float)Math.sqrt(mapZoom);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (input.isDown(Input.Keys.A)) {
             mapRenderer.camX -= speed * dt / (float)Math.sqrt(mapZoom);
         }
 
         //Temporary Zoom
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) mapZoom += mapZoom < 1 ? 0.1f : mapZoom < 4 ? 0.5f : 2;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) mapZoom -= mapZoom < 1 ? 0.1f : mapZoom < 4 ? 0.5f : 2;
+        if (input.isJustPressed(Input.Keys.EQUALS)) mapZoom += mapZoom < 1 ? 0.1f : mapZoom < 4 ? 0.5f : 2;
+        if (input.isJustPressed(Input.Keys.MINUS)) mapZoom -= mapZoom < 1 ? 0.1f : mapZoom < 4 ? 0.5f : 2;
         if (mapZoom < 0.1f) mapZoom = 0.1f;
         if (mapZoom > 20) mapZoom = 20;
 
@@ -566,22 +571,22 @@ public class Editor {
     }
 
     private void moveViewWithKeyBoard(float dt) {
-        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
+        boolean shift = input.isDown(Input.Keys.SHIFT_LEFT);
 
         //Looking
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (input.isDown(Input.Keys.UP)) {
             viewRenderer.camVLook += 200 * dt;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (input.isDown(Input.Keys.DOWN)) {
             viewRenderer.camVLook -= 200 * dt;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (input.isDown(Input.Keys.LEFT)) {
             viewRenderer.camR += 2*dt;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (input.isDown(Input.Keys.RIGHT)) {
             viewRenderer.camR -= 2*dt;
             shouldUpdateViewRenderer = true;
         }
@@ -590,31 +595,31 @@ public class Editor {
         float moveDist = 100*dt;
         if (shift) moveDist*=3;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (input.isDown(Input.Keys.W)) {
             viewRenderer.camX += (float) Math.cos(viewRenderer.camR) * moveDist;
             viewRenderer.camY += (float) Math.sin(viewRenderer.camR) * moveDist;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (input.isDown(Input.Keys.S)) {
             viewRenderer.camX -= (float) Math.cos(viewRenderer.camR) * moveDist;
             viewRenderer.camY -= (float) Math.sin(viewRenderer.camR) * moveDist;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (input.isDown(Input.Keys.A)) {
             viewRenderer.camX += (float) Math.cos(viewRenderer.camR + Math.PI/2) * moveDist;
             viewRenderer.camY += (float) Math.sin(viewRenderer.camR + Math.PI/2) * moveDist;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (input.isDown(Input.Keys.D)) {
             viewRenderer.camX -= (float) Math.cos(viewRenderer.camR + Math.PI/2) * moveDist;
             viewRenderer.camY -= (float) Math.sin(viewRenderer.camR + Math.PI/2) * moveDist;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+        if (input.isDown(Input.Keys.E)) {
             viewRenderer.camZ += (shift ? 200 : 80) * dt;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+        if (input.isDown(Input.Keys.Q)) {
             viewRenderer.camZ -= (shift ? 200 : 80) * dt;
             shouldUpdateViewRenderer = true;
         }
@@ -628,11 +633,11 @@ public class Editor {
         }
          
         //Temporary Zoom
-        if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
+        if (input.isJustPressed(Input.Keys.EQUALS)) {
             viewRenderer.camFOV *= 1 + dt;
             shouldUpdateViewRenderer = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
+        if (input.isJustPressed(Input.Keys.MINUS)) {
             viewRenderer.camFOV *= 1 - Math.min(1, dt);
             shouldUpdateViewRenderer = true;
         }

@@ -224,7 +224,7 @@ public class Application extends ApplicationAdapter {
                     System.out.println("Must instance GameWorld before Editor.");
                     break;
                 }
-                if (editor==null) editor = new Editor(this);
+                if (editor==null) editor = new Editor(this, appInput);
                 break;
             default:
         }

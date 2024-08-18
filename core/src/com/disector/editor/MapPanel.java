@@ -2,7 +2,6 @@ package com.disector.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.utils.Null;
 
 class MapPanel extends Panel {
     public MapPanel(Editor editor) {
@@ -47,23 +46,23 @@ class MapPanel extends Panel {
         if (editor.state != null) {
             return;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        if (editor.input.isJustPressed(Input.Keys.E)) {
             editor.state = new STATE_ExtrudingSector(editor, this);
             return;
         }
-        if (!Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+        if (!editor.input.isJustPressed(Input.Keys.CONTROL_LEFT) && editor.input.isJustPressed(Input.Keys.I)) {
             editor.state = new STATE_SplittingWall(editor, this);
             return;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (editor.input.isJustPressed(Input.Keys.SPACE)) {
             editor.state = new STATE_CreatingSector(editor, this);
             return;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+        if (editor.input.isJustPressed(Input.Keys.M)) {
             editor.state = new STATE_MovingVertices(editor, this);
             return;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+        if (editor.input.isJustPressed(Input.Keys.N)) {
             editor.state = new STATE_MakeInnerSubSector(editor, this);
             return;
         }
