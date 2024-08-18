@@ -9,20 +9,22 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
 import com.disector.Application;
 import com.disector.Sector;
 import com.disector.Wall;
 import com.disector.WallInfoPack;
 import com.disector.assets.PixmapContainer;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class AnimationSavingSoftwareRenderer extends DimensionalRenderer {
-    private Pixmap[] ERROR_TEXTURE;
+    private final Pixmap[] ERROR_TEXTURE;
 
     private int[] occlusionBottom;
     private int[] occlusionTop;
-    private final Stack<Integer> drawnPortals = new Stack<>();
+    private final Deque<Integer> drawnPortals = new ArrayDeque<>();
     //private HashSet<Integer> transformedWalls = new HashSet<>();
     //private HashSet<Integer> transformedSectors = new HashSet<>();
 

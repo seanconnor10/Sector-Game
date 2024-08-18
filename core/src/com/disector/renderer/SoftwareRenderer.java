@@ -9,14 +9,15 @@ import com.badlogic.gdx.utils.Array;
 import com.disector.*;
 import com.disector.assets.PixmapContainer;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class SoftwareRenderer extends DimensionalRenderer {
     private final Pixmap[] ERROR_TEXTURE;
 
     private int[] occlusionBottom;
     private int[] occlusionTop;
-    private final Stack<Integer> drawnPortals = new Stack<>();
+    private final Deque<Integer> drawnPortals = new ArrayDeque<>();
     //private HashSet<Integer> transformedWalls = new HashSet<>();
     //private HashSet<Integer> transformedSectors = new HashSet<>();
 
