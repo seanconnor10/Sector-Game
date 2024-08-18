@@ -250,12 +250,13 @@ public class AnimationSavingSoftwareRenderer extends DimensionalRenderer {
 
             Pixmap tex, texLower, texUpper;
             {
-                final int mipMapCount = app.textures.pixmaps[0].length;
                 final float mipMapResistanceFactor = 1f;
                 float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
                 float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
                 float texPixelWidth = Math.abs( textures[0].getWidth() * (uPlus1-u) );
-                int mipMapIndex = Math.max(0, Math.min( (int)( (int)(Math.sqrt(texPixelWidth))/mipMapResistanceFactor ), mipMapCount-1));
+                int mipMapIndex = Math.max(0, Math.min( PixmapContainer.MIPMAP_COUNT-1,
+                        (int)( (int)(Math.sqrt(texPixelWidth))/mipMapResistanceFactor )
+                ));
                 tex = textures[mipMapIndex];
                 texLower = texturesLow[mipMapIndex];
                 texUpper = texturesHigh[mipMapIndex];

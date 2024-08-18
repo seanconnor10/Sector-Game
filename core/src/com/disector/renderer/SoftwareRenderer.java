@@ -233,7 +233,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
             Pixmap tex, texLower, texUpper;
             {
-                final int mipMapCount = app.textures.pixmaps[0].length;
+                final int mipMapCount = PixmapContainer.MIPMAP_COUNT;
                 final float mipMapResistanceFactor = 1f;
                 float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
                 float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));

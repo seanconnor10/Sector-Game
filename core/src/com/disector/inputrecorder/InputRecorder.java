@@ -1,7 +1,6 @@
 package com.disector.inputrecorder;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class InputRecorder {
     public static void repopulateKeyCodeMap() {
         Field[] fields = KeyMapping.class.getFields();
 
-        keyBinds.clear(); //Map of 'Action Names' and the keyCode they're assign to
+        keyBinds.clear(); //Map of 'Action Names' and the keyCode they're assigned to
         for (Field field : fields) {
             if (!field.isAnnotationPresent(KeyCode.class)) continue;;
             String fieldName = field.getName();
@@ -49,7 +48,7 @@ public class InputRecorder {
             }
         }
 
-        System.out.println(mapToString());
+        System.out.println(printKeyBindInfo());
 
         keyPressMap.clear(); //Map of keyCodes assigned to an action and a keyPressData for each
         for (Integer code : keyBinds.values() ) {
@@ -68,7 +67,7 @@ public class InputRecorder {
         return data;
     }
 
-    public static String mapToString() {
+    public static String printKeyBindInfo() {
         return "InputRecorder::KeyCodeMap = " + keyBinds.toString().replace("}", "\n}").replace("{", "{\n    ").replace(", ", ", \n    ");
     }
 

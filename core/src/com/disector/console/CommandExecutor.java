@@ -17,8 +17,8 @@ public class CommandExecutor {
     private final Application app;
 
     private final Map<String, Method> methods = new HashMap<>();
-    private final String commandList;
-    private final String[] commandNames;
+    private final String commandList;    // A String w/ the Name, Params and HelpText of every ConsoleCommand for 'help' command in Console
+    private final String[] commandNames; // A List of command Names, used in Console's autocomplete
 
     public CommandExecutor(Application app) {
         this.app = app;
@@ -57,7 +57,6 @@ public class CommandExecutor {
             str.append("\n");
         }
         commandList = str.toString();
-
 
     }
 
@@ -104,10 +103,9 @@ public class CommandExecutor {
         }
 
         try {
-            String returnArrayObject = (String) method.invoke(this, args);
-            response = returnArrayObject; //== null ? null : ( (String[]) returnArrayObject ) [0];
+            response = (String) method.invoke(this, args);
         } catch (IllegalAccessException | InvocationTargetException | ClassCastException e) {
-            response = "Exception: " + e.getCause() + e.getMessage();
+            response = "Exception: " + e.getClass();//+ e.getCause() + e.getMessage();
         }
 
         return response;
@@ -209,7 +207,7 @@ public class CommandExecutor {
             app.activeMapFile = Gdx.files.local(handle.path().replaceFirst("MAPS/", ""));
             return "File Not Found\n" + "Setting Working Path to " + handle;
         } else {
-            return "File Found but Failed to Load";
+            return handle.isDirectory() ? "That's A Folder" : "File Found but Failed to Load";
         }
     }
 

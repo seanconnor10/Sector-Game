@@ -10,13 +10,10 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.disector.Application;
 import com.disector.Sector;
-import com.disector.Wall;
-import com.disector.gui.Stage;
+import com.disector.gui.GuiStage;
 
 class PropertiesPanel extends Panel {
     private final static Pixmap.Format pixelFormat = Pixmap.Format.RGBA8888;
@@ -29,7 +26,7 @@ class PropertiesPanel extends Panel {
     ShapeRenderer shape = new ShapeRenderer();
     SpriteBatch batch = new SpriteBatch();
 
-    Stage sectorFieldsStage = new Stage();
+    GuiStage sectorFieldsStage;
 
     PROPERTIES_PANEL_STATES state = PROPERTIES_PANEL_STATES.SHOW_SECTOR_FIELDS;
 
@@ -48,11 +45,11 @@ class PropertiesPanel extends Panel {
         shape.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, w, h));
         batch.setProjectionMatrix(shape.getProjectionMatrix());
 
-        sectorFieldsStage.refreshPanelSize(r.width, r.height);
+        //sectorFieldsStage.refreshPanelSize(r.width, r.height);
     }
 
     void render() {
-        sectorFieldsStage.render();
+        //sectorFieldsStage.render();
 
         frame.begin();
         ScreenUtils.clear(Color.CLEAR);
@@ -79,27 +76,10 @@ class PropertiesPanel extends Panel {
 
         if (sec == null) return;
 
-        TextureRegion reg = sectorFieldsStage.getTexture();
+        /*TextureRegion reg = sectorFieldsStage.getTexture();
+        reg.flip(false, true);
         batch.begin();
-        batch.draw(sectorFieldsStage.getTexture(), 0, 0 );
-        batch.end();
-
-        /*final float LH = font.getLineHeight() + 6;
-        final float ST = rect.height - LH;
-
-        batch.begin();
-            font.draw(batch,
-                "HIGHLIGHTED SECTOR Index: " + sInd,
-                30, ST
-            );
-            font.draw(batch,
-                "Floor Z: " + sec.floorZ,
-                30, ST - LH
-            );
-            font.draw(batch,
-                 "Ceiling Z: " + sec.ceilZ,
-                30, ST - LH*2
-            );
+        batch.draw(reg, 0, 0 );
         batch.end();*/
 
     }

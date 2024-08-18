@@ -12,9 +12,9 @@ import java.util.TreeMap;
 
 public class PixmapContainer {
     private static final FileHandle imgDir = Gdx.files.local("assets/img");
-    public static final int MipMapNumber = 5;
+    public static final int MIPMAP_COUNT = 5;
 
-    public Pixmap[][] pixmaps;
+    private Pixmap[][] pixmaps;
     private TreeMap<String, Pixmap[]> pixmapsByName;
 
     public void loadFolder(String path) {
@@ -29,12 +29,12 @@ public class PixmapContainer {
         }
 
         //Make 'pixmaps' 2D-Array
-        pixmaps = new Pixmap[imgFiles.size][MipMapNumber];
+        pixmaps = new Pixmap[imgFiles.size][MIPMAP_COUNT];
         for (int i=0; i<imgFiles.size; i++) {
             Texture temp = new Texture(imgFiles.get(i), Pixmap.Format.RGBA8888, false);
             if (!temp.getTextureData().isPrepared()) temp.getTextureData().prepare();
             pixmaps[i][0] = temp.getTextureData().consumePixmap();
-            for (int k=1; k<MipMapNumber; k++) {
+            for (int k = 1; k< MIPMAP_COUNT; k++) {
                 pixmaps[i][k] = halvePixmap(pixmaps[i][k-1]);
             }
             temp.dispose();
@@ -45,9 +45,9 @@ public class PixmapContainer {
         for (int i=0; i<imgFiles.size; i++) {
             Texture temp = new Texture(imgFiles.get(i), Pixmap.Format.RGBA8888, false);
             if (!temp.getTextureData().isPrepared()) temp.getTextureData().prepare();
-            Pixmap[] thisImgMips = new Pixmap[MipMapNumber];
+            Pixmap[] thisImgMips = new Pixmap[MIPMAP_COUNT];
             thisImgMips[0] = temp.getTextureData().consumePixmap();
-            for (int k=1; k<MipMapNumber; k++) {
+            for (int k = 1; k< MIPMAP_COUNT; k++) {
                 thisImgMips[k] = halvePixmap(thisImgMips[k-1]);
             }
             pixmapsByName.put(imgFiles.get(i).nameWithoutExtension().toUpperCase(), thisImgMips);
@@ -59,7 +59,7 @@ public class PixmapContainer {
         //Takes an Array of Materials without the Texture loaded,
         //Loads the texture and adds reference to this PixmapContainer
         System.out.println("Loading Textures from Materials Array");
-        pixmaps = new Pixmap[blankMaterials.size][MipMapNumber];
+        pixmaps = new Pixmap[blankMaterials.size][MIPMAP_COUNT];
         pixmapsByName = new TreeMap<>();
 
         HashSet<String> loadedImages = new HashSet<>();
@@ -94,14 +94,16 @@ public class PixmapContainer {
     }
 
     public static Pixmap[] makeMipMapSeries(Texture tex) {
-        Pixmap[] pixmaps = new Pixmap[MipMapNumber];
+        Pixmap[] pixmaps = new Pixmap[MIPMAP_COUNT];
         pixmaps[0] = tex.getTextureData().consumePixmap();
-        for (int i=1; i<MipMapNumber; i++) {
+        for (int i = 1; i< MIPMAP_COUNT; i++) {
             pixmaps[i] = halvePixmap(pixmaps[i-1]);
         }
         return pixmaps;
     }
 
+    // --------------------------------------------------------------------------------
+    
     private static  Pixmap halvePixmap(Pixmap pix) {
         Pixmap newPix = new Pixmap(pix.getWidth()/2, pix.getHeight(), pix.getFormat());
         newPix.setFilter(Pixmap.Filter.BiLinear);
