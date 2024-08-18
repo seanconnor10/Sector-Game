@@ -1,18 +1,17 @@
 package com.disector.console;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.files.FileHandle;
 import com.disector.AppFocusTarget;
 import com.disector.Application;
 import com.badlogic.gdx.Gdx;
 
-import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
 public class CommandExecutor {
+    public static final String NO_MATCH_TEXT = "No such command. Try 'Help'.";
 
     private final Application app;
 
@@ -86,7 +85,7 @@ public class CommandExecutor {
         }
         method = methods.get(commandParts[0]);
         if (method == null) {
-            response = "No such command. Try 'Help'.";
+            response = NO_MATCH_TEXT;
             return response;
         }
 

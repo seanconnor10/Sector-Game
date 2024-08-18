@@ -2,7 +2,6 @@ package com.disector.console;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,10 +9,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
+
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Console {
     private final InputChainNode input;
@@ -26,6 +28,8 @@ public class Console {
 
     private String currentIn;
     private final Array<String> textLines;
+    private final List<String> pastEntries = new ArrayList<>();
+    private int pastEntriesIndex = -1;
 
     private boolean visible;
     private boolean active;
@@ -36,7 +40,7 @@ public class Console {
     private final int xBorder = 42;
 
     private BitmapFont font = new BitmapFont( Gdx.files.local("assets/font/fira.fnt") );
-    private final Color backgroundColor = new Color(0.6f, 0.6f, 0.2f, 0.7f);
+    private final Color backgroundColor = new Color(0.2f, 0.4f, 0.6f, 0.7f);
 
     public Console(CommandExecutor executor, InputChainInterface inputParent) {
         active = false;
@@ -82,29 +86,48 @@ public class Console {
             @Override
             public boolean keyDown (int keycode) {
                 if (active) {
+                    final int LINES_PER_PAGE = (int) (Gdx.graphics.getHeight()*screenPercentage/lineHeight);
+                    final int TOP_OF_PAGE = textLines.size + 2 - LINES_PER_PAGE;
+
                     switch(keycode) {
-                        case Input.Keys.FORWARD_DEL: //'Delete' Key
-                            currentIn = ""; //Bug fix to actually do this in update
-                            break;
-                        case Input.Keys.ENTER:
-                            lineScroll = 0;
-                            executeEntry();
-                            break;
-                        case Input.Keys.PAGE_DOWN:
-                            lineScroll = Math.max(0, lineScroll - (int) (Gdx.graphics.getHeight()*screenPercentage/lineHeight) );
-                            break;
-                        case Input.Keys.PAGE_UP:
-                            lineScroll = Math.min(
-                                    (textLines.size+2) - (int) (screenPercentage*Gdx.graphics.getHeight()/lineHeight),
-                                    lineScroll + (int) (Gdx.graphics.getHeight()*screenPercentage/lineHeight) );
-                            break;
-                        case Input.Keys.END:
-                            lineScroll = 0;
-                            break;
-                        case Input.Keys.HOME:
-                            lineScroll = (textLines.size+2) - (int) (screenPercentage*Gdx.graphics.getHeight()/lineHeight);
-                        default:
-                            break;
+                    case Input.Keys.FORWARD_DEL: //'Delete' Key
+                        currentIn = ""; //Bug fix to actually do this in update
+                        pastEntriesIndex = -1;
+                        break;
+                    case Input.Keys.ENTER:
+                        lineScroll = 0;
+                        executeEntry();
+                        break;
+                    case Input.Keys.PAGE_DOWN:
+                        lineScroll = Math.max(0, lineScroll - LINES_PER_PAGE );
+                        break;
+                    case Input.Keys.PAGE_UP:
+                        lineScroll = Math.min(TOP_OF_PAGE, lineScroll + LINES_PER_PAGE );
+                        break;
+                    case Input.Keys.END:
+                        lineScroll = 0;
+                        break;
+                    case Input.Keys.HOME:
+                        lineScroll = TOP_OF_PAGE;
+                        break;
+                    case Input.Keys.UP:
+                        if (pastEntries.isEmpty()) break;
+                        pastEntriesIndex++;
+                        if (pastEntriesIndex >= pastEntries.size())
+                            pastEntriesIndex = pastEntries.size()-1;
+                        currentIn = pastEntries.get(pastEntriesIndex);
+                        break;
+                    case Input.Keys.DOWN:
+                        if (pastEntries.isEmpty()) break;
+                        pastEntriesIndex--;
+                        if (pastEntriesIndex < -1)
+                            pastEntriesIndex = pastEntries.size()-1;
+                        else if (pastEntriesIndex == -1)
+                            pastEntriesIndex = 0;
+                        currentIn = pastEntries.get(pastEntriesIndex);
+                        break;
+                    default:
+                        break;
                     }
                 }
 
@@ -170,6 +193,11 @@ public class Console {
         insertText(">> " + currentIn);
 
         String response = executor.execute(currentIn);
+
+        if (response == null || !response.equals(CommandExecutor.NO_MATCH_TEXT)) {
+            pastEntriesIndex = -1;
+            pastEntries.add(0, currentIn);
+        }
 
         currentIn = "";
 
