@@ -254,19 +254,20 @@ public class Editor {
         height = h;
 
         switch (layout) {
-            case SWAP:      resizeSWAP();       break;
-            case RENDER:    resizeRENDER();     break;
-            case MAP:       resizeMAP();        break;
-            default:        resizeDEFAULT();    break;
+            case SWAP:       resizeSWAP();       break;
+            case RENDER:     resizeRENDER();     break;
+            case MAP:        resizeMAP();        break;
+            case PROPERTIES: resizePROPERTIES(); break;
+            default:         resizeDEFAULT();    break;
         }
 
         int view3DviewWidth = Math.min( MAX_RENDER_WIDTH, Math.round(viewPanel.rect.width));
         int view3DviewHeight = Math.min( MAX_RENDER_HEIGHT, Math.round(viewPanel.rect.height));
 
         propertiesPanel.refreshPanelSize(propertiesPanel.rect);
-
         mapRenderer.refreshPanelSize(mapPanel.rect);
         viewRenderer.resizeFrame(view3DviewWidth, view3DviewHeight);
+
         mapRenderer.render();
         viewRenderer.renderWorld();
     }
@@ -355,6 +356,43 @@ public class Editor {
         viewPanel.rect.set(-1, -1, -1, -1);
 
         logPanel = mapPanel;
+    }
+
+    private void resizePROPERTIES() {
+        /*menuPanel.rect.height = MENU_BAR_HEIGHT;
+        menuPanel.rect.width = width;
+        menuPanel.rect.x = 0;
+        menuPanel.rect.y = height-menuPanel.rect.height;
+
+        propertiesPanel.rect.height = height-menuPanel.rect.height;
+        propertiesPanel.rect.width = (int) (width*0.6f);
+        propertiesPanel.rect.x = width-propertiesPanel.rect.width;
+        propertiesPanel.rect.y = 0;
+
+        viewPanel.rect.height = (int) ( (height-menuPanel.rect.height)*0.5f);
+        viewPanel.rect.width = propertiesPanel.rect.x;
+        viewPanel.rect.x = 0;
+        viewPanel.rect.y = viewPanel.rect.height;
+
+        mapPanel.rect.height = viewPanel.rect.y;
+        mapPanel.rect.width = propertiesPanel.rect.x;
+        mapPanel.rect.x = 0;
+        mapPanel.rect.y = 0;*/
+
+        menuPanel.rect.height = MENU_BAR_HEIGHT;
+        menuPanel.rect.width = width;
+        menuPanel.rect.x = 0;
+        menuPanel.rect.y = height-menuPanel.rect.height;
+
+        propertiesPanel.rect.x = 0;
+        propertiesPanel.rect.y = 0;
+        propertiesPanel.rect.width = width;
+        propertiesPanel.rect.height = height - MENU_BAR_HEIGHT;
+
+        viewPanel.rect.set(-1,-1,-1,-1);
+        mapPanel.rect.set(-1,-1,-1,-1);
+
+        logPanel = propertiesPanel;
     }
 
     private void cycleLayout() {
