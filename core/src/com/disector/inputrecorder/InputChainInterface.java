@@ -1,14 +1,17 @@
 package com.disector.inputrecorder;
 
-public interface InputChainInterface {
+import com.badlogic.gdx.InputProcessor;
+
+public interface InputChainInterface extends InputProcessor {
     InputRecorder.keyPressData getActionInfo(String name);
 
     boolean isDown(int keyCode);
     boolean isJustPressed(int keyCode);
 
-    boolean isRoot();
+    void addAsChild(InputChainInterface node);
 
-    void addAsChild(InputChainNode node);
+    boolean isRoot();
+    boolean isActive();
 
     void on();
     void off();
