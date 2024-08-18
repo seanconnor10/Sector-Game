@@ -196,7 +196,7 @@ public class Editor {
     private void onMouseClick() {
         Panel panelClicked = getPanelUnderMouse();
 
-        if (state != null)
+        if (state != null && focusedPanel==mapPanel)
             state.click();
         if (state == null || !state.ignoreEditorClick )
             panelClicked.clickedIn();
@@ -482,7 +482,7 @@ public class Editor {
         if (focusedPanel.isForcingMouseFocus) {
             constrainMouseToRect(focusedPanel.rect);
         } else {
-            if (state == null && !Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+            if (/*state == null &&*/ !Gdx.input.isButtonPressed(Input.Buttons.LEFT))
                setPanelFocus(getPanelUnderMouse());
         }
     }
