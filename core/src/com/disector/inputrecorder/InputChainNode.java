@@ -2,30 +2,45 @@ package com.disector.inputrecorder;
 
 import com.badlogic.gdx.utils.Array;
 
-public class InputChainNode {
-    Array<InputChainNode> children;
-    InputChainNode parent;
+public class InputChainNode implements InputChainInterface {
+    private Array<InputChainNode> children;
+    private InputChainInterface parent;
 
-    boolean isRoot;
-    boolean isActive;
+    public boolean isActive;
 
     public InputChainNode(InputChainNode parent) {
         this.parent = parent;
-    }
-
-    public InputChainNode() {
-        isRoot = true;
-    }
-
-    public InputChainNode makeChild() {
-        InputChainNode newNode = new InputChainNode(this);
-        children.add(newNode);
-        return newNode;
+        parent.addAsChild(this);
     }
 
     public void deactivate() {
         for (InputChainNode node : children)
             node.deactivate();
-        if (!isRoot) this.isActive = false;
+        this.isActive = false;
+    }
+
+    @Override
+    public InputRecorder.keyPressData getActionInfo(String name) {
+        return null;
+    }
+
+    @Override
+    public boolean isDown(int keyCode) {
+        return false;
+    }
+
+    @Override
+    public boolean isJustPressed(int keyCode) {
+        return false;
+    }
+
+    @Override
+    public boolean isRoot() {
+        return false;
+    }
+
+    @Override
+    public void addAsChild(InputChainNode node) {
+        children.add(node);
     }
 }

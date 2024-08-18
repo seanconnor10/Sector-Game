@@ -1,13 +1,15 @@
 package com.disector.inputrecorder;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Properties;
 
-public class InputRecorder {
-    public static boolean ignoreInput;
+public class InputRecorder implements InputChainInterface {
+
     public static Map<String, Integer> keyBinds = new HashMap<>();
     public static Map<Integer, keyPressData> keyPressMap = new HashMap<>();
 
@@ -18,9 +20,6 @@ public class InputRecorder {
     public static void updateKeys() {
         mouseDeltaX = Gdx.input.getDeltaX();
         mouseDeltaY = Gdx.input.getDeltaY();
-
-        if (ignoreInput)
-            return;
 
         for (Map.Entry<Integer, keyPressData> keyEntry : keyPressMap.entrySet()) {
             keyEntry.getValue().justReleased = keyEntry.getValue().isDown && !Gdx.input.isKeyPressed(keyEntry.getKey());
@@ -82,4 +81,36 @@ public class InputRecorder {
         }
     }
 
+    // ------- Non-Static Methods --------------------------
+
+    /** Used to allow an instance of this class to serve
+     * as a root of the tree distributing input visibility
+     */
+
+    private Array<InputChainNode> children;
+
+    @Override
+    public boolean isDown(int keyCode) {
+        return Gdx.input.isKeyPressed(keyCode);
+    }
+
+    @Override
+    public boolean isJustPressed(int keyCode) {
+        return Gdx.input.isKeyJustPressed(keyCode);
+    }
+
+    @Override
+    public keyPressData getActionInfo(String actionName) {
+        return getKeyInfo(actionName);
+    }
+
+    @Override
+    public boolean isRoot() {
+        return true;
+    }
+
+    @Override
+    public void addAsChild(InputChainNode node) {
+        children.add(node);
+    }
 }
