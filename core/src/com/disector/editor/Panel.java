@@ -2,6 +2,8 @@ package com.disector.editor;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.disector.inputrecorder.InputChainInterface;
+import com.disector.inputrecorder.InputChainNode;
 
 import java.util.function.Function;
 
@@ -9,15 +11,23 @@ class Panel {
     Editor editor;
     Rectangle rect;
 
+    /**
+     * Used for when we want to take input only if this panel is focused/
+     * If we always want input for something regardless of panel focus
+     * call from editor::input
+     */
+    InputChainInterface input;
+
     Function<Void, Void> stepFunction = (Void) -> {return Void;};
 
     boolean isForcingMouseFocus;
 
     final Array<Button> buttons = new Array<>();
 
-    public Panel(Editor editor) {
+    public Panel(Editor editor, String inputName) {
         this.editor = editor;
         this.rect = new Rectangle();
+        this.input = new InputChainNode(editor.input, inputName);
     }
 
     void resize(Rectangle rect) {

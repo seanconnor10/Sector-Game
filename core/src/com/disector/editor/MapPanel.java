@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 
 class MapPanel extends Panel {
     public MapPanel(Editor editor) {
-        super(editor);
+        super(editor, "MapPanel");
     }
 
     @Override

@@ -31,7 +31,7 @@ class PropertiesPanel extends Panel {
     PROPERTIES_PANEL_STATES state = PROPERTIES_PANEL_STATES.SHOW_SECTOR_FIELDS;
 
     PropertiesPanel(Editor editor) {
-        super(editor);
+        super(editor, "PropertiesPanel");
         frame = new FrameBuffer(pixelFormat, 1, 1, false);
         refreshPanelSize(rect);
         font.setColor(Color.WHITE);

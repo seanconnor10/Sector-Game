@@ -2,7 +2,7 @@ package com.disector.editor;
 
 class ViewPanel extends Panel{
     public ViewPanel(Editor editor) {
-        super(editor);
+        super(editor, "RenderViewPanel");
     }
 
     @Override

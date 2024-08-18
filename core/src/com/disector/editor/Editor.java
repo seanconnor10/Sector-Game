@@ -40,21 +40,21 @@ public class Editor {
     final int MAX_RENDER_HEIGHT = 225;
     static final int MENU_BAR_HEIGHT = 32;
 
-    final MapPanel mapPanel               = new MapPanel(this);
-    final ViewPanel viewPanel             = new ViewPanel(this);
-    final MenuPanel menuPanel             = new MenuPanel(this);
-    final PropertiesPanel propertiesPanel = new PropertiesPanel(this);
+    final MapPanel mapPanel;
+    final ViewPanel viewPanel;
+    final MenuPanel menuPanel;
+    final PropertiesPanel propertiesPanel;
 
-    final Panel[] panels = new Panel[] { mapPanel, viewPanel, menuPanel, propertiesPanel };
+    final Panel[] panels;
 
     Layouts layout = Layouts.DEFAULT;
     Button clickedButton = null;
-    Panel focusedPanel = mapPanel;
+    Panel focusedPanel;
 
     final Stack<EditAction> undoStack = new Stack<>();
 
     final EditorMessageLog messageLog = new EditorMessageLog();
-    Panel logPanel = mapPanel;
+    Panel logPanel;
 
     final ActiveSelection selection;
 
@@ -76,6 +76,15 @@ public class Editor {
         this.shape = app.shape;
         this.batch = app.batch;
         this.input = input;
+
+        mapPanel        = new MapPanel(this);
+        viewPanel       = new ViewPanel(this);
+        menuPanel       = new MenuPanel(this);
+        propertiesPanel = new PropertiesPanel(this);
+
+        logPanel = mapPanel;
+        focusedPanel = mapPanel;
+        panels = new Panel[] { mapPanel, viewPanel, menuPanel, propertiesPanel };
 
         this.mapRenderer = new NewEditorMapRenderer(app, this, mapPanel.rect);
         this.viewRenderer = new SoftwareRenderer(app);
@@ -101,7 +110,8 @@ public class Editor {
         stepStateObject();
 
         updatePanel(dt);    //Update Panel before StateObject so the StateObject's onClick() isn't
-                            //called immediately if clicking created the StateObject
+                            //called immediately if clicking created the StateObject?
+                            //Not anymore I guess...
         callMouseClickActions();
 
         temporaryControls(dt);
@@ -470,8 +480,14 @@ public class Editor {
             constrainMouseToRect(focusedPanel.rect);
         } else {
             if (state == null && !Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-                focusedPanel = getPanelUnderMouse();
+               setPanelFocus(getPanelUnderMouse());
         }
+    }
+
+    private void setPanelFocus(Panel newTarget) {
+        focusedPanel.input.off();
+        focusedPanel = newTarget;
+        focusedPanel.input.on();
     }
 
     private void cycleAnimation(float dt) {

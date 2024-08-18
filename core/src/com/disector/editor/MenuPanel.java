@@ -6,7 +6,7 @@ import com.disector.maploader.TextFileMapLoader;
 
 class MenuPanel extends Panel {
     public MenuPanel(Editor editor) {
-        super(editor);
+        super(editor, "MenuPanel");
 
         Button newMapButton = new Button(editor, this, "NEW");
         newMapButton.releaseAction = (Void) -> {
