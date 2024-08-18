@@ -203,7 +203,7 @@ public class CommandExecutor {
             return null;
 
         if (!handle.exists()) {
-            app.activeMapFile = Gdx.files.local(handle.path().replaceFirst("MAPS/", ""));
+            app.activeMapFile = handle; //Gdx.files.local(handle.path().replaceFirst("MAPS/", ""));
             return "File Not Found\n" + "Setting Working Path to " + handle;
         } else {
             return handle.isDirectory() ? "That's A Folder" : "File Found but Failed to Load";
