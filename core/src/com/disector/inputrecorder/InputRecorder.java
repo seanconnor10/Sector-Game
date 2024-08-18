@@ -2,13 +2,15 @@ package com.disector.inputrecorder;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.Array;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.HashMap;
 
-public class InputRecorder extends InputMultiplexer implements InputChainInterface {
+public class InputRecorder implements InputChainInterface, InputProcessor {
 
     /*
      *  The inputrecorder package provides a way of
@@ -97,15 +99,17 @@ public class InputRecorder extends InputMultiplexer implements InputChainInterfa
         }
     }
 
-    // ------- Non-Static Methods --------------------------
+    // ------- Non-Static Portion --------------------------
 
     /* Used to allow an instance of this class to serve
      * as a root of the tree distributing input visibility
      * Necessary since this otherwise static class couldn't
-     * implement InputChainInterface
+     * implement Interfaces
      */
 
     private final Array<InputChainNode> children = new Array<>();
+
+    // --- InputChainInterface Methods ----------------------------------------
 
     @Override
     public boolean isDown(int keyCode) {
@@ -130,7 +134,6 @@ public class InputRecorder extends InputMultiplexer implements InputChainInterfa
     @Override
     public void addAsChild(InputChainNode node) {
         children.add(node);
-        addProcessor(node);
     }
 
     @Override
@@ -155,12 +158,76 @@ public class InputRecorder extends InputMultiplexer implements InputChainInterfa
         return "ROOT!";
     }
 
-    //InputMultiplexer Methods
+// --- InputProcessor Methods ----------------------------------------
 
     @Override
-    public boolean scrolled(float amountX, float amountY) {
+    public boolean keyDown(int i) {
         for (InputChainNode child : children) {
-            if (child.isActive) child.scrolled(amountX, amountY);
+            if (child.isActive) child.keyDown(i);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int i) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.keyUp(i);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char c) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.keyTyped(c);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int i, int i1, int i2, int i3) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.touchDown(i, i1, i2, i3);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int i, int i1, int i2, int i3) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.touchUp(i, i1, i2, i3);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int i, int i1, int i2, int i3) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.touchCancelled(i, i1, i2, i3);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int i, int i1, int i2) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.touchDragged(i, i1, i2);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int i, int i1) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.mouseMoved(i, i1);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float v, float v1) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.scrolled(v, v1);
         }
         return false;
     }
