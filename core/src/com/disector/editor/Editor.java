@@ -474,7 +474,10 @@ public class Editor {
     }
 
     private void updatePanel(float dt) {
-        focusedPanel.step(dt);
+        focusedPanel.stepFocused(dt);
+
+        for (Panel p : panels)
+            p.step(dt);
 
         if (focusedPanel.isForcingMouseFocus) {
             constrainMouseToRect(focusedPanel.rect);
@@ -578,8 +581,10 @@ public class Editor {
         }
 
         //Temporary Zoom
-        if (input.isJustPressed(Input.Keys.EQUALS)) mapZoom += mapZoom < 1 ? 0.1f : mapZoom < 4 ? 0.5f : 2;
-        if (input.isJustPressed(Input.Keys.MINUS)) mapZoom -= mapZoom < 1 ? 0.1f : mapZoom < 4 ? 0.5f : 2;
+        float amount = mapZoom < 1 ? 0.5f : mapZoom < 4 ? 2.5f : 10;
+        amount *= dt;
+        if (input.isDown(Input.Keys.EQUALS)) mapZoom += amount;
+        if (input.isDown(Input.Keys.MINUS)) mapZoom -= amount;
         if (mapZoom < 0.1f) mapZoom = 0.1f;
         if (mapZoom > 20) mapZoom = 20;
 
@@ -649,11 +654,11 @@ public class Editor {
         }
          
         //Temporary Zoom
-        if (input.isJustPressed(Input.Keys.EQUALS)) {
+        if (input.isDown(Input.Keys.EQUALS)) {
             viewRenderer.camFOV *= 1 + dt;
             shouldUpdateViewRenderer = true;
         }
-        if (input.isJustPressed(Input.Keys.MINUS)) {
+        if (input.isDown(Input.Keys.MINUS)) {
             viewRenderer.camFOV *= 1 - Math.min(1, dt);
             shouldUpdateViewRenderer = true;
         }

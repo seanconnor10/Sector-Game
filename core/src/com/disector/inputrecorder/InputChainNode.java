@@ -4,7 +4,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.Array;
 
 public class InputChainNode extends InputMultiplexer implements InputChainInterface {
-    private Array<InputChainNode> children = new Array<>();
+    protected Array<InputChainNode> children = new Array<>();
     private final InputChainInterface parent;
 
     private final String name;
@@ -67,5 +67,15 @@ public class InputChainNode extends InputMultiplexer implements InputChainInterf
     @Override
     public String showName() {
         return name;
+    }
+
+    // --------------------------------------
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.scrolled(amountX, amountY);
+        }
+        return false;
     }
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.disector.Sector;
 import com.disector.gui.GuiStage;
+import com.disector.inputrecorder.InputChainNode;
 
 class PropertiesPanel extends Panel {
     private final static Pixmap.Format pixelFormat = Pixmap.Format.RGBA8888;
@@ -31,7 +32,8 @@ class PropertiesPanel extends Panel {
     PROPERTIES_PANEL_STATES state = PROPERTIES_PANEL_STATES.SHOW_SECTOR_FIELDS;
 
     PropertiesPanel(Editor editor) {
-        super(editor, "PropertiesPanel");
+        super(editor);
+        this.input = new InputChainNode(editor.input, "Props-Panel-Input");
         frame = new FrameBuffer(pixelFormat, 1, 1, false);
         refreshPanelSize(rect);
         font.setColor(Color.WHITE);

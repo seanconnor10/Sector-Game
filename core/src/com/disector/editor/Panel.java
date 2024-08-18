@@ -24,10 +24,9 @@ class Panel {
 
     final Array<Button> buttons = new Array<>();
 
-    public Panel(Editor editor, String inputName) {
+    public Panel(Editor editor) {
         this.editor = editor;
         this.rect = new Rectangle();
-        this.input = new InputChainNode(editor.input, inputName);
     }
 
     void resize(Rectangle rect) {
@@ -72,6 +71,10 @@ class Panel {
         }
     }
 
+    void stepFocused(float dt) {
+
+    }
+
     void step(float dt) {
 
     }
@@ -82,6 +85,10 @@ class Panel {
 
     float relY() {
         return editor.mouseY - rect.y;
+    }
+
+    InputChainInterface getInputAdapter() {
+        return input;
     }
 
 }

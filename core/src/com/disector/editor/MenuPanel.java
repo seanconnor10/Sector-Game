@@ -2,11 +2,13 @@ package com.disector.editor;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.disector.AppFocusTarget;
+import com.disector.inputrecorder.InputChainNode;
 import com.disector.maploader.TextFileMapLoader;
 
 class MenuPanel extends Panel {
     public MenuPanel(Editor editor) {
-        super(editor, "MenuPanel");
+        super(editor);
+        this.input = new InputChainNode(editor.input, "Menu-Panel-Input");
 
         Button newMapButton = new Button(editor, this, "NEW");
         newMapButton.releaseAction = (Void) -> {

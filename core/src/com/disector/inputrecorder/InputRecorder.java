@@ -155,4 +155,13 @@ public class InputRecorder extends InputMultiplexer implements InputChainInterfa
         return "ROOT!";
     }
 
+    //InputMultiplexer Methods
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        for (InputChainNode child : children) {
+            if (child.isActive) child.scrolled(amountX, amountY);
+        }
+        return false;
+    }
 }
