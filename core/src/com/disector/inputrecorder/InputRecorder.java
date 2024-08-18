@@ -3,13 +3,22 @@ package com.disector.inputrecorder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.StringBuilder;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.HashMap;
 
 public class InputRecorder extends InputMultiplexer implements InputChainInterface {
+
+    /*
+     *  The inputrecorder package provides a way of
+     *  1) globally storing 'just released this frame' info for key input
+     *  2) mapping named actions to keycodes
+     *  3) distributing global input info through a tree of nodes assigned to
+     *     differing parts of the application (ie Console, Game/Editor), offering
+     *     listener input (via extending InputMultiplexer) as well as polled
+     *     input
+     */
 
     public static Map<String, Integer> keyBinds = new HashMap<>();
     public static Map<Integer, keyPressData> keyPressMap = new HashMap<>();
@@ -19,6 +28,10 @@ public class InputRecorder extends InputMultiplexer implements InputChainInterfa
     public static float mouseDeltaX, mouseDeltaY;
 
     public static void updateKeys() {
+        /*
+         * Called once per game frame to store polled input for every
+         * key which has an action bound to it
+         */
         mouseDeltaX = Gdx.input.getDeltaX();
         mouseDeltaY = Gdx.input.getDeltaY();
 
@@ -86,8 +99,10 @@ public class InputRecorder extends InputMultiplexer implements InputChainInterfa
 
     // ------- Non-Static Methods --------------------------
 
-    /** Used to allow an instance of this class to serve
+    /* Used to allow an instance of this class to serve
      * as a root of the tree distributing input visibility
+     * Necessary since this otherwise static class couldn't
+     * implement InputChainInterface
      */
 
     private final Array<InputChainNode> children = new Array<>();
