@@ -19,6 +19,7 @@ import com.disector.console.CommandExecutor;
 import com.disector.console.Console;
 import com.disector.editor.Editor;
 import com.disector.gameworld.GameWorld;
+import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputRecorder;
 import com.disector.maploader.OldTextFormatMapLoader;
 import com.disector.renderer.AnimationSavingSoftwareRenderer;
@@ -61,14 +62,15 @@ public class Application extends ApplicationAdapter {
     public SpriteBatch batch;
     public ShapeRenderer shape;
 
+    public InputRecorder mainInput = new InputRecorder();
+    public InputChainNode consoleInput;
+    public InputChainNode appInput; //Given to the AppFocusTarget (i.e. Game, Editor, Menu)
+
     @Override
     public void create () {
-        console = new Console( new CommandExecutor(this) );
-        Gdx.input.setInputProcessor(console.getInputAdapter());
+        focus = AppFocusTarget.GAME;
 
         loadConfig("disector.config");
-
-        focus = AppFocusTarget.GAME;
 
         Physics.walls = walls;
         Physics.sectors = sectors;
@@ -80,13 +82,20 @@ public class Application extends ApplicationAdapter {
         textures = new PixmapContainer();
         textures.loadFolder("");
 
-        swapFocus(AppFocusTarget.GAME);
-
         InputRecorder.repopulateKeyCodeMap();
+        Gdx.input.setInputProcessor(mainInput);
         Gdx.input.setCursorCatched(true);
+
+        console = new Console( new CommandExecutor(this), mainInput);
+
+        consoleInput = console.getInputAdapter();
+        appInput = new InputChainNode(mainInput, "AppFocusInput");
+        appInput.on();
 
         createTestMap();
         createTestMaterial();
+
+        swapFocus(focus);
     }
 
     @Override
@@ -109,7 +118,6 @@ public class Application extends ApplicationAdapter {
         }
 
         console.updateAndDraw(deltaTime);
-
     }
 
     @Override
@@ -204,7 +212,7 @@ public class Application extends ApplicationAdapter {
 
         switch (target) {
             case GAME:
-                if (gameWorld==null) gameWorld = new GameWorld(this);
+                if (gameWorld==null) gameWorld = new GameWorld(this, appInput);
                 if (renderer==null) renderer = new AnimationSavingSoftwareRenderer(this);
                 if (gameMapRenderer==null) gameMapRenderer = new GameMapRenderer(this, gameWorld);
                 Gdx.input.setCursorCatched(true);
@@ -287,21 +295,28 @@ public class Application extends ApplicationAdapter {
     }
 
     private void functionKeyInputs() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+        if (mainInput.isJustPressed(Input.Keys.F1)) {
             swapFocus(AppFocusTarget.GAME);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+        } else if (mainInput.isJustPressed(Input.Keys.F2)) {
+            if (mainInput.isJustPressed(Input.Keys.SHIFT_LEFT))
                 editor = null;
             else
                 swapFocus(AppFocusTarget.EDITOR);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F4) ) {
+        if (mainInput.isJustPressed(Input.Keys.F4) ) {
 			if (Gdx.graphics.isFullscreen())
 				Gdx.graphics.setWindowedMode( frameWidth*2, frameHeight*2 );
 			else
 				Gdx.graphics.setFullscreenMode( Gdx.graphics.getDisplayMode() );
 		}
+
+        if (mainInput.isJustPressed(Input.Keys.GRAVE)) {
+            console.toggle();
+            appInput.toggle();
+            consoleInput.toggle();
+        }
+
     }
 
     // --------------------------------------------------------

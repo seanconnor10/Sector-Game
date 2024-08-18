@@ -4,15 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 
-import com.disector.Sector;
-import com.disector.Wall;
 import com.disector.gameworld.components.Movable;
+import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputRecorder;
 
 public class Player implements Movable {
     private final GameWorld world;
+    
+    private final InputChainInterface input;
 
     Vector2 position = new Vector2(0.f, 0.f);
     float z, r;
@@ -31,22 +31,23 @@ public class Player implements Movable {
     final int CROUCHING_HEIGHT = 5;
     final float RADIUS = 5.f;
 
-    Player(GameWorld world) {
+    Player(GameWorld world, InputChainInterface input) {
         this.world = world;
+        this.input = input;
     }
 
     public Vector2 movementInput(float dt) {
         Vector2 startingPosition = copyPosition();
 
         //Record needed button presses
-        boolean forwardDown   = InputRecorder.getKeyInfo("FORWARD")   .isDown;
-        boolean leftDown      = InputRecorder.getKeyInfo("LEFT")      .isDown;
-        boolean rightDown     = InputRecorder.getKeyInfo("RIGHT")     .isDown;
-        boolean backwardDown  = InputRecorder.getKeyInfo("BACKWARD")  .isDown;
-        boolean turnLeftDown  = InputRecorder.getKeyInfo("TURN_LEFT") .isDown;
-        boolean turnRightDown = InputRecorder.getKeyInfo("TURN_RIGHT").isDown;
-        boolean lookUpDown    = InputRecorder.getKeyInfo("LOOK_UP")   .isDown;
-        boolean lookDownDown  = InputRecorder.getKeyInfo("LOOK_DOWN") .isDown;
+        boolean forwardDown   = input.getActionInfo("FORWARD")   .isDown;
+        boolean leftDown      = input.getActionInfo("LEFT")      .isDown;
+        boolean rightDown     = input.getActionInfo("RIGHT")     .isDown;
+        boolean backwardDown  = input.getActionInfo("BACKWARD")  .isDown;
+        boolean turnLeftDown  = input.getActionInfo("TURN_LEFT") .isDown;
+        boolean turnRightDown = input.getActionInfo("TURN_RIGHT").isDown;
+        boolean lookUpDown    = input.getActionInfo("LOOK_UP")   .isDown;
+        boolean lookDownDown  = input.getActionInfo("LOOK_DOWN") .isDown;
 
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);
@@ -83,10 +84,10 @@ public class Player implements Movable {
         vLook = Math.min( Math.max(vLook, -VLOOK_CLAMP), VLOOK_CLAMP );
 
         //Crouching
-        height = (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) ? CROUCHING_HEIGHT : STANDING_HEIGHT;
+        height = (input.isJustPressed(Input.Keys.CONTROL_LEFT)) ? CROUCHING_HEIGHT : STANDING_HEIGHT;
 
         //Jump
-        if (onGround && Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+        if (onGround && input.isJustPressed(Input.Keys.SPACE))
             zSpeed = 100.0f;
 
         //Return starting position for collision function to use

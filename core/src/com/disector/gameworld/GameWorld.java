@@ -1,7 +1,5 @@
 package com.disector.gameworld;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
@@ -10,7 +8,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.disector.*;
 import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.Positionable;
-import com.disector.inputrecorder.InputRecorder;
+import com.disector.inputrecorder.InputChainNode;
 
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
@@ -20,23 +18,26 @@ public class GameWorld {
     private final Array<Wall> walls;
     private final Array<Sector> sectors;
 
+    private final InputChainNode input;
+
     private float dt;
     private boolean shouldDisplayMap;
 
     public Player player1;
 
-    public GameWorld(Application app) {
+    public GameWorld(Application app, InputChainNode input) {
         this.app = app;
         this.walls = app.walls;
         this.sectors = app.sectors;
-        player1 = new Player(this);
+        player1 = new Player(this, input);
         player1.z = 100.f;
+        this.input = input;
     }
 
     public void step(float dt) {
         this.dt = dt;
 
-        if (InputRecorder.getKeyInfo("DISPLAY_MAP").justPressed)
+        if (input.getActionInfo("DISPLAY_MAP").justPressed)
             shouldDisplayMap = !shouldDisplayMap;
 
         player1.movementInput(dt);

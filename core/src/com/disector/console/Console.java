@@ -10,13 +10,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
+import com.disector.inputrecorder.InputChainInterface;
+import com.disector.inputrecorder.InputChainNode;
 
 import java.util.Arrays;
 
 public class Console {
+    private final InputChainNode input;
+
+    private final CommandExecutor executor;
+
     private final SpriteBatch batch;
     private final ShapeRenderer shape;
     private final Matrix4 renderTransform;
+
+    private String currentIn;
+    private final Array<String> textLines;
 
     private boolean visible;
     private boolean active;
@@ -26,16 +35,10 @@ public class Console {
     private final float screenPercentage = 0.65f;
     private final int xBorder = 42;
 
-    private String currentIn;
-    private final Array<String> textLines;
+    private BitmapFont font = new BitmapFont( Gdx.files.local("assets/font/fira.fnt") );
+    private final Color backgroundColor = new Color(0.6f, 0.6f, 0.2f, 0.7f);
 
-    private InputAdapter inputAdapter;
-    private CommandExecutor executor;
-
-    BitmapFont font = new BitmapFont( Gdx.files.local("assets/font/fira.fnt") );
-    private final Color backgroundColor = new Color(0.2f, 0.6f, 0.8f, 0.7f);
-
-    public Console(CommandExecutor executor) {
+    public Console(CommandExecutor executor, InputChainInterface inputParent) {
         active = false;
         visible = false;
         y=Gdx.graphics.getHeight();
@@ -49,23 +52,11 @@ public class Console {
 
         textLines = new Array<>(25);
         currentIn = "";
-        textLines.add("    -= welcome =-");
+        textLines.add("    -= Welcome =-");
 
         this.executor = executor;
 
-        createInputProcessor();
-    }
-
-    public void insertText(String str) {
-        textLines.insert(0, str);
-    }
-
-    public InputAdapter getInputAdapter() {
-        return inputAdapter;
-    }
-
-    private void createInputProcessor() {
-        inputAdapter = new InputAdapter() {
+        input = new InputChainNode(inputParent, "Console") {
             @Override
             public boolean keyTyped (char character) {
                 if (active &&
@@ -134,15 +125,22 @@ public class Console {
         };
     }
 
+    public void insertText(String str) {
+        textLines.insert(0, str);
+    }
+
+    public InputChainNode getInputAdapter() {
+        return input;
+    }
+
+    public void toggle() {
+        active = !active;
+    }
+
     public void updateAndDraw(float delta) {
         //Fix bug where commands don't register currently after delete was pressed ?
         if (active && Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL) ) {
             currentIn = "";
-        }
-
-        //Toggle Active
-        if ( Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
-            active = !active;
         }
 
         //Slide console up or down
@@ -220,6 +218,10 @@ public class Console {
     }
 
     private String autoComplete(String str) {
+        /*
+         * Absolutely the nastiest garbage ever written
+         */
+
         if (str == null || str.replaceAll("\n|\t|\b|\r", "").isEmpty() )
             return "";
 
