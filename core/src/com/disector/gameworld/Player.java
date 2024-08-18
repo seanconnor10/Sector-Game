@@ -84,7 +84,7 @@ public class Player implements Movable {
         vLook = Math.min( Math.max(vLook, -VLOOK_CLAMP), VLOOK_CLAMP );
 
         //Crouching
-        height = (input.isJustPressed(Input.Keys.CONTROL_LEFT)) ? CROUCHING_HEIGHT : STANDING_HEIGHT;
+        height = (input.isDown(Input.Keys.CONTROL_LEFT)) ? CROUCHING_HEIGHT : STANDING_HEIGHT;
 
         //Jump
         if (onGround && input.isJustPressed(Input.Keys.SPACE))
