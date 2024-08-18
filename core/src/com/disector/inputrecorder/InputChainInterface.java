@@ -10,4 +10,9 @@ public interface InputChainInterface {
 
     void addAsChild(InputChainNode node);
 
+    void on();
+    void off();
+    void toggle();
+
+    String showName();
 }

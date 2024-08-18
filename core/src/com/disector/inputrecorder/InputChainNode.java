@@ -1,37 +1,41 @@
 package com.disector.inputrecorder;
 
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.Array;
 
-public class InputChainNode implements InputChainInterface {
-    private Array<InputChainNode> children;
-    private InputChainInterface parent;
+public class InputChainNode extends InputMultiplexer implements InputChainInterface {
+    private Array<InputChainNode> children = new Array<>();
+    private final InputChainInterface parent;
+
+    private final String name;
 
     public boolean isActive;
 
-    public InputChainNode(InputChainNode parent) {
+    public InputChainNode(InputChainInterface parent, String name) {
         this.parent = parent;
         parent.addAsChild(this);
+        this.name = name;
     }
 
-    public void deactivate() {
+    private void deactivateAllChildren() {
         for (InputChainNode node : children)
-            node.deactivate();
+            node.deactivateAllChildren();
         this.isActive = false;
     }
 
     @Override
     public InputRecorder.keyPressData getActionInfo(String name) {
-        return null;
+        return isActive ? parent.getActionInfo(name) : InputRecorder.keyPressData.BLANK;
     }
 
     @Override
     public boolean isDown(int keyCode) {
-        return false;
+        return isActive && parent.isDown(keyCode);
     }
 
     @Override
     public boolean isJustPressed(int keyCode) {
-        return false;
+        return isActive && parent.isJustPressed(keyCode);
     }
 
     @Override
@@ -42,5 +46,26 @@ public class InputChainNode implements InputChainInterface {
     @Override
     public void addAsChild(InputChainNode node) {
         children.add(node);
+        addProcessor(node);
+    }
+
+    @Override
+    public void on() {
+        isActive = true;
+    }
+
+    @Override
+    public void off() {
+        isActive = false;
+    }
+
+    @Override
+    public void toggle() {
+        isActive = !isActive;
+    }
+
+    @Override
+    public String showName() {
+        return name;
     }
 }

@@ -1,14 +1,15 @@
 package com.disector.inputrecorder;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Properties;
 
-public class InputRecorder implements InputChainInterface {
+public class InputRecorder extends InputMultiplexer implements InputChainInterface {
 
     public static Map<String, Integer> keyBinds = new HashMap<>();
     public static Map<Integer, keyPressData> keyPressMap = new HashMap<>();
@@ -73,6 +74,8 @@ public class InputRecorder implements InputChainInterface {
     public static class keyPressData {
         public boolean isDown, justPressed, justReleased;
 
+        public static keyPressData BLANK = new keyPressData();
+
         @Override
         public String toString() {
             String str = (isDown ? "CurrentlyPressed " : "") + (justPressed ? "NewlyPressed " : "") + (justReleased ? "NewlyReleased " : "");
@@ -87,7 +90,7 @@ public class InputRecorder implements InputChainInterface {
      * as a root of the tree distributing input visibility
      */
 
-    private Array<InputChainNode> children;
+    private final Array<InputChainNode> children = new Array<>();
 
     @Override
     public boolean isDown(int keyCode) {
@@ -112,5 +115,29 @@ public class InputRecorder implements InputChainInterface {
     @Override
     public void addAsChild(InputChainNode node) {
         children.add(node);
+        addProcessor(node);
     }
+
+    @Override
+    public void on() {
+        //Since an instance of this class is used as the root of the input tree
+        //We don't every really want to toggle activation?
+    }
+
+    @Override
+    public void off() {
+        //Since an instance of this class is used as the root of the input tree
+        //We don't every really want to toggle activation?
+    }
+
+    @Override
+    public void toggle() {
+
+    }
+
+    @Override
+    public String showName() {
+        return "ROOT!";
+    }
+
 }
