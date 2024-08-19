@@ -1,109 +1,67 @@
 package com.disector.renderer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.disector.*;
+
+import com.disector.Wall;
+import com.disector.Sector;
+import com.disector.Application;
 import com.disector.assets.Material;
 import com.disector.assets.PixmapContainer;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+public class EditingSoftwareRenderer extends SoftwareRenderer {
 
-public class SoftwareRenderer extends DimensionalRenderer {
-    protected final Pixmap[] ERROR_TEXTURE;
+    /*
+     * Allows the view to be clicked on. giving info about
+     * which Wall or Sector Floor/Ceil was clicked On
+     */
 
-    protected int[] occlusionBottom;
-    protected int[] occlusionTop;
-    protected final Deque<Integer> drawnPortals = new ArrayDeque<>();
-    //private HashSet<Integer> transformedWalls = new HashSet<>();
-    //private HashSet<Integer> transformedSectors = new HashSet<>();
+    public int wallHighLightIndex = -1;
+    public int sectorHighlightIndex = -1;
 
-    protected final Color depthFogColor = new Color(0.2f, 0.05f, 0.2f, 1f);
-    protected final Color darkColor = new Color(0x20_0A_10_FF);
+    public class ClickInfo {
+        public int index = -1;
+        public boolean isWall;
+    };
 
-    public SoftwareRenderer(Application app) {
+
+    public ClickInfo[] clickInfo = new ClickInfo[frameWidth*frameHeight];
+
+    public EditingSoftwareRenderer(Application app) {
         super(app);
-
-        Texture temp = new Texture(Gdx.files.local("assets/img/error_tex.png"));
-        temp.getTextureData().prepare();
-        ERROR_TEXTURE = PixmapContainer.makeMipMapSeries(temp);
-        temp.dispose();
-
-        setFovFromDeg(Application.config.fov);
     }
 
-    @Override
-    public void renderWorld() {
-        resetDrawData();
-        buffer.fill();
-        drawSector(camCurrentSector, 0, frameWidth-1);
-    }
 
     @Override
     public void resizeFrame(int w, int h) {
-        w = Math.max(1, w);
-        h = Math.max(1, h);
-        float fovDeg = getDegFromFov();
+        clickInfo = new ClickInfo[frameWidth*frameHeight];
+
+        for (int i=0; i<clickInfo.length; i++) {
+            clickInfo[i] = new ClickInfo();
+        }
+
         super.resizeFrame(w, h);
-        setFovFromDeg(fovDeg);
-        reInitDrawData(w);
     }
 
-    @Override
-    public void setFov(float val) {
-        setFovFromDeg(val);
+    public ClickInfo getClickInfo(int x, int y) {
+        int loc = x + (y*frameWidth);
+        if (loc < 0) loc = 0;
+        if (loc >= clickInfo.length) loc = clickInfo.length - 1;
+        return clickInfo[loc];
     }
 
-    public void setFovFromDeg(float deg) {
-        camFOV = (float) ( halfWidth / Math.tan(Math.toRadians(deg/2)) );
+    public int getWidth() {
+        return frameWidth;
     }
 
-    public float getDegFromFov() {
-        return 2.f * (float) Math.toDegrees( Math.atan(halfWidth / camFOV) );
+    public int getHeight() {
+        return frameHeight;
     }
 
-    @Override
-    public boolean screenHasEmptySpace() {
-        return !spanFilled(0, frameWidth-1);
-    }
 
     // --------------------------------------------------------------------------------------
 
-    protected void drawSector(int secInd, int spanStart, int spanEnd) {
-        Sector sec = null;
-        try {
-            sec = sectors.get(secInd);
-        } catch (IndexOutOfBoundsException indexException) {
-            return;// false;
-        }
-
-        //Get all walls of the sector, finding their nearest point to the camera
-        Array<WallInfoPack> wallsToDraw = new Array<>();
-        for (int wInd : sec.walls.toArray()) {
-            wallsToDraw.add( new WallInfoPack(walls.get(wInd), wInd, new Vector2(camX, camY)) );
-        }
-
-        wallsToDraw.sort( //Sort wallsToDraw with nearest to camera first
-            (WallInfoPack o1, WallInfoPack o2) -> Float.compare(o1.distToNearest, o2.distToNearest)
-        );
-
-        for (WallInfoPack wallInfo : wallsToDraw) {
-            drawWall(wallInfo.wInd, secInd, spanStart, spanEnd);
-            if (spanFilled(spanStart, spanEnd)) return;// true;
-        }
-
-        //Returns false if the entire span isn't filled
-        //If this instance of drawSector() is the original
-        //where the span is the full screen AND we have returned false,
-        //we can know that currentSectorIndex of the camera is
-        //misplaced
-        return;// false;
-    }
-
+    @Override
     protected void drawWall(int wInd, int currentSectorIndex, int spanStart, int spanEnd) {
         Wall w = walls.get(wInd);
         boolean isPortal = w.isPortal;
@@ -163,7 +121,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         if (!isPortal && p2_plotX < p1_plotX) return; //Avoid drawing backside of non portal wall
 
         int leftEdgeX = Math.max(0, Math.min((int)p2_plotX,(int)p1_plotX) );
-		int rightEdgeX = Math.min( Math.max((int)p2_plotX,(int)p1_plotX), frameWidth-1);
+        int rightEdgeX = Math.min( Math.max((int)p2_plotX,(int)p1_plotX), frameWidth-1);
 
         if (leftEdgeX > spanEnd) return; //Avoid more processing if out of span
         if (rightEdgeX < spanStart) return;
@@ -268,16 +226,24 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     drawColor = getCheckerboardColor(u,v);
                 }
 
+                if (wallHighLightIndex == wInd) {
+                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                }
+
                 buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor) );
+
+                ClickInfo info = getClickInfo(drawX, drawY);
+                info.index = wInd;
+                info.isWall = true;
 
             } //End Per Pixel Loop
 
             //Floor and Ceiling
             if (occlusionBottom[drawX] < quadBottom && camZ > currentSector.floorZ)
-                drawFloor(w, currentSector.matFloor, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor);
+                drawFloor(w, currentSector.matFloor, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor, currentSectorIndex);
 
             if (occlusionTop[drawX] > rasterTop && camZ < currentSector.ceilZ)
-                drawCeiling(w, currentSector.matCeil, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil);
+                drawCeiling(w, currentSector.matCeil, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil, currentSectorIndex);
 
             //Update Occlusion Matrix
             updateOcclusion(isPortal, drawX, quadTop, quadBottom, quadHeight, upperWallCutoffV, lowerWallCutoffV);
@@ -293,7 +259,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     }
 
-    protected void drawFloor(Wall w, int texInd, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light) {
+
+    protected void drawFloor(Wall w, int texInd, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light, int secInd) {
         final float scaleFactor = 32.f;
         float floorXOffset = camX/scaleFactor, floorYOffset = camY/scaleFactor;
         int vOffset = (int) camVLook;
@@ -345,13 +312,21 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 drawColor.lerp(depthFogColor, getFogFactor(dist));
                 drawColor.lerp(darkColor, 1.0f - light);
 
+                if (sectorHighlightIndex == secInd) {
+                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                }
+
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+
+                ClickInfo info = getClickInfo(drawX, drawY - vOffset);
+                info.index = secInd;
+                info.isWall = false;
 
             }
         }
     }
 
-    protected void drawCeiling(Wall w, int texInd, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light) {
+    protected void drawCeiling(Wall w, int texInd, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light, int secInd) {
         Pixmap tex;
         boolean isSky = false;
         try {
@@ -422,64 +397,39 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 drawColor.lerp(0.1f, 0f, 0.2f, 1f, getFogFactor(dist));
                 drawColor.lerp(darkColor, 1.0f - light);
+
+                if (sectorHighlightIndex == secInd) {
+                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                }
+
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+
+
             } else { //If isSky
                 Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
+
+                if (sectorHighlightIndex == secInd) {
+                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                }
+
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
             }
 
+            ClickInfo info = getClickInfo(drawX, drawY - vOffset);
+            info.index = secInd;
+            info.isWall = false;
+
         }
 
     }
 
-    protected void updateOcclusion(boolean isPortal, int drawX, float quadTop, float quadBottom, float quadHeight, float upperCutoff, float lowerCutoff) {
-        if (!isPortal) {
-            if (occlusionBottom[drawX] < quadTop) occlusionBottom[drawX] = (int) quadTop;
-            if (occlusionTop[drawX] > quadBottom) occlusionTop[drawX] = (int) quadBottom;
-        } else {
-            occlusionTop[drawX] = (int) Math.min(quadBottom + (quadHeight * upperCutoff), occlusionTop[drawX]);
-            occlusionBottom[drawX] = (int) Math.max(quadBottom + (quadHeight * lowerCutoff), occlusionBottom[drawX]);
-        }
-    }
-
-    protected void reInitDrawData(int newFrameWidth) {
-        occlusionBottom = new int[newFrameWidth];
-        occlusionTop = new int[newFrameWidth];
-    }
-
+    @Override
     protected void resetDrawData() {
-        //transformedWalls.clear();
-        //transformedSectors.clear();
-        drawnPortals.clear();
+        super.resetDrawData();
 
-        for (int i=0; i<frameWidth; i++) {
-            occlusionBottom[i] = 0;
-            occlusionTop[i] = frameHeight;
-        }
+        for (ClickInfo item : clickInfo)
+            item.index = -1;
+
     }
 
-    protected float getFogFactor(float dist) {
-        if (!drawFog) return 0f;
-        final float fogDistance = 400f;
-        return Math.max(0, Math.min(fogDistance, dist) ) / fogDistance;
-    }
-
-    protected boolean spanFilled(int spanStart, int spanEnd) {
-        for (int i=spanStart; i<spanEnd; i++) {
-            if (occlusionBottom[i] < occlusionTop[i]-1)
-                return false;
-        }
-        return true;
-    }
-
-    protected Color grabColor(Pixmap tex, float u, float v) {
-        u = u - (int)u;
-        v = v - (int)v;
-        return new Color(tex.getPixel( (int)(u*tex.getWidth()), (int)((1.f-v)*tex.getHeight()) ));
-    }
-
-    protected Color getCheckerboardColor(float u, float v) {
-        boolean checker = ( (int)(u*8)%2 == (int)(v*8)%2 );
-        return new Color(checker ? 0xB0_20_30_FF : 0xA0_A0_A0_FF);
-    }
 }

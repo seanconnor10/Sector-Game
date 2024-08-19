@@ -164,7 +164,7 @@ public class CommandExecutor {
     }
 
     @ConsoleCommand(helpText = "Toggle Vsync")
-    public String Stringvsync() {
+    public String vsync() {
         return "Vsync " + (app.toggleVsync() ? "Enabled" : "Disabled");
     }
 

@@ -17,6 +17,7 @@ import com.disector.Wall;
 import com.disector.assets.Material;
 import com.disector.editor.actions.EditAction;
 import com.disector.inputrecorder.InputChainInterface;
+import com.disector.renderer.EditingSoftwareRenderer;
 import com.disector.renderer.SoftwareRenderer;
 
 import java.util.Stack;
@@ -34,7 +35,7 @@ public class Editor {
     final InputChainInterface input;
 
     final NewEditorMapRenderer mapRenderer;
-    final SoftwareRenderer viewRenderer;
+    final EditingSoftwareRenderer viewRenderer;
 
     final int MAX_RENDER_WIDTH = 400;
     final int MAX_RENDER_HEIGHT = 225;
@@ -87,7 +88,7 @@ public class Editor {
         panels = new Panel[] { mapPanel, viewPanel, menuPanel, propertiesPanel };
 
         this.mapRenderer = new NewEditorMapRenderer(app, this, mapPanel.rect);
-        this.viewRenderer = new SoftwareRenderer(app);
+        this.viewRenderer = new EditingSoftwareRenderer(app);
         this.viewRenderer.placeCamera(100, 30, -(float)Math.PI/4f);
         this.viewRenderer.camZ = 20;
         this.selection = new ActiveSelection(sectors, walls, this);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.disector.gameworld.Player;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputRecorder;
+import com.disector.renderer.EditingSoftwareRenderer;
 
 class ViewPanel extends Panel{
     public ViewPanel(Editor editor) {
@@ -36,5 +37,25 @@ class ViewPanel extends Panel{
             p1.r = editor.viewRenderer.camR;
             p1.vLook = editor.viewRenderer.camVLook;
         }
+    }
+
+    @Override
+    void clickedIn() {
+        int frameX = (int) ( relX() / (rect.width/editor.viewRenderer.getWidth()) );
+        int frameY = (int) ( relY() / (rect.height/editor.viewRenderer.getHeight()) );
+
+        EditingSoftwareRenderer.ClickInfo info =
+                editor.viewRenderer.getClickInfo(frameX, frameY);
+
+        editor.viewRenderer.wallHighLightIndex = -1;
+        editor.viewRenderer.sectorHighlightIndex = -1;
+        editor.shouldUpdateViewRenderer = true;
+
+        if (info.isWall) {
+            editor.viewRenderer.wallHighLightIndex = info.index;
+        } else {
+            editor.viewRenderer.sectorHighlightIndex = info.index;
+        }
+
     }
 }
