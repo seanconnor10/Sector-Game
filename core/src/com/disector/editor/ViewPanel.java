@@ -20,6 +20,16 @@ class ViewPanel extends Panel{
     }
 
     @Override
+    void step(float dt) {
+        if (editor.viewRenderer.highLightStrength > 0) {
+            editor.viewRenderer.highLightStrength -= dt;
+            editor.shouldUpdateViewRenderer = true;
+            if (editor.viewRenderer.highLightStrength < 0)
+                editor.viewRenderer.highLightStrength = 0;
+        }
+    }
+
+    @Override
     void stepFocused(float dt) {
         super.stepFocused(dt);
         if (Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
@@ -52,9 +62,13 @@ class ViewPanel extends Panel{
         editor.shouldUpdateViewRenderer = true;
 
         if (info.isWall) {
+            editor.viewRenderer.highLightStrength = 0.75f;
             editor.viewRenderer.wallHighLightIndex = info.index;
+            editor.propertiesPanel.wallPropertiesWindow.setWall(info.index);
         } else {
+            editor.viewRenderer.highLightStrength = 0.75f;
             editor.viewRenderer.sectorHighlightIndex = info.index;
+            editor.propertiesPanel.sectorPropertiesWindow.setSector(info.index);
         }
 
     }

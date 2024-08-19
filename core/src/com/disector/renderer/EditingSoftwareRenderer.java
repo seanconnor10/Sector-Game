@@ -16,8 +16,11 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
      * which Wall or Sector Floor/Ceil was clicked On
      */
 
+    private final Color highlightColor = new Color(0x10_D0_40_FF);
+
     public int wallHighLightIndex = -1;
     public int sectorHighlightIndex = -1;
+    public float highLightStrength = 0;
 
     public class ClickInfo {
         public int index = -1;
@@ -227,7 +230,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 }
 
                 if (wallHighLightIndex == wInd) {
-                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                    drawColor.lerp(highlightColor, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor) );
@@ -313,7 +316,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 drawColor.lerp(darkColor, 1.0f - light);
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                    drawColor.lerp(highlightColor, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
@@ -399,7 +402,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 drawColor.lerp(darkColor, 1.0f - light);
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                    drawColor.lerp(highlightColor, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
@@ -409,7 +412,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(1f, 0.5f, 0.5f, 1.0f, 0.5f);
+                    drawColor.lerp(highlightColor, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );

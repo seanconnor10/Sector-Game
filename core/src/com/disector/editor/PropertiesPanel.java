@@ -25,8 +25,10 @@ class PropertiesPanel extends Panel {
     private final static Pixmap.Format pixelFormat = Pixmap.Format.RGBA8888;
     private final static BitmapFont font = new BitmapFont( Gdx.files.local("assets/font/fira.fnt") );
 
-    int chosenSectorIndex = -1;
-    Sector chosenSector = null;
+    //int chosenSectorIndex = -1;
+    //Sector chosenSector = null;
+    COMP_SectorProperties sectorPropertiesWindow;
+    COMP_WallProperties wallPropertiesWindow;
 
     FrameBuffer frame;
 
@@ -80,8 +82,11 @@ class PropertiesPanel extends Panel {
         stage = new InputChainStage(new ScreenViewport(), new SpriteBatch(), input);
         stage.on();
 
-        stage.addActor(new COMP_SectorProperties("Sector Properties", guiSkin, editor));
-        stage.addActor(new COMP_WallProperties("Wall Properties", guiSkin, editor));
+        sectorPropertiesWindow = new COMP_SectorProperties("Sector Properties", guiSkin, editor);
+        wallPropertiesWindow = new COMP_WallProperties("Wall Properties", guiSkin, editor);
+
+        stage.addActor(sectorPropertiesWindow);
+        stage.addActor(wallPropertiesWindow);
 
     }
 
