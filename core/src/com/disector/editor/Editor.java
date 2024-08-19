@@ -550,6 +550,8 @@ public class Editor {
     }
 
     private void temporaryControls(float dt) {
+        final boolean CTRL = input.isDown(Input.Keys.CONTROL_LEFT);
+
         if (focusedPanel == mapPanel)
             moveMapWithKeyBoard(dt);
         else if (focusedPanel == viewPanel)
@@ -563,7 +565,7 @@ public class Editor {
         }
 
         //Cycle Layout
-        if (input.isJustPressed(Input.Keys.TAB)) {
+        if (CTRL && input.isJustPressed(Input.Keys.TAB)) {
             if (input.isJustPressed(Input.Keys.SHIFT_LEFT))
                 cycleLayoutBackward();
             else
@@ -571,7 +573,7 @@ public class Editor {
         }
 
         //Temporary Toggle FullBright
-        if (input.isJustPressed(Input.Keys.CONTROL_LEFT) && input.isJustPressed(Input.Keys.I)) {
+        if (CTRL && input.isJustPressed(Input.Keys.I)) {
             viewRenderer.fullBright = !viewRenderer.fullBright;
             messageLog.log("Full-Bright " + (viewRenderer.fullBright ? "ON" : "OFF"));
             shouldUpdateViewRenderer = true;
@@ -584,7 +586,7 @@ public class Editor {
 
         //GridSize
         if (input.isJustPressed(Input.Keys.G)) {
-            if (input.isJustPressed(Input.Keys.CONTROL_LEFT)) {
+            if (CTRL) {
                 isGridSnapping = !isGridSnapping;
                 messageLog.log("Snapping " + (isGridSnapping ? "Enabled" : "Disabled"));
             } else {

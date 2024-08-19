@@ -1,25 +1,23 @@
-package com.disector.gui;
+package com.disector.inputrecorder;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.disector.inputrecorder.InputChainInterface;
-import com.disector.inputrecorder.InputRecorder;
 
-public class GuiStage extends Stage implements InputChainInterface {
+public class InputChainStage extends Stage implements InputChainInterface {
     private boolean isActive;
 
-    public GuiStage(InputChainInterface parent) {
+    public InputChainStage(InputChainInterface parent) {
         super();
         parent.addAsChild(this);
     }
 
-    public GuiStage(Viewport viewport, InputChainInterface parent) {
+    public InputChainStage(Viewport viewport, InputChainInterface parent) {
         super(viewport);
         parent.addAsChild(this);
     }
 
-    public GuiStage(Viewport viewport, Batch batch, InputChainInterface parent) {
+    public InputChainStage(Viewport viewport, Batch batch, InputChainInterface parent) {
         super(viewport, batch);
         parent.addAsChild(this);
     }
