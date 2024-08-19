@@ -188,7 +188,7 @@ public class CommandExecutor {
         if (path == null) {
             app.saveMap(app.activeMapFile.path());
         } else {
-            app.saveMap(path);
+            app.saveMap("MAPS/" + path);
         }
     }
 
@@ -203,7 +203,7 @@ public class CommandExecutor {
             return null;
 
         if (!handle.exists()) {
-            app.activeMapFile = handle; //Gdx.files.local(handle.path().replaceFirst("MAPS/", ""));
+            app.activeMapFile = Gdx.files.local("MAPS/" + path); //Gdx.files.local(handle.path().replaceFirst("MAPS/", ""));
             return "File Not Found\n" + "Setting Working Path to " + handle;
         } else {
             return handle.isDirectory() ? "That's A Folder" : "File Found but Failed to Load";

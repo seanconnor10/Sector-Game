@@ -1,5 +1,6 @@
 package com.disector.editor;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Array;
@@ -7,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 public class COMP_UpdateableWindow extends Window implements UpdatableComponent {
     protected final Editor editor;
 
-    protected final Array<COMP_ControlGroup> actorsToUpdate = new Array<>();
+    protected final Array<UpdatableComponent> actorsToUpdate = new Array<>();
 
     public COMP_UpdateableWindow(String title, Skin skin, Editor editor) {
         super(title, skin);
@@ -32,8 +33,8 @@ public class COMP_UpdateableWindow extends Window implements UpdatableComponent 
     }
 
     protected void updateControlGroups() {
-        for (COMP_ControlGroup item : actorsToUpdate) {
-            item.onUpdateMap.run();
+        for (UpdatableComponent item : actorsToUpdate) {
+            item.onMapLoad();
         }
     }
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class COMP_ControlGroup extends Table {
+public class COMP_ControlGroup extends Table implements UpdatableComponent {
     Runnable minusAction;
     Runnable plusAction;
     Runnable onTextSubmit;
@@ -61,4 +61,10 @@ public class COMP_ControlGroup extends Table {
 
     }
 
+    @Override
+    public void onMapLoad() {
+        if (onUpdateMap != null) {
+            try {onUpdateMap.run();} catch (Exception e) {};
+        }
+    }
 }

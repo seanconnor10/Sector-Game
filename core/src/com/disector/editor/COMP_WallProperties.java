@@ -1,8 +1,9 @@
 package com.disector.editor;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Array;
 
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.disector.Wall;
 
 public class COMP_WallProperties extends COMP_UpdateableWindow {
@@ -32,7 +33,8 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
         setWall(wallIndex); //Grab new sector reference
         /*
          * This call will call updateControlGroups() and
-         * will update everything here
+         * will update everything here, so we avoid calling
+         * super.onMapLoad() which calls updateControlGroups()
          */
     }
 
@@ -41,9 +43,8 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
         int prevIndex = wallIndex;
 
         try {
-            this.wallIndex = wallIndex;
             wall = editor.walls.get(wallIndex);
-            indexLabel.setText("Index: " + wallIndex);
+            this.wallIndex = wallIndex;
             updateControlGroups();
         } catch (Exception e) {
             wallIndex = prevIndex;
@@ -53,19 +54,32 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
 
     // -----------------------------------------------------------------
 
-    //Element that must be accessed later??...
-    private Label indexLabel = new Label("Index: " + wallIndex, getSkin());
-
     private void setup() {
         this.setResizable(true);
 
         this.row().fill().expandX();
-
+        
         Table mainTable = new Table();
         mainTable.defaults().pad(10);
         mainTable.setFillParent(false);
 
-        mainTable.add(indexLabel).colspan(2);
+
+        COMP_ControlGroup indexControl = new COMP_ControlGroup("Wall", getSkin(), editor);
+        indexControl.minusAction  = () -> setWall(wallIndex-1);
+        indexControl.plusAction   = () -> setWall(wallIndex+1);
+        indexControl.onTextSubmit = () -> setWall(Integer.parseInt(indexControl.textField.getText()));
+        indexControl.onUpdateMap  = () -> indexControl.textField.setText("" + wallIndex);
+        indexControl.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused) {
+                    indexControl.onUpdateMap.run(); //Update the text field, when leaving
+                }
+            }
+        });
+        actorsToUpdate.add(indexControl);
+        mainTable.add(indexControl);
+
         mainTable.row();
 
         COMP_ControlGroup light_control = new COMP_ControlGroup("Floor Z", getSkin(), editor);

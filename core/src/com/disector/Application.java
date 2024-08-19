@@ -174,8 +174,8 @@ public class Application extends ApplicationAdapter {
     }
 
     public boolean saveMap(String filePath) {
-        if (!filePath.contains(".")) filePath += ".txt";
-        return new TextFileMapLoader(this).save("MAPS/" + filePath);
+        //if (!filePath.contains(".")) filePath += ".txt";
+        return new TextFileMapLoader(this).save(filePath);
     }
 
     public boolean loadMapOldFormat(String filePath) {
@@ -210,7 +210,6 @@ public class Application extends ApplicationAdapter {
             case MENU:
                 break;
             case EDITOR:
-                //Gdx.graphics.setUndecorated(true);
                 break;
             default:
         }

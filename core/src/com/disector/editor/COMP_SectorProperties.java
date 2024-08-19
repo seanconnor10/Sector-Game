@@ -34,7 +34,8 @@ public class COMP_SectorProperties extends COMP_UpdateableWindow {
         setSector(secIndex); //Grab new sector reference
         /*
          * This call will call updateControlGroups() and
-         * will update everything here
+         * will update everything here, so we avoid calling
+         * super.onMapLoad() which calls updateControlGroups()
          */
     }
 
@@ -45,7 +46,6 @@ public class COMP_SectorProperties extends COMP_UpdateableWindow {
         try {
             this.secIndex = secIndex;
             this.sec = editor.sectors.get(secIndex);
-            this.indexLabel.setText("Index: " + secIndex);
             updateControlGroups();
         } catch (Exception e) {
             this.secIndex = prevIndex;
@@ -54,9 +54,6 @@ public class COMP_SectorProperties extends COMP_UpdateableWindow {
     }
 
     // -----------------------------------------------------------------
-
-    //Element that must be accessed later??...
-    private Label indexLabel = new Label("Index: " + secIndex, getSkin());
 
     private void setup() {
         this.setResizable(true);
@@ -70,7 +67,27 @@ public class COMP_SectorProperties extends COMP_UpdateableWindow {
         mainTable.defaults().pad(10);
         mainTable.setFillParent(false);
 
-        mainTable.add(indexLabel).colspan(2);
+        COMP_ControlGroup indexControl = new COMP_ControlGroup("Sector", getSkin(), editor);
+        indexControl.minusAction  = () -> setSector(secIndex-1);
+        indexControl.plusAction   = () -> setSector(secIndex+1);
+        indexControl.onTextSubmit = () -> setSector(Integer.parseInt(indexControl.textField.getText()));
+        indexControl.onUpdateMap  = () -> indexControl.textField.setText("" + secIndex);
+        indexControl.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused) {
+                    indexControl.onUpdateMap.run(); //Update the text field, when leaving
+                }
+            }
+        });
+        actorsToUpdate.add(indexControl);
+        mainTable.add(indexControl);
+
+        COMP_UpdateableLabel wallCountLabel = new COMP_UpdateableLabel("Wall Count: " + sec.walls.size, getSkin());
+        wallCountLabel.onUpdate = () -> wallCountLabel.setText("Wall Count: " + sec.walls.size);
+        actorsToUpdate.add(wallCountLabel);
+        mainTable.add(wallCountLabel);
+
         mainTable.row();
 
         COMP_ControlGroup floorZ_control = new COMP_ControlGroup("Floor Z", getSkin(), editor);
