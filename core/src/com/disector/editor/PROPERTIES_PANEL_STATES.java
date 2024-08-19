@@ -1,5 +1,0 @@
-package com.disector.editor;
-
-enum PROPERTIES_PANEL_STATES {
-    DISAMBIGUATE_SECTOR_SELECTION, SHOW_SECTOR_FIELDS;
-}

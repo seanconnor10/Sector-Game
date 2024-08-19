@@ -1,8 +1,10 @@
 package com.disector.inputrecorder;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.disector.editor.UpdatableComponent;
 
 public class InputChainStage extends Stage implements InputChainInterface {
     private boolean isActive;
@@ -20,6 +22,14 @@ public class InputChainStage extends Stage implements InputChainInterface {
     public InputChainStage(Viewport viewport, Batch batch, InputChainInterface parent) {
         super(viewport, batch);
         parent.addAsChild(this);
+    }
+
+    public void onMapLoad() {
+        for (Actor item : getActors()) {
+            if (item instanceof UpdatableComponent) {
+                ((UpdatableComponent) item).onMapLoad();
+            }
+        }
     }
 
     @Override

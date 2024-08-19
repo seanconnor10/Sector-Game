@@ -359,26 +359,6 @@ public class Editor {
     }
 
     private void resizePROPERTIES() {
-        /*menuPanel.rect.height = MENU_BAR_HEIGHT;
-        menuPanel.rect.width = width;
-        menuPanel.rect.x = 0;
-        menuPanel.rect.y = height-menuPanel.rect.height;
-
-        propertiesPanel.rect.height = height-menuPanel.rect.height;
-        propertiesPanel.rect.width = (int) (width*0.6f);
-        propertiesPanel.rect.x = width-propertiesPanel.rect.width;
-        propertiesPanel.rect.y = 0;
-
-        viewPanel.rect.height = (int) ( (height-menuPanel.rect.height)*0.5f);
-        viewPanel.rect.width = propertiesPanel.rect.x;
-        viewPanel.rect.x = 0;
-        viewPanel.rect.y = viewPanel.rect.height;
-
-        mapPanel.rect.height = viewPanel.rect.y;
-        mapPanel.rect.width = propertiesPanel.rect.x;
-        mapPanel.rect.x = 0;
-        mapPanel.rect.y = 0;*/
-
         menuPanel.rect.height = MENU_BAR_HEIGHT;
         menuPanel.rect.width = width;
         menuPanel.rect.x = 0;
@@ -703,6 +683,7 @@ public class Editor {
     // -----------------------------------------------
 
     void loadMap(String path) {
+        //For the Load Menu bar button
         if (app.loadMap(path)) {
             messageLog.log("Loaded from " + path);
             shouldUpdateViewRenderer = true;
@@ -726,5 +707,9 @@ public class Editor {
 
     int snap(float val) {
         return Math.round(val/(float)gridSize) * gridSize;
+    }
+
+    public void onMapLoad() {
+        propertiesPanel.stage.onMapLoad();
     }
 }

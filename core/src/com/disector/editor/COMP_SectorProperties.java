@@ -4,48 +4,38 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.utils.Array;
 
 import com.disector.Sector;
-import com.disector.editor.COMP_ControlGroup;
 
-public class COMP_SectorProperties extends Window {
-    private final Editor editor;
+public class COMP_SectorProperties extends COMP_UpdateableWindow {
 
-    private Array<COMP_ControlGroup> actorsToUpdate = new Array<>();
     private int secIndex = -1;
     private Sector sec = null;
 
-    private final Button.ButtonStyle minusStyle =
-            getSkin().get("minimize", Button.ButtonStyle.class);
-    private final Button.ButtonStyle plusStyle =
-            getSkin().get("maximize", Button.ButtonStyle.class);
-
     public COMP_SectorProperties(String title, Skin skin, String styleName,Editor editor) {
-        super(title, skin, styleName);
-        this.editor = editor;
+        super(title, skin, styleName, editor);
         setSector(0);
         setup();
     }
 
     public COMP_SectorProperties(String title, WindowStyle style,Editor editor) {
-        super(title, style);
-        this.editor = editor;
+        super(title, style, editor);
         setSector(0);
         setup();
     }
 
     public COMP_SectorProperties(String title, Skin skin,Editor editor) {
-        super(title, skin);
-        this.editor = editor;
+        super(title, skin, editor);
         setSector(0);
         setup();
     }
 
-    public void update() {
-        for (COMP_ControlGroup item : actorsToUpdate) {
-            item.onUpdateMap.run();
-        }
+    @Override public void onMapLoad() {
+        setSector(secIndex); //Grab new sector reference
+        /*
+         * This call will call updateControlGroups() and
+         * will update everything here
+         */
     }
 
     public void setSector(int secIndex) {
@@ -56,7 +46,7 @@ public class COMP_SectorProperties extends Window {
             this.secIndex = secIndex;
             this.sec = editor.sectors.get(secIndex);
             this.indexLabel.setText("Index: " + secIndex);
-            update();
+            updateControlGroups();
         } catch (Exception e) {
             this.secIndex = prevIndex;
             this.sec = previous;
@@ -160,65 +150,8 @@ public class COMP_SectorProperties extends Window {
 
         this.pack();
 
-        update();
+        onMapLoad();
     }
-
-//    private class ControlGroup extends Table {
-//        Runnable minusAction;
-//        Runnable plusAction;
-//        Runnable onTextSubmit;
-//        Runnable onUpdateMap;
-//
-//        Label label;
-//        Button minusButton;
-//        Button plusButton;
-//        TextField textField;
-//
-//        public ControlGroup(String name, Skin skin) {
-//            super();
-//
-//            label = new Label(name, skin);
-//            minusButton = new Button(minusStyle);
-//            plusButton = new Button(plusStyle);
-//            textField = new TextField("", skin);
-//
-//            textField.setFocusTraversal(true);
-//
-//            minusButton.addListener(new ChangeListener() { @Override
-//                public void changed(ChangeEvent changeEvent, Actor actor) {
-//                    if (minusAction != null) {
-//                        editor.shouldUpdateViewRenderer = true;
-//                        try {minusAction.run();} catch (Exception e) {};
-//                    }
-//                }});
-//
-//            plusButton.addListener(new ChangeListener() { @Override
-//                public void changed(ChangeEvent changeEvent, Actor actor) {
-//                    if (plusAction != null) {
-//                        editor.shouldUpdateViewRenderer = true;
-//                        try {plusAction.run();} catch (Exception e) {};
-//                    }
-//            }});
-//
-//            textField.addListener(new ChangeListener() {@Override
-//                public void changed(ChangeEvent changeEvent, Actor actor) {
-//                    if (onTextSubmit != null) {
-//                        editor.shouldUpdateViewRenderer = true;
-//                        try {onTextSubmit.run();} catch (Exception e) {};
-//                    }
-//            }});
-//
-//            this.defaults().pad(5);
-//            this.add(label).width(70);
-//            this.add(minusButton).size(20);
-//            this.add(textField);
-//            this.add(plusButton).size(20);
-//
-//        }
-//
-//    }
-
-    // ---------  Action Helpers -------------------------------
 
     private String shiftFloor(float amt) {
         sec.floorZ = Math.round( sec.floorZ + amt );

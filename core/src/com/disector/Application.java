@@ -161,8 +161,10 @@ public class Application extends ApplicationAdapter {
             if (gameWorld.getPlayerPosition().z < newFloorZ) {
                 gameWorld.player1.setZ(newFloorZ);
             }
-//            if (editor != null) editor.shouldUpdateViewRenderer = true;
-            editor = new Editor(this, appInput);
+            if (editor != null) {
+                editor.shouldUpdateViewRenderer = true;
+                editor.onMapLoad();
+            }
             activeMapFile = Gdx.files.local(filePath);
         } catch (Exception e) {
             System.out.println( "Error when loading map! " + e.getCause() + " " + e.getMessage() );

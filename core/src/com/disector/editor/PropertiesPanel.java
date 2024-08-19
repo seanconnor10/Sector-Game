@@ -31,9 +31,7 @@ class PropertiesPanel extends Panel {
     FrameBuffer frame;
 
     Skin guiSkin;
-    InputChainStage sectorFieldsStage;
-
-    PROPERTIES_PANEL_STATES state = PROPERTIES_PANEL_STATES.SHOW_SECTOR_FIELDS;
+    InputChainStage stage;
 
     PropertiesPanel(Editor editor) {
         super(editor);
@@ -47,10 +45,10 @@ class PropertiesPanel extends Panel {
     @Override
     void stepFocused(float dt) {
         super.stepFocused(dt);
-        sectorFieldsStage.act(dt);
+        stage.act(dt);
 
         if (Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
-            Vector3 camPos = sectorFieldsStage.getCamera().position;
+            Vector3 camPos = stage.getCamera().position;
             camPos.x -= InputRecorder.mouseDeltaX;
             camPos.y += InputRecorder.mouseDeltaY;
         }
@@ -60,8 +58,8 @@ class PropertiesPanel extends Panel {
     void render() {
         frame.begin();
         ScreenUtils.clear(COL_BACK);
-        sectorFieldsStage.act();
-        sectorFieldsStage.draw();
+        stage.act();
+        stage.draw();
         frame.end();
     }
 
@@ -70,7 +68,7 @@ class PropertiesPanel extends Panel {
         int w = Math.max( (int) r.width,  1 );
         int h = Math.max( (int) r.height, 1 );
         frame = new FrameBuffer(pixelFormat, w, h, false);
-        sectorFieldsStage.getViewport().update(w, h, false);
+        stage.getViewport().update(w, h, false);
     }
 
     private void setupStage() {
@@ -79,10 +77,11 @@ class PropertiesPanel extends Panel {
                 new TextureAtlas( Gdx.files.local("assets/skin/clean-crispy-ui.atlas") )
         );
 
-        sectorFieldsStage = new InputChainStage(new ScreenViewport(), new SpriteBatch(), input);
-        sectorFieldsStage.on();
+        stage = new InputChainStage(new ScreenViewport(), new SpriteBatch(), input);
+        stage.on();
 
-        sectorFieldsStage.addActor(new COMP_SectorProperties("Sector Properties", guiSkin, editor));
+        stage.addActor(new COMP_SectorProperties("Sector Properties", guiSkin, editor));
+        stage.addActor(new COMP_WallProperties("Wall Properties", guiSkin, editor));
 
     }
 
