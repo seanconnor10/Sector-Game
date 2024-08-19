@@ -14,9 +14,9 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    Vector2 position = new Vector2(0.f, 0.f);
-    float z, r;
-    float vLook; // 'Angle' of vertical view direction
+    public Vector2 position = new Vector2(0.f, 0.f);
+    public float z, r;
+    public float vLook; // 'Angle' of vertical view direction
     float height;
     Vector2 velocity = new Vector2(0.f, 0.f);
     float zSpeed;

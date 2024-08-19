@@ -557,16 +557,9 @@ public class Editor {
         else if (focusedPanel == viewPanel)
             moveViewWithKeyBoard(dt);
 
-        if (input.isJustPressed(Input.Keys.P)) {
-            app.gameWorld.player1.snagPosition().set(
-                mapPanel.getMouseWorldX(),
-                mapPanel.getMouseWorldY()
-            );
-        }
-
         //Cycle Layout
         if (CTRL && input.isJustPressed(Input.Keys.TAB)) {
-            if (input.isJustPressed(Input.Keys.SHIFT_LEFT))
+            if (input.isDown(Input.Keys.SHIFT_LEFT))
                 cycleLayoutBackward();
             else
                 cycleLayout();
@@ -590,7 +583,7 @@ public class Editor {
                 isGridSnapping = !isGridSnapping;
                 messageLog.log("Snapping " + (isGridSnapping ? "Enabled" : "Disabled"));
             } else {
-                if (!input.isJustPressed(Input.Keys.SHIFT_LEFT))
+                if (!input.isDown(Input.Keys.SHIFT_LEFT))
                     gridSize /= 2;
                 else
                     gridSize *= 2;

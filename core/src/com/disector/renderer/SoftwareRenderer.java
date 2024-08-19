@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.disector.*;
+import com.disector.assets.Material;
 import com.disector.assets.PixmapContainer;
 
 import java.util.ArrayDeque;
@@ -299,7 +300,13 @@ public class SoftwareRenderer extends DimensionalRenderer {
         if (occlusionBottom[drawX] < rasterBottom) {
             float heightOffset = (camZ - secFloorZ) / scaleFactor;
             int floorEndScreenY = Math.min(rasterBottom, occlusionTop[drawX]);
-            Pixmap tex = materials.get(texInd).tex[0];
+            Pixmap tex;
+            try {
+                tex = materials.get(texInd).tex[0];
+            } catch (Exception e) {
+                //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
+                tex = ERROR_TEXTURE[0];
+            }
             for (int drawY = occlusionBottom[drawX] + vOffset; drawY<=floorEndScreenY + vOffset; drawY++) {
                 float floorX = heightOffset * (drawX-halfWidth) / (drawY-halfHeight);
                 float floorY = heightOffset * fov / (drawY-halfHeight);
@@ -345,8 +352,16 @@ public class SoftwareRenderer extends DimensionalRenderer {
     }
 
     private void drawCeiling(Wall w, int texInd, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light) {
-        Pixmap tex = materials.get(texInd).tex[0];
-        boolean isSky = drawParallax && materials.get(texInd).isSky;
+        Pixmap tex;
+        boolean isSky = false;
+        try {
+            Material mat = materials.get(texInd);
+            tex = mat.tex[0];
+            isSky = drawParallax && mat.isSky;
+        } catch (Exception e) {
+            //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
+            tex = ERROR_TEXTURE[0];
+        }
 
         final float scaleFactor = 32.f;
 

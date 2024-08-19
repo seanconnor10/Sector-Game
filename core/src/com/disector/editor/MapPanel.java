@@ -25,13 +25,11 @@ class MapPanel extends Panel {
     void stepFocused(float dt) {
         super.stepFocused(dt);
 
+        keyActions();
+
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
             editor.mapRenderer.camX -= InputRecorder.mouseDeltaX / editor.mapRenderer.zoom;
             editor.mapRenderer.camY += InputRecorder.mouseDeltaY / editor.mapRenderer.zoom;
-        }
-
-        if (editor.state == null) {
-            editor.selection.setHighlights(getMouseWorldX(), getMouseWorldY());
         }
 
         editor.selection.setHighlights(getMouseWorldX(), getMouseWorldY());
@@ -68,25 +66,31 @@ class MapPanel extends Panel {
         if (editor.state != null) {
             return;
         }
-        if (editor.input.isJustPressed(Input.Keys.E)) {
+        if (input.isJustPressed(Input.Keys.E)) {
             editor.state = new STATE_ExtrudingSector(editor, this);
             return;
         }
-        if (!editor.input.isJustPressed(Input.Keys.CONTROL_LEFT) && editor.input.isJustPressed(Input.Keys.I)) {
+        if (!input.isJustPressed(Input.Keys.CONTROL_LEFT) && editor.input.isJustPressed(Input.Keys.I)) {
             editor.state = new STATE_SplittingWall(editor, this);
             return;
         }
-        if (editor.input.isJustPressed(Input.Keys.SPACE)) {
+        if (input.isJustPressed(Input.Keys.SPACE)) {
             editor.state = new STATE_CreatingSector(editor, this);
             return;
         }
-        if (editor.input.isJustPressed(Input.Keys.M)) {
+        if (input.isJustPressed(Input.Keys.M)) {
             editor.state = new STATE_MovingVertices(editor, this);
             return;
         }
-        if (editor.input.isJustPressed(Input.Keys.N)) {
+        if (input.isJustPressed(Input.Keys.N)) {
             editor.state = new STATE_MakeInnerSubSector(editor, this);
             return;
+        }
+        if (input.isJustPressed(Input.Keys.P)) {
+            editor.app.gameWorld.player1.snagPosition().set(
+                    editor.mapPanel.getMouseWorldX(),
+                    editor.mapPanel.getMouseWorldY()
+            );
         }
 
     }
