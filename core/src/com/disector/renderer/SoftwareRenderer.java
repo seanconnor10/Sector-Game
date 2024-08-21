@@ -140,7 +140,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             float slope = (y2-y1) / (x2-x1);
             float yAxisIntersect = y1 - slope*x1;
             leftClipU = (float) Math.sqrt( x1*x1 + (yAxisIntersect-y1)*(yAxisIntersect-y1) ) / wallLength;
-            x1 = 0.001f; //Avoid dividing by zero
+            x1 = 0.01f; //Avoid dividing by zero
             y1 = yAxisIntersect;
         }
 
@@ -148,7 +148,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             float slope = (y2-y1) / (x2-x1);
             float yAxisIntersect = y1 - slope*x1;
             rightClipU = 1.f - (float) ( Math.sqrt( x2*x2 + (yAxisIntersect-y2)*(yAxisIntersect-y2) ) / wallLength );
-            x2 = 0.001f; //Avoid dividing by zero
+            x2 = 0.01f; //Avoid dividing by zero
             y2 = yAxisIntersect;
         }
 
@@ -161,6 +161,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float p2_plotX = halfWidth - fov*y2/x2;
 
         if (!isPortal && p2_plotX < p1_plotX) return; //Avoid drawing backside of non portal wall
+
+        float leftEdgePrecise = Math.max(0, Math.min(p2_plotX,p1_plotX) );
+        float rightEdgePrecise = Math.min( Math.max(p2_plotX,p1_plotX), frameWidth-1);
 
         int leftEdgeX = Math.max(0, Math.min((int)p2_plotX,(int)p1_plotX) );
 		int rightEdgeX = Math.min( Math.max((int)p2_plotX,(int)p1_plotX), frameWidth-1);
@@ -223,7 +226,11 @@ public class SoftwareRenderer extends DimensionalRenderer {
             quadTop = p1_plotHigh + hProgress*(p2_plotHigh-p1_plotHigh);
             quadHeight = quadTop - quadBottom;
 
-            float fog = getFogFactor(x1 + hProgress*(x2-x1));
+            float fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
+            {
+                float screenXProgress = (drawX-leftEdgePrecise) / (rightEdgePrecise-leftEdgePrecise);
+                fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
+            }
 
             float light = fullBright ? 1.0f : w.light;
 
@@ -420,7 +427,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 Color drawColor = grabColor(tex, rotX, rotY);
 
-                drawColor.lerp(0.1f, 0f, 0.2f, 1f, getFogFactor(dist));
+                drawColor.lerp(depthFogColor, getFogFactor(dist));
                 drawColor.lerp(darkColor, 1.0f - light);
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
             } else { //If isSky
@@ -460,7 +467,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     protected float getFogFactor(float dist) {
         if (!drawFog) return 0f;
-        final float fogDistance = 400f;
+        final float fogDistance = 600;
         return Math.max(0, Math.min(fogDistance, dist) ) / fogDistance;
     }
 

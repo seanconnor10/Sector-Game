@@ -82,7 +82,7 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
 
         mainTable.row();
 
-        COMP_ControlGroup light_control = new COMP_ControlGroup("Floor Z", getSkin(), editor);
+        COMP_ControlGroup light_control = new COMP_ControlGroup("Light", getSkin(), editor);
         light_control.minusAction  = () -> light_control.textField.setText(shiftLight(-0.1f));
         light_control.plusAction   = () -> light_control.textField.setText(shiftLight(0.1f));
         light_control.onTextSubmit = () -> setLight(Float.parseFloat(light_control.textField.getText()));

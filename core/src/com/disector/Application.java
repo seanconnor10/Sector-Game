@@ -217,7 +217,7 @@ public class Application extends ApplicationAdapter {
         switch (target) {
             case GAME:
                 if (gameWorld==null) gameWorld = new GameWorld(this, appInput);
-                if (renderer==null) renderer = new AnimationSavingSoftwareRenderer(this);
+                if (renderer==null) renderer = new SoftwareRenderer(this);
                 if (gameMapRenderer==null) gameMapRenderer = new GameMapRenderer(this, gameWorld);
                 Gdx.input.setCursorCatched(true);
                 break;
@@ -241,9 +241,6 @@ public class Application extends ApplicationAdapter {
     private void game() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) //Toggle Mouse Locking
             Gdx.input.setCursorCatched( !Gdx.input.isCursorCatched() );
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) //Randomize Textures
-            randomizeTextures();
 
         gameWorld.step(deltaTime);
 

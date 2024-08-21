@@ -84,7 +84,7 @@ class PropertiesPanel extends Panel {
 
         sectorPropertiesWindow = new COMP_SectorProperties("Sector Properties", guiSkin, editor);
         wallPropertiesWindow = new COMP_WallProperties("Wall Properties", guiSkin, editor);
-
+        
         stage.addActor(sectorPropertiesWindow);
         stage.addActor(wallPropertiesWindow);
 

@@ -183,8 +183,12 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             quadBottom = p1_plotLow + hProgress*(p2_plotLow-p1_plotLow);
             quadTop = p1_plotHigh + hProgress*(p2_plotHigh-p1_plotHigh);
             quadHeight = quadTop - quadBottom;
-
-            float fog = getFogFactor(x1 + hProgress*(x2-x1));
+            
+            float fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
+            {
+                float screenXProgress = (float) (drawX-leftEdgeX) / (float) (rightEdgeX-leftEdgeX);
+                fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
+            }
 
             float light = fullBright ? 1.0f : w.light;
 

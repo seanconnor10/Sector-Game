@@ -6,6 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class COMP_ControlGroup extends Table implements UpdatableComponent {
+    private static final int INPUT_WIDTH = 100;
+    private static final int LABEL_WIDTH = 80;
+    private static final int BUTTON_WIDTH = 20;
+
     Runnable minusAction;
     Runnable plusAction;
     Runnable onTextSubmit;
@@ -54,10 +58,10 @@ public class COMP_ControlGroup extends Table implements UpdatableComponent {
         }});
 
         this.defaults().pad(5);
-        this.add(label).width(70);
-        this.add(minusButton).size(20);
-        this.add(textField);
-        this.add(plusButton).size(20);
+        this.add(label).width(LABEL_WIDTH);
+        this.add(minusButton).size(BUTTON_WIDTH);
+        this.add(textField).width(INPUT_WIDTH);
+        this.add(plusButton).size(BUTTON_WIDTH);
 
     }
 
