@@ -4,14 +4,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Wall {
     //When adding more members, add to
-    //complete constructor, copy constructor
-    //copy setter, MapLoaders' save() and load()
+    // copy constructor,
+    //and MapLoaders' save() and load()
     public float x1, y1, x2, y2;
     public boolean isPortal;
     public int linkA, linkB;
     public float normalAngle; //Angle of line protruding outward perpendicularly from wall into the sector
     public int mat, matUpper, matLower;
     public float light = 1.f;
+    public float xOffset = 0.f, yOffset = 0.f;
+    public float xScale = 1.f, yScale = 1.f;
 
     public Wall() {
 
@@ -37,6 +39,10 @@ public class Wall {
         this.matUpper = w.matUpper;
         this.matLower = w.matLower;
         this.light = w.light;
+        this.xOffset = w.xOffset;
+        this.yOffset = w.yOffset;
+        this.xScale = w.xScale;
+        this.yScale = w.yScale;
         setNormalAngle();
     }
 
@@ -52,6 +58,10 @@ public class Wall {
         this.matUpper = w.matUpper;
         this.matLower = w.matLower;
         this.light = w.light;
+        this.xOffset = w.xOffset;
+        this.yOffset = w.yOffset;
+        this.xScale = w.xScale;
+        this.yScale = w.yScale;
         setNormalAngle();
     }
 
