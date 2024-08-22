@@ -275,7 +275,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     drawColor = getCheckerboardColor(u,v);
                 }
 
-                buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor) );
+                setPixel(drawX, drawY, drawColor);
 
             } //End Per Pixel Loop
 
@@ -352,7 +352,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 drawColor.lerp(depthFogColor, getFogFactor(dist));
                 drawColor.lerp(darkColor, 1.0f - light);
 
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+                setPixel(drawX, drawY - vOffset, drawColor);
 
             }
         }
@@ -429,10 +429,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 drawColor.lerp(depthFogColor, getFogFactor(dist));
                 drawColor.lerp(darkColor, 1.0f - light);
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+                setPixel(drawX, drawY - vOffset, drawColor);
             } else { //If isSky
                 Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+                setPixel(drawX, drawY - vOffset, drawColor);
             }
 
         }
@@ -488,5 +488,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
     protected Color getCheckerboardColor(float u, float v) {
         boolean checker = ( (int)(u*8)%2 == (int)(v*8)%2 );
         return new Color(checker ? 0xB0_20_30_FF : 0xA0_A0_A0_FF);
+    }
+
+    protected void setPixel(int x, int y, Color color) {
+        buffer.drawPixel(x, y, Color.rgba8888(color));
     }
 }
