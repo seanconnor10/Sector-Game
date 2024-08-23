@@ -75,7 +75,11 @@ public class Console {
                     currentIn += character;
 
                 if (character == '\b') { //Backspace
-                    currentIn = currentIn.substring(0, Math.max( 0, (currentIn+"MARK!MARK%MARK?").indexOf("MARK!MARK%MARK?")-1) );
+                    if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+                        currentIn = removeLastWord(currentIn);
+                    else
+                        currentIn = currentIn.substring(0, Math.max( 0, (currentIn+"MARK!MARK%MARK?").indexOf("MARK!MARK%MARK?")-1) );
+
                 } else if (character == '\t') {
                     currentIn = autoComplete(currentIn);
                 }
@@ -278,5 +282,13 @@ public class Console {
             size = filteredNames.length;
         }
         return current.substring(0, current.length()-1);
+    }
+
+    private String removeLastWord(String str) {
+        //If last char is ' ' remove it so we don't do nothing
+        if (str.lastIndexOf(' ') == str.length()-1)
+            str = str.substring(0, str.length()-1);
+
+        return str.substring(0, Math.max(1, str.lastIndexOf(' ') + 1) );
     }
 }

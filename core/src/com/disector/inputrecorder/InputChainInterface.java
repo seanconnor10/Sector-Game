@@ -16,6 +16,7 @@ public interface InputChainInterface extends InputProcessor {
     void on();
     void off();
     void toggle();
+    void remove(InputChainInterface node);
 
     String showName();
 }

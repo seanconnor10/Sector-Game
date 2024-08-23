@@ -69,6 +69,11 @@ public class InputChainNode implements InputChainInterface {
     }
 
     @Override
+    public void remove(InputChainInterface node) {
+        children.removeValue(node, false);
+    }
+
+    @Override
     public String showName() {
         return name;
     }

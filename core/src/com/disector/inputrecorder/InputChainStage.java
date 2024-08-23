@@ -7,20 +7,25 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.disector.editor.UpdatableComponent;
 
 public class InputChainStage extends Stage implements InputChainInterface {
+    private final InputChainInterface parent;
+
     private boolean isActive;
 
     public InputChainStage(InputChainInterface parent) {
         super();
+        this.parent = parent;
         parent.addAsChild(this);
     }
 
     public InputChainStage(Viewport viewport, InputChainInterface parent) {
         super(viewport);
+        this.parent = parent;
         parent.addAsChild(this);
     }
 
     public InputChainStage(Viewport viewport, Batch batch, InputChainInterface parent) {
         super(viewport, batch);
+        this.parent = parent;
         parent.addAsChild(this);
     }
 
@@ -76,6 +81,12 @@ public class InputChainStage extends Stage implements InputChainInterface {
     public void toggle() {
         isActive = !isActive;
     }
+
+    @Override
+    public void remove(InputChainInterface node) {
+
+    }
+
 
     @Override
     public String showName() {

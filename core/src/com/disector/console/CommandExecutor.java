@@ -47,7 +47,7 @@ public class CommandExecutor {
 
             for (Parameter p : m.getParameters()) {
                 String typeName = p.getType() == String.class ? "text" : p.getType().getName();
-                str.append(" (").append(typeName).append(" ").append(p.getName()).append(")");
+                str.append(" (").append(typeName).append(")");
             }
             String helpText = m.getAnnotation(ConsoleCommand.class).helpText();
             if (helpText != null && !helpText.isEmpty()) {

@@ -187,6 +187,16 @@ public class TextFileMapLoader implements MapLoader {
                                     wallBuild.light = Float.parseFloat(next);
                                     subMode = "NONE";
                                     break;
+                                case "OFFSET":
+                                    wallBuild.xOffset = parseFloatOrDefault(next, 0f);
+                                    wallBuild.yOffset = parseFloatOrDefault(in.next(), 0f);
+                                    subMode = "NONE";
+                                    break;
+                                case "SCALE":
+                                    wallBuild.xScale = parseFloatOrDefault(next, 1f);
+                                    wallBuild.yScale = parseFloatOrDefault(in.next(), 1f);
+                                    subMode = "NONE";
+                                    break;
                                 default:
                                     break;
                             }
@@ -346,16 +356,7 @@ public class TextFileMapLoader implements MapLoader {
         str.append(form(w.y2)).append(" ");
         str.append(":: ");
 
-        //Materials
-        /* Save by array index
-        str.append("Mat ").append(w.mat).append(" :: ");
-        if (w.matLower != 0) {
-            str.append("LowerMat ").append(w.matLower).append(" :: ");
-        }
-        if (w.matUpper != 0) {
-            str.append("UpperMat ").append(w.matUpper).append(" :: ");
-        }*/
-        //Save by name reference
+        //Materials saved by name reference
         str.append("Mat ").append( materials.get(w.mat).nameReference ).append(" :: ");
         if (w.matLower != 0) {
             str.append("LowerMat ").append( materials.get(w.matLower).nameReference ).append(" :: ");
@@ -370,6 +371,16 @@ public class TextFileMapLoader implements MapLoader {
         //Portal Links
         if (w.isPortal) {
             str.append(String.format("Port %d -> %d :: ", w.linkA, w.linkB));
+        }
+
+        //Texture Offset
+        if (w.xOffset != 0f && w.yOffset != 0f) {
+            str.append("Offset ").append( form2(w.xOffset) ).append(" ").append( form2(w.yOffset) ).append(" :: ");
+        }
+
+        //Texture Scale
+        if (w.xScale != 1f && w.yScale != 1f) {
+            str.append("Scale ").append( form2(w.xScale) ).append(" ").append( form2(w.yScale) ).append(" :: ");
         }
 
         str.append("\n");

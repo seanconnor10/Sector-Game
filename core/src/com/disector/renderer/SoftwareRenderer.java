@@ -254,20 +254,23 @@ public class SoftwareRenderer extends DimensionalRenderer {
             }
 
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
-                float v = (drawY - quadBottom) /quadHeight;
-                //if (v<0.01f) v = 0.01f; if (v>0.99) v = 0.99f;
+                float v = (drawY - quadBottom) / quadHeight;
+
 
                 if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
                     continue;
 
+                float texU = w.xOffset + u * w.xScale;
+                float texV = w.yOffset + v * w.yScale;
+
                 Color drawColor;
                 if (/*Draw Textures*/ true) {
                     if (!w.isPortal)
-                        drawColor = grabColor(tex, u, v);
+                        drawColor = grabColor(tex, texU, texV);
                     else if (v <= lowerWallCutoffV)
-                        drawColor = grabColor(texLower, u, v);
+                        drawColor = grabColor(texLower, texU, texV);
                     else
-                        drawColor = grabColor(texUpper, u, v);
+                        drawColor = grabColor(texUpper, texU, texV);
 
                     drawColor.lerp(depthFogColor,fog);
                     drawColor.lerp(darkColor, 1.f - light);
