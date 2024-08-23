@@ -15,6 +15,8 @@ public class STATE_TextureAlign extends EditorState{
 
     boolean scalingNotShifting;
 
+    boolean isConstrainingAxis, constrainVertically;
+
     float origXScale, origYScale, origXOffset, origYOffset;
 
     public STATE_TextureAlign(Editor editor, Panel panel, int wallIndex) {
@@ -34,17 +36,40 @@ public class STATE_TextureAlign extends EditorState{
                 if (shouldFinish)
                     return false;
 
+                boolean shift = input.isDown(Input.Keys.SHIFT_LEFT);
+
+                int deltaX = Gdx.input.getDeltaX();
+                int deltaY = Gdx.input.getDeltaY();
+
+                if (!isConstrainingAxis && shift) {
+                    if (deltaX > deltaY ) {
+                        constrainVertically = false;
+                        isConstrainingAxis = true;
+                    } else if (deltaY > deltaX) {
+                        constrainVertically = true;
+                        isConstrainingAxis = true;
+                    }
+                } else if (isConstrainingAxis && !shift) {
+                    isConstrainingAxis = false;
+                }
+
+                boolean allowHorizontal = !isConstrainingAxis || !constrainVertically;
+                boolean allowVertical = !isConstrainingAxis || constrainVertically;
+
                 if (scalingNotShifting) {
-                    wall.xScale += 0.01f * Gdx.input.getDeltaX();
-                    wall.yScale += 0.01f * Gdx.input.getDeltaY();
+                    if (allowHorizontal)    wall.xScale += 0.01f * deltaX;
+                    if (allowVertical)      wall.yScale += 0.01f * deltaY;
                 } else {
-                    wall.xOffset += 0.02f * Gdx.input.getDeltaX();
-                    wall.yOffset += 0.02f * Gdx.input.getDeltaY();
+                    if (allowHorizontal)    wall.xOffset += 0.02f * deltaX;
+                    if (allowVertical)      wall.yOffset += 0.02f * deltaY;
                 }
 
                 editor.shouldUpdateViewRenderer = true;
 
-                Gdx.input.setCursorPosition( (int) (panel.rect.x + panel.rect.width / 2), Gdx.graphics.getHeight() - (int) (panel.rect.y + panel.rect.height / 2) );
+                Gdx.input.setCursorPosition(
+                        (int) ( panel.rect.x + panel.rect.width / 2 ),
+                        Gdx.graphics.getHeight() - (int) ( panel.rect.y + panel.rect.height / 2 )
+                );
 
                 return true;
             }
@@ -64,7 +89,7 @@ public class STATE_TextureAlign extends EditorState{
     @Override
     void step() {
 
-        if (input.isJustPressed(Input.Keys.SHIFT_LEFT)) {
+        if (input.isJustPressed(Input.Keys.F)) {
             scalingNotShifting = !scalingNotShifting;
         }
 
@@ -89,6 +114,7 @@ public class STATE_TextureAlign extends EditorState{
 
     @Override
     EditAction[] finish() {
+        this.input.off();
         editor.input.remove(this.input);
         return new EditAction[0];
     }

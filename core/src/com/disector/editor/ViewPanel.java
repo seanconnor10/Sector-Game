@@ -28,7 +28,7 @@ class ViewPanel extends Panel{
                 editor.viewRenderer.highLightStrength = 0;
         }
 
-        if (input.isJustPressed(Input.Keys.F)) {
+        if (editor.state == null && input.isJustPressed(Input.Keys.F)) {
             int index = editor.viewRenderer.wallHighLightIndex;
             if (index < 0 || index >= editor.walls.size) return;
             editor.state = new STATE_TextureAlign(editor, this, editor.viewRenderer.wallHighLightIndex);
