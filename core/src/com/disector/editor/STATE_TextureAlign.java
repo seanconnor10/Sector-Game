@@ -42,10 +42,10 @@ public class STATE_TextureAlign extends EditorState{
                 int deltaY = Gdx.input.getDeltaY();
 
                 if (!isConstrainingAxis && shift) {
-                    if (deltaX > deltaY ) {
+                    if (deltaX > 2 && deltaX > deltaY ) {
                         constrainVertically = false;
                         isConstrainingAxis = true;
-                    } else if (deltaY > deltaX) {
+                    } else if (deltaY > 2 && deltaY > deltaX) {
                         constrainVertically = true;
                         isConstrainingAxis = true;
                     }

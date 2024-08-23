@@ -374,12 +374,12 @@ public class TextFileMapLoader implements MapLoader {
         }
 
         //Texture Offset
-        if (w.xOffset != 0f && w.yOffset != 0f) {
+        if (w.xOffset != 0f || w.yOffset != 0f) {
             str.append("Offset ").append( form2(w.xOffset) ).append(" ").append( form2(w.yOffset) ).append(" :: ");
         }
 
         //Texture Scale
-        if (w.xScale != 1f && w.yScale != 1f) {
+        if (w.xScale != 1f || w.yScale != 1f) {
             str.append("Scale ").append( form2(w.xScale) ).append(" ").append( form2(w.yScale) ).append(" :: ");
         }
 

@@ -15,7 +15,7 @@ SECTOR (1) :: Height -24 44 :: Mat 0 1 :: Light 0.10 0.10 :: Has 0 12 13 14 15 1
 SECTOR (2) :: Height -40 200 :: Mat 9 3 :: Light 0.70 0.80 :: Has 6 7 8 9 10 20 22 33 34 35 118 119 120 121 122 123 124 125 126 127 128 129 ::
 SECTOR (3) :: Height -30 20 :: Mat 0 3 :: Light 0.80 0.80 :: Has 23 24 25 26 ::
 SECTOR (4) :: Height -24 44 :: Mat 0 1 :: Light 0.10 0.10 :: Has 3 4 27 30 31 32 ::
-SECTOR (5) :: Height -32 44 :: Mat 0 0 :: Light 0.80 0.80 :: Has 21 33 34 35 ::
+SECTOR (5) :: Height -32 44 :: Mat 0 8 :: Light 0.80 0.80 :: Has 21 33 34 35 ::
 SECTOR (6) :: Height 24 60 :: Mat 0 0 :: Light 0.80 0.80 :: Has 9 36 37 38 ::
 SECTOR (7) :: Height -24 36 :: Mat 5 0 :: Light 0.60 0.60 :: Has 39 40 41 42 43 44 48 49 50 51 54 55 59 66 76 86 ::
 SECTOR (8) :: Height -24 20 :: Mat 0 0 :: Light 0.80 0.80 :: Has 42 56 57 58 ::
@@ -50,7 +50,7 @@ WALL (5) :: Pos 72 168 96 168 :: Mat MYWOOD :: Light 0.50 ::
 WALL (6) :: Pos 96 168 112 184 :: Mat MYWOOD :: Light 0.50 :: 
 WALL (7) :: Pos 112 184 240 184 :: Mat MYWOOD :: Light 0.80 :: Port 10 -> 2 :: 
 WALL (8) :: Pos 240 184 240 0 :: Mat MYWOOD :: Light 0.80 :: Port 11 -> 2 :: 
-WALL (9) :: Pos 240 0 112 0 :: Mat MYWOOD :: Light 0.70 :: Port 6 -> 2 :: 
+WALL (9) :: Pos 240 0 112 0 :: Mat MYWOOD :: Light 0.70 :: Port 6 -> 2 :: Offset 2.60 -6.44 :: Scale 3.36 2.69 :: 
 WALL (10) :: Pos 112 0 96 16 :: Mat MYWOOD :: Light 0.50 :: 
 WALL (11) :: Pos 96 16 72 16 :: Mat MYWOOD :: Light 0.50 :: 
 WALL (12) :: Pos 72 16 56 16 :: Mat MYWOOD :: Light 0.20 :: 
@@ -74,9 +74,9 @@ WALL (29) :: Pos 80 120 80 136 :: Mat GRATE :: Light 0.50 ::
 WALL (30) :: Pos 80 136 64 136 :: Mat GRATE :: Light 0.30 :: 
 WALL (31) :: Pos 64 120 16 128 :: Mat MYWOOD :: Light 0.50 :: Port 4 -> 0 :: 
 WALL (32) :: Pos 72 168 80 136 :: Mat MYWOOD :: Light 0.50 :: Port 4 -> 0 :: 
-WALL (33) :: Pos 96 72 112 80 :: Mat MYWOOD :: LowerMat GRATE :: UpperMat METAL :: Light 0.50 :: Port 5 -> 2 :: 
-WALL (34) :: Pos 112 80 112 104 :: Mat MYWOOD :: LowerMat GRATE :: UpperMat METAL :: Light 0.50 :: Port 5 -> 2 :: 
-WALL (35) :: Pos 112 104 96 112 :: Mat MYWOOD :: LowerMat GRATE :: UpperMat METAL :: Light 0.50 :: Port 5 -> 2 :: 
+WALL (33) :: Pos 96 72 112 80 :: Mat MYWOOD :: LowerMat GRATE :: UpperMat METAL :: Light 0.50 :: Port 5 -> 2 :: Scale 1.00 8.50 :: 
+WALL (34) :: Pos 112 80 112 104 :: Mat MYWOOD :: LowerMat GRATE :: UpperMat METAL :: Light 0.50 :: Port 5 -> 2 :: Scale 1.00 8.50 :: 
+WALL (35) :: Pos 112 104 96 112 :: Mat MYWOOD :: LowerMat GRATE :: UpperMat METAL :: Light 0.50 :: Port 5 -> 2 :: Scale 1.00 8.50 :: 
 WALL (36) :: Pos 240 0 240 -16 :: Mat MYWOOD :: Light 0.50 :: 
 WALL (37) :: Pos 240 -16 112 -16 :: Mat MYWOOD :: Light 0.30 :: 
 WALL (38) :: Pos 112 -16 112 0 :: Mat MYWOOD :: Light 0.50 :: 

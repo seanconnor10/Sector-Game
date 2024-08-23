@@ -218,8 +218,12 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
                     continue;
 
-                float texU = w.xOffset + u * w.xScale;
-                float texV = w.yOffset + v * w.yScale;
+                float tempXOff, tempYOff;
+                tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset)%1.f : w.xOffset;
+                tempYOff = w.yOffset < 0 ? 1.f - Math.abs(w.yOffset)%1.f : w.yOffset;
+
+                float texU = (tempXOff + u * w.xScale) % 1.0f;
+                float texV = (tempYOff + v * w.yScale) % 1.0f;
 
                 Color drawColor;
                 if (/*Draw Textures*/ true) {
