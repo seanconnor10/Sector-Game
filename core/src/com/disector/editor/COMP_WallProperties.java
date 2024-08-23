@@ -118,6 +118,42 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
 
         mainTable.row();
 
+        COMP_ControlGroup xScale_control = new COMP_ControlGroup("X Scale", getSkin(), editor);
+        xScale_control.minusAction  = () -> xScale_control.textField.setText( shiftXScale(-0.2f) );
+        xScale_control.plusAction   = () -> xScale_control.textField.setText( shiftXScale(0.2f) );
+        xScale_control.onTextSubmit = () -> setXScale(Float.parseFloat(xScale_control.textField.getText()));
+        xScale_control.onUpdateMap  = () -> xScale_control.textField.setText("" + wall.xScale);
+        actorsToUpdate.add(xScale_control);
+        mainTable.add(xScale_control);
+
+        COMP_ControlGroup yScale_control = new COMP_ControlGroup("Y Scale", getSkin(), editor);
+        yScale_control.minusAction  = () -> yScale_control.textField.setText( shiftYScale(-0.2f) );
+        yScale_control.plusAction   = () -> yScale_control.textField.setText( shiftYScale(0.2f) );
+        yScale_control.onTextSubmit = () -> setYScale(Float.parseFloat(yScale_control.textField.getText()));
+        yScale_control.onUpdateMap  = () -> yScale_control.textField.setText("" + wall.yScale);
+        actorsToUpdate.add(yScale_control);
+        mainTable.add(yScale_control);
+
+        mainTable.row();
+
+        COMP_ControlGroup xOffset_control = new COMP_ControlGroup("X Offset", getSkin(), editor);
+        xOffset_control.minusAction  = () -> xOffset_control.textField.setText( shiftXOffset(-0.1f) );
+        xOffset_control.plusAction   = () -> xOffset_control.textField.setText( shiftXOffset(0.1f) );
+        xOffset_control.onTextSubmit = () -> setXOffset(Float.parseFloat(xOffset_control.textField.getText()));
+        xOffset_control.onUpdateMap  = () -> xOffset_control.textField.setText("" + wall.xOffset);
+        actorsToUpdate.add(xOffset_control);
+        mainTable.add(xOffset_control);
+
+        COMP_ControlGroup yOffset_control = new COMP_ControlGroup("Y Offset", getSkin(), editor);
+        yOffset_control.minusAction  = () -> yOffset_control.textField.setText( shiftYOffset(-0.1f) );
+        yOffset_control.plusAction   = () -> yOffset_control.textField.setText( shiftYOffset(0.1f) );
+        yOffset_control.onTextSubmit = () -> setYOffset(Float.parseFloat(yOffset_control.textField.getText()));
+        yOffset_control.onUpdateMap  = () -> yOffset_control.textField.setText("" + wall.yOffset);
+        actorsToUpdate.add(yOffset_control);
+        mainTable.add(yOffset_control);
+
+        mainTable.row();
+
         mainTable.align(0);
         this.add(mainTable);
 
@@ -207,6 +243,54 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
             return "Huh?";
         }
 
+    }
+
+    private String setXScale(float amt) {
+        wall.xScale = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.xScale;
+    }
+
+    private String shiftXScale(float amt) {
+        wall.xScale += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.xScale;
+    }
+
+    private String setYScale(float amt) {
+        wall.yScale = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.yScale;
+    }
+
+    private String shiftYScale(float amt) {
+        wall.yScale += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.yScale;
+    }
+
+    private String setXOffset(float amt) {
+        wall.xOffset = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.xOffset;
+    }
+
+    private String shiftXOffset(float amt) {
+        wall.xOffset += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.xOffset;
+    }
+
+    private String setYOffset(float amt) {
+        wall.yOffset = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.yOffset;
+    }
+
+    private String shiftYOffset(float amt) {
+        wall.yOffset += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.yOffset;
     }
 
     private enum MATERIAL_LOCATION{

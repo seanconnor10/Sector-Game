@@ -41,14 +41,18 @@ public class STATE_TextureAlign extends EditorState{
                 int deltaX = Gdx.input.getDeltaX();
                 int deltaY = Gdx.input.getDeltaY();
 
+                if (deltaX == 0 && deltaY == 0)
+                    return false;
+
                 if (!isConstrainingAxis && shift) {
-                    if (deltaX > 2 && deltaX > deltaY ) {
+                    isConstrainingAxis = true;
+
+                    if (deltaX > deltaY ) {
                         constrainVertically = false;
-                        isConstrainingAxis = true;
-                    } else if (deltaY > 2 && deltaY > deltaX) {
+                    } else {
                         constrainVertically = true;
-                        isConstrainingAxis = true;
                     }
+
                 } else if (isConstrainingAxis && !shift) {
                     isConstrainingAxis = false;
                 }
@@ -63,6 +67,8 @@ public class STATE_TextureAlign extends EditorState{
                     if (allowHorizontal)    wall.xOffset += 0.02f * deltaX;
                     if (allowVertical)      wall.yOffset += 0.02f * deltaY;
                 }
+
+                editor.onMapLoad();
 
                 editor.shouldUpdateViewRenderer = true;
 
@@ -105,10 +111,14 @@ public class STATE_TextureAlign extends EditorState{
 
     @Override
     void rightClick() {
+        editor.shouldUpdateViewRenderer = true;
+        editor.onMapLoad();
+
         wall.xOffset = origXOffset;
         wall.yOffset = origYOffset;
         wall.xScale = origXScale;
         wall.yScale = origYScale;
+
         shouldFinish = true;
     }
 
