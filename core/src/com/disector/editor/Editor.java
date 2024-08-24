@@ -17,6 +17,7 @@ import com.disector.Wall;
 import com.disector.assets.Material;
 import com.disector.editor.actions.EditAction;
 import com.disector.inputrecorder.InputChainInterface;
+import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.EditingSoftwareRenderer;
 import com.disector.renderer.SoftwareRenderer;
 
@@ -80,7 +81,18 @@ public class Editor {
         this.materials = app.materials;
         this.shape = app.shape;
         this.batch = app.batch;
-        this.input = input;
+
+        this.input = new InputChainNode(input, "Editor") {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    selection.clear();
+                    return true;
+                }
+                return super.keyDown(keycode);
+            }
+        };
+        this.input.on();
 
         mapPanel        = new MapPanel(this);
         viewPanel       = new ViewPanel(this);
@@ -778,4 +790,5 @@ public class Editor {
     private boolean wallsConnectOneWay(Wall a, Wall b) {
         return a.x2 == b.x1 && a.y2 == b.y1;
     }
+
 }
