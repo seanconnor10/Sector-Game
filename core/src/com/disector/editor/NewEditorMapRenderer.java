@@ -127,9 +127,9 @@ class NewEditorMapRenderer {
 
         float anim = editor.animationFactor;
         shape.setColor(1f, 0.5f, 0.5f, 0.1f);
-        shape.setColor( shape.getColor().lerp(Color.GOLDENROD, anim/2.f) );
+        shape.getColor().a=0.1f;
 
-        Vertex verts[] = Arrays.stream(editor.sectors.get(index).walls.toArray())
+        Vertex[] verts = Arrays.stream(editor.sectors.get(index).walls.toArray())
             .mapToObj(editor.walls::get)
             .map(wall -> new Vertex(wall.x1, wall.y1))
             .toArray(Vertex[]::new);

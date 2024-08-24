@@ -67,14 +67,21 @@ class ViewPanel extends Panel{
         editor.viewRenderer.sectorHighlightIndex = -1;
         editor.shouldUpdateViewRenderer = true;
 
-        if (info.isWall) {
+        switch (info.type) {
+        case WALL_MAIN:
+        case WALL_UPPER:
             editor.viewRenderer.highLightStrength = 0.75f;
             editor.viewRenderer.wallHighLightIndex = info.index;
             editor.propertiesPanel.wallPropertiesWindow.setWall(info.index);
-        } else {
+            break;
+        case FLOOR:
+        case CEIL:
             editor.viewRenderer.highLightStrength = 0.75f;
             editor.viewRenderer.sectorHighlightIndex = info.index;
             editor.propertiesPanel.sectorPropertiesWindow.setSector(info.index);
+            break;
+        default:
+            break;
         }
 
     }

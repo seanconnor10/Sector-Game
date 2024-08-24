@@ -263,8 +263,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 float tempXOff, tempYOff;
                 tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset)%1.f : w.xOffset;
                 tempYOff = w.yOffset < 0 ? 1.f - Math.abs(w.yOffset)%1.f : w.yOffset;
+
                 float texU = (tempXOff + u * w.xScale) % 1.0f;
                 float texV = (tempYOff + v * w.yScale) % 1.0f;
+                float texV_Upper = (v * w.yScale) % 1.0f;
 
                 Color drawColor;
                 if (/*Draw Textures*/ true) {
@@ -273,7 +275,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     else if (v <= lowerWallCutoffV)
                         drawColor = grabColor(texLower, texU, texV);
                     else
-                        drawColor = grabColor(texUpper, texU, texV);
+                        drawColor = grabColor(texUpper, texU, texV_Upper);
 
                     drawColor.lerp(depthFogColor,fog);
                     drawColor.lerp(darkColor, 1.f - light);

@@ -16,15 +16,20 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
      * which Wall or Sector Floor/Ceil was clicked On
      */
 
-    private final Color highlightColor = new Color(0x10_D0_40_FF);
+    private final Color highlightColorSector = new Color(0x10_D0_40_FF);
+    private final Color highlightColorWall = new Color(0xD0_10_40_FF);
 
     public int wallHighLightIndex = -1;
     public int sectorHighlightIndex = -1;
     public float highLightStrength = 0;
 
+
+    public enum CLICK_TYPE {FLOOR, CEIL, WALL_MAIN, WALL_UPPER}
+
     public class ClickInfo {
         public int index = -1;
-        public boolean isWall;
+        public CLICK_TYPE type;
+
     };
 
 
@@ -235,15 +240,24 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
                 float texU = (tempXOff + u * w.xScale) % 1.0f;
                 float texV = (tempYOff + v * w.yScale) % 1.0f;
+                float texV_Upper = (v * w.yScale) % 1.0f;
+
+                CLICK_TYPE type;
 
                 Color drawColor;
                 if (/*Draw Textures*/ true) {
-                    if (!w.isPortal)
+                    if (!w.isPortal) {
                         drawColor = grabColor(tex, texU, texV);
-                    else if (v <= lowerWallCutoffV)
+                        type = CLICK_TYPE.WALL_MAIN;
+                    }
+                    else if (v <= lowerWallCutoffV) {
                         drawColor = grabColor(texLower, texU, texV);
-                    else
-                        drawColor = grabColor(texUpper, texU, texV);
+                        type = CLICK_TYPE.WALL_MAIN;
+                    }
+                    else {
+                        drawColor = grabColor(texUpper, texU, texV_Upper);
+                        type = CLICK_TYPE.WALL_UPPER;
+                    }
 
                     drawColor.lerp(depthFogColor,fog);
                     drawColor.lerp(darkColor, 1.f - light);
@@ -252,14 +266,14 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 }
 
                 if (wallHighLightIndex == wInd) {
-                    drawColor.lerp(highlightColor, highLightStrength);
+                    drawColor.lerp(highlightColorWall, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor) );
 
                 ClickInfo info = getClickInfo(drawX, drawY);
                 info.index = wInd;
-                info.isWall = true;
+                info.type = type;
 
             } //End Per Pixel Loop
 
@@ -338,14 +352,14 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 drawColor.lerp(darkColor, 1.0f - light);
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(highlightColor, highLightStrength);
+                    drawColor.lerp(highlightColorSector, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
 
                 ClickInfo info = getClickInfo(drawX, drawY - vOffset);
                 info.index = secInd;
-                info.isWall = false;
+                info.type = CLICK_TYPE.FLOOR;
 
             }
         }
@@ -424,7 +438,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 drawColor.lerp(darkColor, 1.0f - light);
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(highlightColor, highLightStrength);
+                    drawColor.lerp(highlightColorSector, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
@@ -434,7 +448,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(highlightColor, highLightStrength);
+                    drawColor.lerp(highlightColorSector, highLightStrength);
                 }
 
                 buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
@@ -442,7 +456,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
             ClickInfo info = getClickInfo(drawX, drawY - vOffset);
             info.index = secInd;
-            info.isWall = false;
+            info.type  = CLICK_TYPE.CEIL;
 
         }
 
