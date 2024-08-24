@@ -1,5 +1,6 @@
 package com.disector.editor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import com.disector.Application;
 import com.disector.Wall;
+
+import java.util.Arrays;
 
 class NewEditorMapRenderer {
     private final Application app;
@@ -48,26 +51,31 @@ class NewEditorMapRenderer {
 
     public void render() {
         frame.begin();
+
         ScreenUtils.clear(Color.BLACK);
 
-        shape.begin(ShapeRenderer.ShapeType.Line);
+        shape.begin(ShapeRenderer.ShapeType.Filled); {
+            drawSectorFilled(editor.selection.highlightedSectorIndex);
+        shape.end(); }
 
-        drawGrid();
-        drawWalls();
+        shape.begin(ShapeRenderer.ShapeType.Line); {
+            drawGrid();
+            drawWalls();
 
-        //Draw Player1 Position
-        shape.setColor(Color.TEAL);
-        Vector4 playerPos = app.gameWorld.getPlayerPosition();
-        drawCircle(playerPos.x, playerPos.y, app.gameWorld.getPlayerRadius());
+            //Draw Player1 Position
+            shape.setColor(Color.TEAL);
+            Vector4 playerPos = app.gameWorld.getPlayerPosition();
+            drawCircle(playerPos.x, playerPos.y, app.gameWorld.getPlayerRadius());
 
-        //Draw Editor-ViewRenderer Camera Position
-        if ( editor.layout != Layouts.MAP )
-            drawCameraWidget();
+            //Draw Editor-ViewRenderer Camera Position
+            if ( editor.layout != Layouts.MAP )
+                drawCameraWidget();
 
-        shape.end();
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        drawVertices();
-        shape.end();
+        shape.end(); }
+
+        shape.begin(ShapeRenderer.ShapeType.Filled); {
+            drawVertices();
+        shape.end(); }
 
         frame.end();
     }
@@ -108,6 +116,36 @@ class NewEditorMapRenderer {
                     centerX + (float) ( Math.cos(wall.normalAngle) * Math.min(15.0f/zoom, 15.f) ),
                     centerY + (float) ( Math.sin(wall.normalAngle) * Math.min(15.0f/zoom, 15.f) )
             );
+        }
+    }
+
+    public void drawSectorFilled(int index) {
+        if (index == -1) return;
+
+        Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+        Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
+
+        float anim = editor.animationFactor;
+        shape.setColor(1f, 0.5f, 0.5f, 0.1f);
+        shape.setColor( shape.getColor().lerp(Color.GOLDENROD, anim/2.f) );
+
+        Vertex verts[] = Arrays.stream(editor.sectors.get(index).walls.toArray())
+            .mapToObj(editor.walls::get)
+            .map(wall -> new Vertex(wall.x1, wall.y1))
+            .toArray(Vertex[]::new);
+
+        Vertex first = verts[0];
+
+        for (int i=2; i<verts.length; i++) {
+            drawTri(first.x, first.y, verts[i].x, verts[i].y, verts[i-1].x, verts[i-1].y);
+        }
+    }
+
+    private static class Vertex {
+        float x, y;
+        Vertex(float x, float y) {
+            this.x = x;
+            this.y = y;
         }
     }
 
@@ -160,6 +198,17 @@ class NewEditorMapRenderer {
 
     private void drawCircle(float x, float y, float r) {
         shape.circle(halfWidth+zoom*(x-camX), halfHeight+zoom*(y-camY), r*zoom);
+    }
+
+    private void drawTri(float x, float y, float x2, float y2, float x3, float y3) {
+        shape.triangle(
+                halfWidth+zoom*(x-camX),
+                halfHeight+zoom*(y-camY),
+                halfWidth+zoom*(x2-camX),
+                halfHeight+zoom*(y2-camY),
+                halfWidth+zoom*(x3-camX),
+                halfHeight+zoom*(y3-camY)
+        );
     }
 
     private void drawLine(float x, float y, float x2, float y2) {
