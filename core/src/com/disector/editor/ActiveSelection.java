@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.IntSet;
 import com.disector.Physics;
 import com.disector.Sector;
 import com.disector.Wall;
@@ -15,9 +14,9 @@ class ActiveSelection {
     final Array<Wall> allWalls;
     final Array<Sector> allSectors;
 
-    final IntSet sectorIndices;
+    final IntArray sectorIndices;
     final Array<Sector> selectedSectors;
-    final IntSet wallIndices;
+    final IntArray wallIndices;
     final Array<Wall> selectedWalls;
 
     int highlightedSectorIndex;
@@ -28,8 +27,8 @@ class ActiveSelection {
     ActiveSelection(Array<Sector> sectors, Array<Wall> walls, Editor editor) {
         selectedSectors = new Array<>();
         selectedWalls = new Array<>();
-        sectorIndices = new IntSet();
-        wallIndices = new IntSet();
+        sectorIndices = new IntArray();
+        wallIndices = new IntArray();
         this.editor = editor;
         this.allWalls = walls;
         this.allSectors = sectors;
@@ -129,10 +128,5 @@ class ActiveSelection {
 
     void addHighlightedWallToSelection() {
 
-        if (highlightedWallIndex == -1 || wallIndices.contains(highlightedWallIndex))
-            return;
-
-        wallIndices.add(highlightedWallIndex);
-        selectedWalls.add(editor.walls.get(highlightedWallIndex));
     }
 }

@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector4;
-import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import com.disector.Application;
@@ -73,26 +72,14 @@ class NewEditorMapRenderer {
     }
 
     public void drawWalls() {
-        //Attempt to get this in stack memory?
-        IntSet selectedWallIndices = new IntSet(editor.selection.wallIndices);
         int highlightedWall = editor.selection.getWallHighlightIndex();
-        float anim = editor.animationFactor;
-
         for (int i=0; i<app.walls.size; i++) {
             Wall wall = app.walls.get(i);
 
-
-
             if (i == highlightedWall) {
-                shape.setColor(new Color(1f, 0f, 0f, 1f).lerp(Color.TEAL, anim));
+                shape.setColor(new Color(1f, 0f, 0f, 1f).lerp(Color.LIME, editor.animationFactor));
             } else {
-                if (selectedWallIndices.contains(i)) {
-                    shape.setColor(wall.isPortal ? Color.YELLOW : Color.CYAN);
-                    shape.setColor( shape.getColor().lerp(wall.isPortal ? Color.LIME : Color.PINK, anim*2) );
-                }
-                else {
-                    shape.setColor(wall.isPortal ? Color.CORAL : Color.WHITE);
-                }
+                shape.setColor(wall.isPortal ? Color.CORAL : Color.WHITE);
             }
 
             drawLine(wall.x1, wall.y1, wall.x2, wall.y2);
@@ -112,10 +99,10 @@ class NewEditorMapRenderer {
     }
 
     public void drawVertices() {
-        shape.setColor(Color.RED); // Transparent Red
+        shape.setColor(Color.RED);
         for (Wall wall : editor.walls) {
-            drawSquarePoint(wall.x1, wall.y1, 6);
-            drawSquarePoint(wall.x2, wall.y2, 6);
+            drawSquarePoint(wall.x1, wall.y1, 8);
+            drawSquarePoint(wall.x2, wall.y2, 8);
         }
     }
 

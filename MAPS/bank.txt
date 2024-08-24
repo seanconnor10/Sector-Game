@@ -1,8 +1,4 @@
-MATERIAL (0) :: IMG wood2 ::
-material img marble
-material img aifloor
-material img scallop
-material img sky2 sky
+MATERIAL (0) :: IMG wood2 :: 
 SECTOR (0) :: HEIGHT -40 252 :: MAT 0 0 :: LIGHT 0.80 0.80 :: HAS 0 1 2 3 4 5 10 47 48 12 49 50 115 116 117 118 119 120 121 122 ::
 SECTOR (1) :: HEIGHT 40 252 :: MAT 0 0 :: LIGHT 0.80 0.80 :: HAS 0 13 14 15 ::
 SECTOR (2) :: HEIGHT -80 252 :: MAT 0 0 :: LIGHT 0.80 0.80 :: HAS 21 22 20 71 ::
