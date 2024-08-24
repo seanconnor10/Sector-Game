@@ -37,7 +37,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
     @Override
     public void resizeFrame(int w, int h) {
-        clickInfo = new ClickInfo[frameWidth*frameHeight];
+        clickInfo = new ClickInfo[w*h];
 
         for (int i=0; i<clickInfo.length; i++) {
             clickInfo[i] = new ClickInfo();

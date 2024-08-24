@@ -46,8 +46,9 @@ class MapPanel extends Panel {
         super.clickedIn();
 
         if (editor.state == null) {
-            editor.state = new STATE_PlacingCamera(editor, this);
+            editor.selection.addHighlightedWallToSelection();
         }
+
     }
 
     int getMouseWorldX() {
@@ -66,6 +67,9 @@ class MapPanel extends Panel {
         if (editor.state != null) {
             return;
         }
+
+        boolean shift = input.isDown(Input.Keys.SHIFT_LEFT);
+
         if (input.isJustPressed(Input.Keys.E)) {
             editor.state = new STATE_ExtrudingSector(editor, this);
             return;
@@ -91,6 +95,9 @@ class MapPanel extends Panel {
                     editor.mapPanel.getMouseWorldX(),
                     editor.mapPanel.getMouseWorldY()
             );
+        }
+        if (editor.state == null && input.isJustPressed(Input.Keys.C)) {
+            editor.state = new STATE_PlacingCamera(editor, this);
         }
 
     }
