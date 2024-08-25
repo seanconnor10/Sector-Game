@@ -1,5 +1,8 @@
 package com.disector.editor;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
+import com.disector.Wall;
 import com.disector.editor.actions.EditAction;
 
 abstract class EditorState {
@@ -35,6 +38,43 @@ abstract class EditorState {
     int xSnapped() {return editor.snap(xUnSnapped());}
 
     int ySnapped() {return editor.snap(yUnSnapped());}
+
+    protected Array<Wall> getPointsOnesAtMouse() {
+        Array<Wall> walls = new Array<>();
+        float x = xUnSnapped();
+        float y = yUnSnapped();
+
+        final float grabDistance = 5.0f / editor.mapRenderer.zoom;
+
+        for (Wall w : editor.walls) {
+            if (squareCollision(w.x1, w.y1, x, y, grabDistance))
+                walls.add(w);
+        }
+
+        return walls;
+    }
+
+    protected int[] getPointsOnesAtMouseByIndex() {
+        IntArray walls = new IntArray();
+
+        float x = xUnSnapped();
+        float y = yUnSnapped();
+
+        final float grabDistance = 5.0f / editor.mapRenderer.zoom;
+
+        for (int i=0; i<editor.walls.size; i++) {
+            if (squareCollision(editor.walls.get(i).x1, editor.walls.get(i).y1, x, y, grabDistance))
+                walls.add(i);
+        }
+
+        return walls.toArray();
+    }
+
+    protected boolean squareCollision(float x1, float y1, float x2, float y2, float maxDistance) {
+        if ( Math.abs(x1-x2) > maxDistance)
+            return false;
+        return Math.abs(y1-y2) < maxDistance;
+    }
 
     private boolean mouseOutsidePanel() {
     int x = xUnSnapped();

@@ -730,63 +730,6 @@ public class Editor {
         propertiesPanel.stage.onMapLoad();
     }
 
-    public void TEMP_bisectSector(int wInd_start, int wInd_end) {
-        Sector sec;
-
-        try  {
-            sec = Arrays.stream(sectors.toArray()).filter( (Sector item) ->
-                item.walls.contains(wInd_start)
-            ).findAny().get();
-        } catch (NoSuchElementException e) {
-            return;
-        }
-
-        Wall start, end;
-
-        try {
-            start = walls.get(wInd_start);
-            end = walls.get(wInd_end);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return;
-        }
-
-        Array<Wall> wallChain = new Array<>();
-
-        Stream<Wall> secWalls = Arrays.stream(sec.walls.toArray()).mapToObj(walls::get);
-
-        wallChain.add(start);
-
-        while (!wallsConnectOneWay(wallChain.peek(), end)) {
-
-           Wall[] nextPlural = (Wall[]) secWalls.filter( (Wall w) -> wallsConnectOneWay(w, end) ).toArray();
-
-           if (nextPlural.length > 1) {
-               throw new RuntimeException("Two Walls when bisecting. Algorithm dumbfounded.");
-           }
-
-           if (nextPlural.length == 0) {
-               return;
-           }
-
-           wallChain.add(nextPlural[0]);
-
-        }
-
-        //
-
-        wallChain.add(end);
-
-        //Make new sector and add walls from wallChain
-        //Make new portal wall from start-p1 to end-p1
-        //Remove wallChain from original sector
-        //Make sure to change portal linkages of wall in wallChain
-
-    }
-
-    public void bisectSector(Sector sec, int start_wInd, int end_wIndex ) {
-        return;
-    }
-
     private boolean wallsConnectOneWay(Wall a, Wall b) {
         return a.x2 == b.x1 && a.y2 == b.y1;
     }

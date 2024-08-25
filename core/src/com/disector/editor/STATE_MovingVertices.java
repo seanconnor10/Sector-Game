@@ -63,12 +63,6 @@ public class STATE_MovingVertices extends EditorState {
         grabbing = false;
     }
 
-    private boolean squareCollision(float x1, float y1, float x2, float y2, float maxDistance) {
-        if ( Math.abs(x1-x2) > maxDistance)
-            return false;
-        return Math.abs(y1-y2) < maxDistance;
-    }
-
     private void moveGrabbedWall() {
         int x = x(), y = y();
 

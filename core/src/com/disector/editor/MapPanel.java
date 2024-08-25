@@ -6,6 +6,7 @@ import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputRecorder;
 
 class MapPanel extends Panel {
+
     public MapPanel(Editor editor) {
         super(editor);
         this.input = new InputChainNode(editor.input, "Map-Panel-Input") {
@@ -68,6 +69,14 @@ class MapPanel extends Panel {
             return;
         }
 
+        if (input.isJustPressed(Input.Keys.P)) {
+            editor.app.gameWorld.player1.snagPosition().set(
+                    editor.mapPanel.getMouseWorldX(),
+                    editor.mapPanel.getMouseWorldY()
+            );
+            return;
+        }
+
         boolean shift = input.isDown(Input.Keys.SHIFT_LEFT);
 
         if (input.isJustPressed(Input.Keys.E)) {
@@ -90,14 +99,13 @@ class MapPanel extends Panel {
             editor.state = new STATE_MakeInnerSubSector(editor, this);
             return;
         }
-        if (input.isJustPressed(Input.Keys.P)) {
-            editor.app.gameWorld.player1.snagPosition().set(
-                    editor.mapPanel.getMouseWorldX(),
-                    editor.mapPanel.getMouseWorldY()
-            );
-        }
-        if (editor.state == null && input.isJustPressed(Input.Keys.C)) {
+        if (input.isJustPressed(Input.Keys.C)) {
             editor.state = new STATE_PlacingCamera(editor, this);
+            return;
+        }
+        if (input.isJustPressed(Input.Keys.B)) {
+            editor.state = new STATE_BisectingSector(editor, this);
+            return;
         }
 
     }
