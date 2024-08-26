@@ -128,6 +128,9 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
         if (!isPortal && p2_plotX < p1_plotX) return; //Avoid drawing backside of non portal wall
 
+        float leftEdgePrecise = Math.max(0, Math.min(p2_plotX,p1_plotX) );
+        float rightEdgePrecise = Math.min( Math.max(p2_plotX,p1_plotX), frameWidth-1);
+
         int leftEdgeX = Math.max(0, Math.min((int)p2_plotX,(int)p1_plotX) );
         int rightEdgeX = Math.min( Math.max((int)p2_plotX,(int)p1_plotX), frameWidth-1);
 
@@ -200,9 +203,15 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             quadTop = p1_plotHigh + hProgress*(p2_plotHigh-p1_plotHigh);
             quadHeight = quadTop - quadBottom;
             
-            float fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
+            /*float fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
             {
                 float screenXProgress = (float) (drawX-leftEdgeX) / (float) (rightEdgeX-leftEdgeX);
+                fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
+            }*/
+
+            float fog;
+            {
+                float screenXProgress = (drawX-leftEdgePrecise) / (rightEdgePrecise-leftEdgePrecise);
                 fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
             }
 
@@ -227,36 +236,62 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 texUpper = texturesHigh[mipMapIndex];
             }
 
+            //Get Horizontal Texture Co-Ords before entering per-pixel column loop
+            float texU, texU_Upper=0, texU_Lower=0;
+            float tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.xOffset;
+            texU = (tempXOff + u * w.xScale) % 1.0f;
+            if (isPortal) {
+                tempXOff = w.Lower_xOffset < 0 ? 1.f - Math.abs(w.Lower_xOffset) % 1.f : w.Lower_xOffset;
+                texU_Lower = (tempXOff + u * w.Upper_xScale) % 1.0f;
+                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.Upper_xOffset;
+                texU_Upper = (tempXOff + u * w.Upper_xScale) % 1.0f;
+            }
+
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
-                float v = (drawY - quadBottom) /quadHeight;
-                //if (v<0.01f) v = 0.01f; if (v>0.99) v = 0.99f;
+                float v = (drawY - quadBottom) / quadHeight;
 
                 if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
                     continue;
 
-                float tempXOff, tempYOff;
-                tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset)%1.f : w.xOffset;
-                tempYOff = w.yOffset < 0 ? 1.f - Math.abs(w.yOffset)%1.f : w.yOffset;
+                float pixU;
 
-                float texU = (tempXOff + u * w.xScale) % 1.0f;
-                float texV = (tempYOff + v * w.yScale) % 1.0f;
-                float texV_Upper = (v * w.yScale) % 1.0f;
+                float yOff, yScale;
+                if (!isPortal) {
+                    yOff = w.yOffset;
+                    yScale = w.yScale;
+                    pixU = texU;
+                } else if (v<lowerWallCutoffV) {
+                    yOff = w.Lower_yOffset;
+                    yScale = w.Lower_yScale;
+                    pixU = texU_Lower;
+                } else if (v<upperWallCutoffV) {
+                    yOff = w.yOffset;
+                    yScale = w.yScale;
+                    pixU = texU;
+                } else {
+                    yOff = w.Upper_yOffset;
+                    yScale = w.Upper_yScale;
+                    pixU = texU_Upper;
+                }
 
-                CLICK_TYPE type;
+                float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
+                float texV = (tempYOff + v * yScale) % 1.0f;
 
                 Color drawColor;
+                CLICK_TYPE type;
 
                 if (!w.isPortal) {
-                    drawColor = grabColor(tex, texU, texV);
+                    drawColor = grabColor(tex, pixU, texV);
                     type = CLICK_TYPE.WALL_MAIN;
-                }
-                else if (v <= lowerWallCutoffV) {
-                    drawColor = grabColor(texLower, texU, texV);
+                } else if (v <= lowerWallCutoffV) {
+                    drawColor = grabColor(texLower, pixU, texV);
                     type = CLICK_TYPE.WALL_LOWER;
-                }
-                else {
-                    drawColor = grabColor(texUpper, texU, texV_Upper);
+                } else if (v <= upperWallCutoffV){
+                    type = CLICK_TYPE.WALL_MAIN;
+                    drawColor = grabColor(tex, pixU, texV);
+                } else {
                     type = CLICK_TYPE.WALL_UPPER;
+                    drawColor = grabColor(texUpper, pixU, texV);
                 }
 
                 drawColor.lerp(depthFogColor,fog);
@@ -266,7 +301,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                     drawColor.lerp(highlightColorWall, highLightStrength);
                 }
 
-                buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor) );
+                setPixel(drawX, drawY, drawColor);
 
                 ClickInfo info = getClickInfo(drawX, drawY);
                 info.index = wInd;

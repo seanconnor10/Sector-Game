@@ -194,12 +194,15 @@ public class SoftwareRenderer extends DimensionalRenderer {
         Pixmap[] textures, texturesLow, texturesHigh;
         try {
             textures = materials.get(w.mat).tex;
+            texturesLow = textures;
+            texturesHigh = textures;
+
         } catch (Exception e) {
             //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
             textures = ERROR_TEXTURE;
+            texturesLow = ERROR_TEXTURE;
+            texturesHigh = ERROR_TEXTURE;
         }
-        texturesLow = textures;
-        texturesHigh = textures;
 
         if (isPortal) {
             drawnPortals.push(wInd); // !!
@@ -210,16 +213,17 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 upperWallCutoffV = (destCeiling - secFloorZ) / thisSectorCeilingHeight;
             if (destFloor > secFloorZ)
                 lowerWallCutoffV = (destFloor - secFloorZ) / thisSectorCeilingHeight;
-            
+
             try {
                 texturesLow = materials.get(w.matLower).tex;
-            } catch (IndexOutOfBoundsException | NullPointerException e) {
-                texturesLow = textures;
+            } catch (Exception e) {
+                texturesLow = ERROR_TEXTURE;
             }
+
             try {
                 texturesHigh = materials.get(w.matUpper).tex;
-            } catch (IndexOutOfBoundsException | NullPointerException e) {
-                texturesHigh = textures;
+            } catch (Exception e) {
+                texturesHigh = ERROR_TEXTURE;
             }
 
         }
@@ -276,8 +280,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
                 float v = (drawY - quadBottom) / quadHeight;
-                
-                
+
                 if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
                     continue;
 
