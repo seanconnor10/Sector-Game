@@ -15,9 +15,9 @@ class ActiveSelection {
     final Array<Wall> allWalls;
     final Array<Sector> allSectors;
 
-    final IntSet sectorIndices;
+    final IntArray sectorIndices;
     final Array<Sector> selectedSectors;
-    final IntSet wallIndices;
+    final IntArray wallIndices;
     final Array<Wall> selectedWalls;
 
     int highlightedSectorIndex;
@@ -28,8 +28,8 @@ class ActiveSelection {
     ActiveSelection(Array<Sector> sectors, Array<Wall> walls, Editor editor) {
         selectedSectors = new Array<>();
         selectedWalls = new Array<>();
-        sectorIndices = new IntSet();
-        wallIndices = new IntSet();
+        sectorIndices = new IntArray();
+        wallIndices = new IntArray();
         this.editor = editor;
         this.allWalls = walls;
         this.allSectors = sectors;

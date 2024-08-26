@@ -107,6 +107,10 @@ class MapPanel extends Panel {
             editor.state = new STATE_BisectingSector(editor, this);
             return;
         }
+        if (input.isJustPressed(Input.Keys.J)) {
+            editor.joinSelectionAsPortals();
+            return;
+        }
 
     }
 

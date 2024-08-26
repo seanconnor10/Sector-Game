@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -86,7 +87,7 @@ class NewEditorMapRenderer {
 
     public void drawWalls() {
         //Attempt to get this in stack memory?
-        IntSet selectedWallIndices = new IntSet(editor.selection.wallIndices);
+        IntArray selectedWallIndices = new IntArray(editor.selection.wallIndices);
         int highlightedWall = editor.selection.getWallHighlightIndex();
         float anim = editor.animationFactor;
 

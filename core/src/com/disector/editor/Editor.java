@@ -21,11 +21,7 @@ import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.EditingSoftwareRenderer;
 import com.disector.renderer.SoftwareRenderer;
 
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Stack;
-import java.util.stream.Stream;
 
 public class Editor {
     static BitmapFont font = new BitmapFont( Gdx.files.local("assets/font/fira.fnt") );
@@ -732,6 +728,73 @@ public class Editor {
 
     private boolean wallsConnectOneWay(Wall a, Wall b) {
         return a.x2 == b.x1 && a.y2 == b.y1;
+    }
+
+    void joinSelectionAsPortals() {
+        //Maybe make this be able to join multiple segments...?
+        if (selection.selectedWalls.size != 2)
+            return;
+
+        int wInd1 = selection.wallIndices.get(0);
+        int wInd2 = selection.wallIndices.get(1);
+        Wall wall1 = walls.get(wInd1);
+        Wall wall2 = walls.get(wInd2);
+
+        if (wall1.isPortal || wall2.isPortal)
+            return;
+
+        int secInd1 = -1, secInd2 =-1;
+        Sector sec1 = null, sec2 = null;
+
+        for (int i=0; i<sectors.size; i++){
+            Sector s = sectors.get(i);
+            if (s.walls.contains(wInd1)) {
+                secInd1 = i;
+                sec1 = s;
+            } else if (s.walls.contains(wInd2)) {
+                secInd2 = i;
+                sec2 = s;
+            }
+            if (secInd1 != -1 && secInd2 != -1)
+                break;
+        }
+
+        if (secInd1 == -1 || secInd2 == -1)
+            return;
+
+        int newSectorIndex = sectors.size;
+        Sector newSector = new Sector(sec1, false);
+
+        Wall newWallOne = new Wall(wall1);
+        newWallOne.x1 = wall1.x1;
+        newWallOne.y1 = wall1.y1;
+        newWallOne.x2 = wall2.x2;
+        newWallOne.y2 = wall2.y2;
+        newSector.walls.add(walls.size);
+        walls.add(newWallOne);
+
+        Wall newWallTwo = new Wall(wall1);
+        newWallTwo.x1 = wall2.x1;
+        newWallTwo.y1 = wall2.y1;
+        newWallTwo.x2 = wall1.x2;
+        newWallTwo.y2 = wall1.y2;
+        newSector.walls.add(walls.size);
+        walls.add(newWallTwo);
+
+        newSector.walls.add(wInd1);
+        newSector.walls.add(wInd2);
+
+        wall1.isPortal = true;
+        wall1.linkA = newSectorIndex;
+        wall1.linkB = secInd1;
+
+        wall2.isPortal = true;
+        wall2.linkA = newSectorIndex;
+        wall2.linkB = secInd2;
+
+        sectors.add(newSector);
+
+        selection.clearWalls();
     }
 
 }
