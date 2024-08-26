@@ -210,11 +210,15 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 upperWallCutoffV = (destCeiling - secFloorZ) / thisSectorCeilingHeight;
             if (destFloor > secFloorZ)
                 lowerWallCutoffV = (destFloor - secFloorZ) / thisSectorCeilingHeight;
+            
             try {
                 texturesLow = materials.get(w.matLower).tex;
-                texturesHigh = materials.get(w.matUpper).tex;
             } catch (IndexOutOfBoundsException | NullPointerException e) {
                 texturesLow = textures;
+            }
+            try {
+                texturesHigh = materials.get(w.matUpper).tex;
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
                 texturesHigh = textures;
             }
 
@@ -259,35 +263,59 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 texUpper = texturesHigh[mipMapIndex];
             }
 
+            //Get Horizontal Texture Co-Ords before entering per-pixel column loop
+            float texU, texU_Upper=0, texU_Lower=0;
+            float tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.xOffset;
+            texU = (tempXOff + u * w.xScale) % 1.0f;
+            if (isPortal) {
+                tempXOff = w.Lower_xOffset < 0 ? 1.f - Math.abs(w.Lower_xOffset) % 1.f : w.Lower_xOffset;
+                texU_Lower = (tempXOff + u * w.Upper_xScale) % 1.0f;
+                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.Upper_xOffset;
+                texU_Upper = (tempXOff + u * w.Upper_xScale) % 1.0f;
+            }
+
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
                 float v = (drawY - quadBottom) / quadHeight;
-
-
+                
+                
                 if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
                     continue;
 
-                float tempXOff, tempYOff;
-                tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset)%1.f : w.xOffset;
-                tempYOff = w.yOffset < 0 ? 1.f - Math.abs(w.yOffset)%1.f : w.yOffset;
+                float pixU;
+                
+                float yOff, yScale;
+                if (!isPortal) {
+                    yOff = w.yOffset;
+                    yScale = w.yScale;
+                    pixU = texU;
+                } else if (v<lowerWallCutoffV) {
+                    yOff = w.Lower_yOffset;
+                    yScale = w.Lower_yScale;
+                    pixU = texU_Lower;
+                } else if (v<upperWallCutoffV) {
+                    yOff = w.yOffset;
+                    yScale = w.yScale;
+                    pixU = texU;
+                } else {
+                    yOff = w.Upper_yOffset;
+                    yScale = w.Upper_yScale;
+                    pixU = texU_Upper;
+                }
 
-                float texU = (tempXOff + u * w.xScale) % 1.0f;
-                float texV = (tempYOff + v * w.yScale) % 1.0f;
-                float texV_Upper = (v * w.yScale) % 1.0f;
+                float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
+                float texV = (tempYOff + v * yScale) % 1.0f;
 
                 Color drawColor;
-                if (/*Draw Textures*/ true) {
                     if (!w.isPortal)
-                        drawColor = grabColor(tex, texU, texV);
+                        drawColor = grabColor(tex, pixU, texV);
                     else if (v <= lowerWallCutoffV)
-                        drawColor = grabColor(texLower, texU, texV);
+                        drawColor = grabColor(texLower, pixU, texV);
                     else
-                        drawColor = grabColor(texUpper, texU, texV_Upper);
+                        drawColor = grabColor(texUpper, pixU, texV);
 
-                    drawColor.lerp(depthFogColor,fog);
-                    drawColor.lerp(darkColor, 1.f - light);
-                } else {
-                    drawColor = getCheckerboardColor(u,v);
-                }
+                drawColor.lerp(depthFogColor,fog);
+                drawColor.lerp(darkColor, 1.f - light);
+            
 
                 setPixel(drawX, drawY, drawColor);
 

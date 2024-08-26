@@ -14,6 +14,16 @@ public class Wall {
     public float light = 1.f;
     public float xOffset = 0.f, yOffset = 0.f;
     public float xScale = 1.f, yScale = 1.f;
+    public float Upper_xOffset = 0.f, Upper_yOffset = 0.f;
+    public float Upper_xScale = 1.f, Upper_yScale = 1.f;
+    public float Lower_xOffset = 0.f, Lower_yOffset = 0.f;
+    public float Lower_xScale = 1.f, Lower_yScale = 1.f;
+
+    public PortalType type = PortalType.NORMAL;
+
+    public enum PortalType {
+        NORMAL, TEXTURE, TEXTURE_BLOCK_OBJECT, TEXTURE_BLOCK_ALL, DISJOINTED;
+    }
 
     //TODO Add separate offset and scale for upper AND lower
     //TODO plus Portal types... NORMAL, TEXTURE_PERMEABLE, TEXTURE_BLOCKING_OBJECT, TEXTURE_BLOCKING_ALL
@@ -46,6 +56,14 @@ public class Wall {
         this.yOffset = w.yOffset;
         this.xScale = w.xScale;
         this.yScale = w.yScale;
+        this.Upper_xOffset = w.Upper_xOffset;
+        this.Upper_yOffset = w.Upper_yOffset;
+        this.Upper_xScale = w.Upper_xScale;
+        this.Upper_yScale = w.Upper_yScale;
+        this.Lower_xOffset = w.Lower_xOffset;
+        this.Lower_yOffset = w.Lower_yOffset;
+        this.Lower_xScale = w.Lower_xScale;
+        this.Lower_yScale = w.Lower_yScale;
         setNormalAngle();
     }
 
@@ -65,6 +83,14 @@ public class Wall {
         this.yOffset = w.yOffset;
         this.xScale = w.xScale;
         this.yScale = w.yScale;
+        this.Upper_xOffset = w.Upper_xOffset;
+        this.Upper_yOffset = w.Upper_yOffset;
+        this.Upper_xScale = w.Upper_xScale;
+        this.Upper_yScale = w.Upper_yScale;
+        this.Lower_xOffset = w.Lower_xOffset;
+        this.Lower_yOffset = w.Lower_yOffset;
+        this.Lower_xScale = w.Lower_xScale;
+        this.Lower_yScale = w.Lower_yScale;
         setNormalAngle();
     }
 

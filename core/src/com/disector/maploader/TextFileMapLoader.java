@@ -197,6 +197,26 @@ public class TextFileMapLoader implements MapLoader {
                                     wallBuild.yScale = parseFloatOrDefault(in.next(), 1f);
                                     subMode = "NONE";
                                     break;
+                                case "OFFSET_LOWER":
+                                    wallBuild.Lower_xOffset = parseFloatOrDefault(next, 0f);
+                                    wallBuild.Lower_yOffset = parseFloatOrDefault(in.next(), 0f);
+                                    subMode = "NONE";
+                                    break;
+                                case "SCALE_LOWER":
+                                    wallBuild.Lower_xScale = parseFloatOrDefault(next, 1f);
+                                    wallBuild.Lower_yScale = parseFloatOrDefault(in.next(), 1f);
+                                    subMode = "NONE";
+                                    break;
+                                case "OFFSET_UPPER":
+                                    wallBuild.Upper_xOffset = parseFloatOrDefault(next, 0f);
+                                    wallBuild.Upper_yOffset = parseFloatOrDefault(in.next(), 0f);
+                                    subMode = "NONE";
+                                    break;
+                                case "SCALE_UPPER":
+                                    wallBuild.Upper_xScale = parseFloatOrDefault(next, 1f);
+                                    wallBuild.Upper_yScale = parseFloatOrDefault(in.next(), 1f);
+                                    subMode = "NONE";
+                                    break;
                                 default:
                                     break;
                             }
@@ -373,14 +393,28 @@ public class TextFileMapLoader implements MapLoader {
             str.append(String.format("Port %d -> %d :: ", w.linkA, w.linkB));
         }
 
-        //Texture Offset
+        //Texture Align Middle
         if (w.xOffset != 0f || w.yOffset != 0f) {
             str.append("Offset ").append( form2(w.xOffset) ).append(" ").append( form2(w.yOffset) ).append(" :: ");
         }
-
-        //Texture Scale
         if (w.xScale != 1f || w.yScale != 1f) {
             str.append("Scale ").append( form2(w.xScale) ).append(" ").append( form2(w.yScale) ).append(" :: ");
+        }
+
+        //Texture Align Lower
+        if (w.Lower_xOffset != 0f || w.Lower_yOffset != 0f) {
+            str.append("Offset_Lower ").append( form2(w.Lower_xOffset) ).append(" ").append( form2(w.Lower_yOffset) ).append(" :: ");
+        }
+        if (w.Lower_xScale != 1f || w.Lower_yScale != 1f) {
+            str.append("Scale_Lower ").append( form2(w.Lower_xScale) ).append(" ").append( form2(w.Lower_yScale) ).append(" :: ");
+        }
+
+        //Texture Align Upper
+        if (w.Upper_xOffset != 0f || w.Upper_yOffset != 0f) {
+            str.append("Offset_Upper ").append( form2(w.Upper_xOffset) ).append(" ").append( form2(w.Upper_yOffset) ).append(" :: ");
+        }
+        if (w.Upper_xScale != 1f || w.Upper_yScale != 1f) {
+            str.append("Scale_Upper ").append( form2(w.Upper_xScale) ).append(" ").append( form2(w.Upper_yScale) ).append(" :: ");
         }
 
         str.append("\n");
