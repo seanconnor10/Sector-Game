@@ -39,7 +39,6 @@ class NewEditorMapRenderer {
         refreshPanelSize(startDimensions);
     }
 
-
     void refreshPanelSize(Rectangle r) {
         frame.dispose();
         int w = Math.max( (int) r.width,  1 );

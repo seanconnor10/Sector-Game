@@ -273,8 +273,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
             texU = (tempXOff + u * w.xScale) % 1.0f;
             if (isPortal) {
                 tempXOff = w.Lower_xOffset < 0 ? 1.f - Math.abs(w.Lower_xOffset) % 1.f : w.Lower_xOffset;
-                texU_Lower = (tempXOff + u * w.Upper_xScale) % 1.0f;
-                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.Upper_xOffset;
+                texU_Lower = (tempXOff + u * w.Lower_xScale) % 1.0f;
+                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.Upper_xOffset) % 1.f : w.Upper_xOffset;
                 texU_Upper = (tempXOff + u * w.Upper_xScale) % 1.0f;
             }
 

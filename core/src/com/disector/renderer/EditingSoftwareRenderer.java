@@ -202,12 +202,6 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             quadBottom = p1_plotLow + hProgress*(p2_plotLow-p1_plotLow);
             quadTop = p1_plotHigh + hProgress*(p2_plotHigh-p1_plotHigh);
             quadHeight = quadTop - quadBottom;
-            
-            /*float fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
-            {
-                float screenXProgress = (float) (drawX-leftEdgeX) / (float) (rightEdgeX-leftEdgeX);
-                fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
-            }*/
 
             float fog;
             {
@@ -242,8 +236,8 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             texU = (tempXOff + u * w.xScale) % 1.0f;
             if (isPortal) {
                 tempXOff = w.Lower_xOffset < 0 ? 1.f - Math.abs(w.Lower_xOffset) % 1.f : w.Lower_xOffset;
-                texU_Lower = (tempXOff + u * w.Upper_xScale) % 1.0f;
-                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.Upper_xOffset;
+                texU_Lower = (tempXOff + u * w.Lower_xScale) % 1.0f;
+                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.Upper_xOffset) % 1.f : w.Upper_xOffset;
                 texU_Upper = (tempXOff + u * w.Upper_xScale) % 1.0f;
             }
 

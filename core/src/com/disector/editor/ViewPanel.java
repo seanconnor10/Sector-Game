@@ -8,6 +8,8 @@ import com.disector.inputrecorder.InputRecorder;
 import com.disector.renderer.EditingSoftwareRenderer;
 
 class ViewPanel extends Panel{
+    ActiveSelection.Surface recentViewClick = null;
+
     public ViewPanel(Editor editor) {
         super(editor);
 
@@ -28,11 +30,6 @@ class ViewPanel extends Panel{
                 editor.viewRenderer.highLightStrength = 0;
         }
 
-        if (editor.state == null && input.isJustPressed(Input.Keys.F)) {
-            int index = editor.viewRenderer.wallHighLightIndex;
-            if (index < 0 || index >= editor.walls.size) return;
-            editor.state = new STATE_TextureAlign(editor, this, editor.viewRenderer.wallHighLightIndex);
-        }
     }
 
     @Override
@@ -53,6 +50,12 @@ class ViewPanel extends Panel{
             p1.r = editor.viewRenderer.camR;
             p1.vLook = editor.viewRenderer.camVLook;
         }
+
+        if (editor.state == null && input.isJustPressed(Input.Keys.F)) {
+            int index = editor.viewRenderer.wallHighLightIndex;
+            if (index < 0 || index >= editor.walls.size) return;
+            editor.state = new STATE_TextureAlign(editor, this, recentViewClick);
+        }
     }
 
     @Override
@@ -66,6 +69,8 @@ class ViewPanel extends Panel{
         editor.viewRenderer.wallHighLightIndex = -1;
         editor.viewRenderer.sectorHighlightIndex = -1;
         editor.shouldUpdateViewRenderer = true;
+
+        recentViewClick = new ActiveSelection.Surface(info.index, info.type);
 
         switch (info.type) {
         case WALL_MAIN:

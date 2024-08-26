@@ -6,8 +6,10 @@ import com.badlogic.gdx.Input;
 import com.disector.Wall;
 import com.disector.editor.actions.EditAction;
 import com.disector.inputrecorder.InputChainNode;
+import com.disector.renderer.EditingSoftwareRenderer.CLICK_TYPE;
+import com.disector.editor.ActiveSelection.Surface;
 
-public class STATE_TextureAlign extends EditorState{
+class STATE_TextureAlign extends EditorState{
 
     com.disector.inputrecorder.InputChainNode input;
 
@@ -18,16 +20,42 @@ public class STATE_TextureAlign extends EditorState{
     boolean isConstrainingAxis, constrainVertically;
 
     float origXScale, origYScale, origXOffset, origYOffset;
+    
+    Surface target;
 
-    public STATE_TextureAlign(Editor editor, Panel panel, int wallIndex) {
+    STATE_TextureAlign(Editor editor, Panel panel, Surface target) {
         super(editor, panel);
-        this.wall = editor.walls.get(wallIndex);
-        this.visibleName = "Texture Align Wall " + wallIndex;
+        if (target == null || target.type == CLICK_TYPE.FLOOR || target.type == CLICK_TYPE.CEIL) {
+            shouldFinish = true;
+            return;
+        }
+        this.wall = editor.walls.get(target.index);
+        this.visibleName = "Texture Align Wall " + target.index;
 
-        this.origXOffset = wall.xOffset;
-        this.origYOffset = wall.yOffset;
-        this.origXScale = wall.xScale;
-        this.origYScale = wall.yScale;
+        switch(target.type) {
+            case WALL_MAIN:
+                this.origXOffset = wall.xOffset;
+                this.origYOffset = wall.yOffset;
+                this.origXScale = wall.xScale;
+                this.origYScale = wall.yScale;
+                break;
+            case WALL_LOWER:
+                this.origXOffset = wall.Lower_xOffset;
+                this.origYOffset = wall.Lower_yOffset;
+                this.origXScale = wall.Lower_xScale;
+                this.origYScale = wall.Lower_yScale;
+                break;
+            case WALL_UPPER:
+                this.origXOffset = wall.Upper_xOffset;
+                this.origYOffset = wall.Upper_yOffset;
+                this.origXScale = wall.Upper_xScale;
+                this.origYScale = wall.Upper_yScale;
+                break;
+            default:
+                break;
+        }
+
+        this.target = target;
 
         input = new InputChainNode(editor.input, "Editor-State-Texture-Align") {
 
@@ -44,13 +72,16 @@ public class STATE_TextureAlign extends EditorState{
                 if (deltaX == 0 && deltaY == 0)
                     return false;
 
-                if (!isConstrainingAxis && shift) {
-                    isConstrainingAxis = true;
+                int xABS = Math.abs(deltaX);
+                int yABS = Math.abs(deltaY);
 
-                    if (deltaX > deltaY ) {
+                if (!isConstrainingAxis && shift) {
+                    if (xABS > 0 && xABS > yABS) {
                         constrainVertically = false;
-                    } else {
+                        isConstrainingAxis = true;
+                    } else if (yABS > 0 && yABS > xABS ) {
                         constrainVertically = true;
+                        isConstrainingAxis = true;
                     }
 
                 } else if (isConstrainingAxis && !shift) {
@@ -61,11 +92,39 @@ public class STATE_TextureAlign extends EditorState{
                 boolean allowVertical = !isConstrainingAxis || constrainVertically;
 
                 if (scalingNotShifting) {
-                    if (allowHorizontal)    wall.xScale += 0.01f * deltaX;
-                    if (allowVertical)      wall.yScale += 0.01f * deltaY;
+                    switch (target.type) {
+                    case WALL_MAIN:
+                        if (allowHorizontal) wall.xScale += 0.01f * deltaX;
+                        if (allowVertical) wall.yScale += 0.01f * deltaY;
+                        break;
+                    case WALL_LOWER:
+                        if (allowHorizontal) wall.Lower_xScale += 0.01f * deltaX;
+                        if (allowVertical) wall.Lower_yScale += 0.01f * deltaY;
+                        break;
+                    case WALL_UPPER:
+                        if (allowHorizontal) wall.Upper_xScale += 0.01f * deltaX;
+                        if (allowVertical) wall.Upper_yScale += 0.01f * deltaY;
+                        break;
+                    default:
+                        break;
+                    }
                 } else {
-                    if (allowHorizontal)    wall.xOffset += 0.02f * deltaX;
-                    if (allowVertical)      wall.yOffset += 0.02f * deltaY;
+                    switch (target.type) {
+                        case WALL_MAIN:
+                            if (allowHorizontal) wall.xScale += 0.02f * deltaX;
+                            if (allowVertical) wall.yOffset += 0.02f * deltaY;
+                            break;
+                        case WALL_LOWER:
+                            if (allowHorizontal) wall.Lower_xOffset += 0.02f * deltaX;
+                            if (allowVertical) wall.Lower_yOffset += 0.02f * deltaY;
+                            break;
+                        case WALL_UPPER:
+                            if (allowHorizontal) wall.Upper_xOffset += 0.02f * deltaX;
+                            if (allowVertical) wall.Upper_yOffset += 0.02f * deltaY;
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 editor.onMapLoad();
@@ -114,10 +173,28 @@ public class STATE_TextureAlign extends EditorState{
         editor.shouldUpdateViewRenderer = true;
         editor.onMapLoad();
 
-        wall.xOffset = origXOffset;
-        wall.yOffset = origYOffset;
-        wall.xScale = origXScale;
-        wall.yScale = origYScale;
+        switch(target.type) {
+            case WALL_MAIN:
+                wall.xOffset = origXOffset;
+                wall.yOffset = origYOffset;
+                wall.xScale = origXScale;
+                wall.yScale = origYScale;
+                break;
+            case WALL_LOWER:
+                wall.Lower_xOffset = origXOffset;
+                wall.Lower_yOffset = origYOffset;
+                wall.Lower_xScale = origXScale;
+                wall.Lower_yScale = origYScale;
+                break;
+            case WALL_UPPER:
+                wall.Upper_xOffset = origXOffset;
+                wall.Upper_yOffset = origYOffset;
+                wall.Upper_xScale = origXScale;
+                wall.Upper_yScale = origYScale;
+                break;
+            default:
+                break;
+        }
 
         shouldFinish = true;
     }

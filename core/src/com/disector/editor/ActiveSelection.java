@@ -9,6 +9,7 @@ import com.disector.Physics;
 import com.disector.Sector;
 import com.disector.Wall;
 import com.disector.WallInfoPack;
+import com.disector.renderer.EditingSoftwareRenderer;
 
 class ActiveSelection {
     final Editor editor;
@@ -33,6 +34,16 @@ class ActiveSelection {
         this.editor = editor;
         this.allWalls = walls;
         this.allSectors = sectors;
+    }
+
+    public static class Surface {
+        int index;
+        EditingSoftwareRenderer.CLICK_TYPE type;
+
+        public Surface(int index, EditingSoftwareRenderer.CLICK_TYPE type) {
+            this.index = index;
+            this.type = type;
+        }
     }
 
     void clear() {
