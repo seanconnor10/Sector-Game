@@ -70,6 +70,7 @@ class ViewPanel extends Panel{
         switch (info.type) {
         case WALL_MAIN:
         case WALL_UPPER:
+        case WALL_LOWER:
             editor.viewRenderer.highLightStrength = 0.75f;
             editor.viewRenderer.wallHighLightIndex = info.index;
             editor.propertiesPanel.wallPropertiesWindow.setWall(info.index);

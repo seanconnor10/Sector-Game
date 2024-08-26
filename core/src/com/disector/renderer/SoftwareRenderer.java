@@ -210,8 +210,14 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 upperWallCutoffV = (destCeiling - secFloorZ) / thisSectorCeilingHeight;
             if (destFloor > secFloorZ)
                 lowerWallCutoffV = (destFloor - secFloorZ) / thisSectorCeilingHeight;
-            texturesLow = materials.get(w.matLower).tex;
-            texturesHigh = materials.get(w.matUpper).tex;
+            try {
+                texturesLow = materials.get(w.matLower).tex;
+                texturesHigh = materials.get(w.matUpper).tex;
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                texturesLow = textures;
+                texturesHigh = textures;
+            }
+
         }
 
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop

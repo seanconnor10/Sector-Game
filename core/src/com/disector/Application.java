@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import com.disector.Config.Config;
 import com.disector.assets.Material;
@@ -27,6 +28,8 @@ import com.disector.renderer.GameMapRenderer;
 import com.disector.renderer.SoftwareRenderer;
 import com.disector.maploader.MapLoader;
 import com.disector.maploader.TextFileMapLoader;
+
+import java.sql.Time;
 
 public class Application extends ApplicationAdapter {
     public static Config config;
@@ -67,6 +70,10 @@ public class Application extends ApplicationAdapter {
 
     @Override
     public void create () {
+        System.out.println("Setting things up...");
+
+        long timeStamp = TimeUtils.millis();
+
         focus = AppFocusTarget.GAME;
 
         loadConfig("disector.config");
@@ -94,7 +101,13 @@ public class Application extends ApplicationAdapter {
         createTestMap();
         createTestMaterial();
 
+        if (gameWorld==null) gameWorld = new GameWorld(this, appInput);
+        if (renderer==null) renderer = new SoftwareRenderer(this);
+        if (gameMapRenderer==null) gameMapRenderer = new GameMapRenderer(this, gameWorld);
+
         swapFocus(focus);
+
+        System.out.println("Engine Booted in " + TimeUtils.timeSinceMillis(timeStamp) + "ms");
     }
 
     @Override

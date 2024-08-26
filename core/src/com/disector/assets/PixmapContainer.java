@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -18,9 +19,10 @@ public class PixmapContainer {
     private TreeMap<String, Pixmap[]> pixmapsByName;
 
     public void loadFolder(String path) {
-        Array<FileHandle> imgFiles = new Array<>();
-
         System.out.println("Pixmap Container Loading  All Images In " + imgDir);
+        long timeStamp = TimeUtils.millis();
+
+        Array<FileHandle> imgFiles = new Array<>();
 
         for (FileHandle file : imgDir.child(path) .list()) {
             if (handleIsImage(file))
@@ -30,6 +32,7 @@ public class PixmapContainer {
 
         //Make 'pixmaps' 2D-Array
         pixmaps = new Pixmap[imgFiles.size][MIPMAP_COUNT];
+        pixmapsByName = new TreeMap<>();
         for (int i=0; i<imgFiles.size; i++) {
             Texture temp = new Texture(imgFiles.get(i), Pixmap.Format.RGBA8888, false);
             if (!temp.getTextureData().isPrepared()) temp.getTextureData().prepare();
@@ -37,28 +40,19 @@ public class PixmapContainer {
             for (int k = 1; k< MIPMAP_COUNT; k++) {
                 pixmaps[i][k] = halvePixmap(pixmaps[i][k-1]);
             }
+            pixmapsByName.put(imgFiles.get(i).nameWithoutExtension().toUpperCase(), pixmaps[i]);
             temp.dispose();
         }
 
-        //Make 'pixmaps2' String/Img Map
-        pixmapsByName = new TreeMap<>();
-        for (int i=0; i<imgFiles.size; i++) {
-            Texture temp = new Texture(imgFiles.get(i), Pixmap.Format.RGBA8888, false);
-            if (!temp.getTextureData().isPrepared()) temp.getTextureData().prepare();
-            Pixmap[] thisImgMips = new Pixmap[MIPMAP_COUNT];
-            thisImgMips[0] = temp.getTextureData().consumePixmap();
-            for (int k = 1; k< MIPMAP_COUNT; k++) {
-                thisImgMips[k] = halvePixmap(thisImgMips[k-1]);
-            }
-            pixmapsByName.put(imgFiles.get(i).nameWithoutExtension().toUpperCase(), thisImgMips);
-            temp.dispose();
-        }
+        System.out.println("    Done in " + TimeUtils.timeSinceMillis(timeStamp) + "ms" );
     }
 
     public void loadArray(Array<Material> blankMaterials) {
         //Takes an Array of Materials without the Texture loaded,
         //Loads the texture and adds reference to this PixmapContainer
+        long timeStamp = TimeUtils.millis();
         System.out.println("Loading Textures from Materials Array");
+
         pixmaps = new Pixmap[blankMaterials.size][MIPMAP_COUNT];
         pixmapsByName = new TreeMap<>();
 
@@ -86,6 +80,8 @@ public class PixmapContainer {
             System.out.println("    " + i + ") " + file);
             i++;
         }
+
+        System.out.println("    Done in " + TimeUtils.timeSinceMillis(timeStamp) + "ms" );
 
     }
 

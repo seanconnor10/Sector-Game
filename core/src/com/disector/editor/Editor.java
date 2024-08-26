@@ -770,6 +770,7 @@ public class Editor {
         newWallOne.y1 = wall1.y1;
         newWallOne.x2 = wall2.x2;
         newWallOne.y2 = wall2.y2;
+        newWallOne.setNormalAngle();
         newSector.walls.add(walls.size);
         walls.add(newWallOne);
 
@@ -778,6 +779,7 @@ public class Editor {
         newWallTwo.y1 = wall2.y1;
         newWallTwo.x2 = wall1.x2;
         newWallTwo.y2 = wall1.y2;
+        newWallTwo.setNormalAngle();
         newSector.walls.add(walls.size);
         walls.add(newWallTwo);
 

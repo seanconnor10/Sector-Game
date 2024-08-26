@@ -24,7 +24,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
     public float highLightStrength = 0;
 
 
-    public enum CLICK_TYPE {FLOOR, CEIL, WALL_MAIN, WALL_UPPER}
+    public enum CLICK_TYPE {FLOOR, CEIL, WALL_MAIN, WALL_UPPER, WALL_LOWER}
 
     public class ClickInfo {
         public int index = -1;
@@ -245,25 +245,22 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 CLICK_TYPE type;
 
                 Color drawColor;
-                if (/*Draw Textures*/ true) {
-                    if (!w.isPortal) {
-                        drawColor = grabColor(tex, texU, texV);
-                        type = CLICK_TYPE.WALL_MAIN;
-                    }
-                    else if (v <= lowerWallCutoffV) {
-                        drawColor = grabColor(texLower, texU, texV);
-                        type = CLICK_TYPE.WALL_MAIN;
-                    }
-                    else {
-                        drawColor = grabColor(texUpper, texU, texV_Upper);
-                        type = CLICK_TYPE.WALL_UPPER;
-                    }
 
-                    drawColor.lerp(depthFogColor,fog);
-                    drawColor.lerp(darkColor, 1.f - light);
-                } else {
-                    drawColor = getCheckerboardColor(u,v);
+                if (!w.isPortal) {
+                    drawColor = grabColor(tex, texU, texV);
+                    type = CLICK_TYPE.WALL_MAIN;
                 }
+                else if (v <= lowerWallCutoffV) {
+                    drawColor = grabColor(texLower, texU, texV);
+                    type = CLICK_TYPE.WALL_LOWER;
+                }
+                else {
+                    drawColor = grabColor(texUpper, texU, texV_Upper);
+                    type = CLICK_TYPE.WALL_UPPER;
+                }
+
+                drawColor.lerp(depthFogColor,fog);
+                drawColor.lerp(darkColor, 1.f - light);
 
                 if (wallHighLightIndex == wInd) {
                     drawColor.lerp(highlightColorWall, highLightStrength);

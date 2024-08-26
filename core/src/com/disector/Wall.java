@@ -15,6 +15,9 @@ public class Wall {
     public float xOffset = 0.f, yOffset = 0.f;
     public float xScale = 1.f, yScale = 1.f;
 
+    //TODO Add separate offset and scale for upper AND lower
+    //TODO plus Portal types... NORMAL, TEXTURE_PERMEABLE, TEXTURE_BLOCKING_OBJECT, TEXTURE_BLOCKING_ALL
+
     public Wall() {
 
     }
