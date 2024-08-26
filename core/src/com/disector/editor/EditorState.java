@@ -54,16 +54,32 @@ abstract class EditorState {
         return walls;
     }
 
-    protected int[] getPointsOnesAtMouseByIndex() {
+    protected int[] getPointsOnesAtMouseByIndex(float worldDistance) {
         IntArray walls = new IntArray();
 
         float x = xUnSnapped();
         float y = yUnSnapped();
 
-        final float grabDistance = 5.0f / editor.mapRenderer.zoom;
+        final float grabDistance = worldDistance / editor.mapRenderer.zoom;
 
         for (int i=0; i<editor.walls.size; i++) {
             if (squareCollision(editor.walls.get(i).x1, editor.walls.get(i).y1, x, y, grabDistance))
+                walls.add(i);
+        }
+
+        return walls.toArray();
+    }
+
+    protected int[] getPointsTwosAtMouseByIndex(float worldDistance) {
+        IntArray walls = new IntArray();
+
+        float x = xUnSnapped();
+        float y = yUnSnapped();
+
+        final float grabDistance = worldDistance / editor.mapRenderer.zoom;
+
+        for (int i=0; i<editor.walls.size; i++) {
+            if (squareCollision(editor.walls.get(i).x2, editor.walls.get(i).y2, x, y, grabDistance))
                 walls.add(i);
         }
 
