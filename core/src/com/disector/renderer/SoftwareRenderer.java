@@ -25,6 +25,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
     protected final Color depthFogColor = new Color(0.2f, 0.05f, 0.2f, 1f);
     protected final Color darkColor = new Color(0x20_0A_10_FF);
 
+    protected final boolean AGGRESSIVE_MIPMAPS = false;
+
     public SoftwareRenderer(Application app) {
         super(app);
 
@@ -254,86 +256,45 @@ public class SoftwareRenderer extends DimensionalRenderer {
             float u =  ((1 - hProgress)*(leftClipU/x1) + hProgress*(rightClipU/x2)) / ( (1-hProgress)*(1/x1) + hProgress*(1/x2));
             //if (u<0.01f) u = 0.01f; if (u>0.99) u = 0.99f;
 
-            //U is percent along wall 0 to 1.0
-            //TexU is u * wallLength / texture_width
-            //Then find UPlusOne and then TexUPlusOne
-            //All for mid, lower and upper
-            float xOffMain = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.xOffset;
-            float xOffLow = w.Lower_xOffset < 0 ? 1.f - Math.abs(w.Lower_xOffset) % 1.f : w.Lower_xOffset;
-            float xOffHigh = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.Upper_xOffset) % 1.f : w.Upper_xOffset;
+            Pixmap tex, texLower, texUpper;
 
-            float texU_Main = u * wallLength / textures[0].getWidth();
-            texU_Main = (xOffMain + texU_Main * w.xScale) % 1.f;
-            
-            float texU_Lower = u * wallLength / texturesLow[0].getWidth();
-            texU_Lower = (xOffLow + texU_Main * w.Lower_xScale) % 1.f;
-            
-            float texU_Upper = u * wallLength / texturesHigh[0].getWidth();
-            texU_Upper = (xOffHigh + texU_Main * w.Upper_xScale) % 1.f;
+            final int MAX_MIP_IND = PixmapContainer.MIPMAP_COUNT - 1;
 
             float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
             float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
 
-            float texU_PlusOne_Main = uPlus1 * wallLength / textures[0].getWidth();
-            texU_PlusOne_Main = (xOffMain + texU_PlusOne_Main * w.xScale) % 1.f;
-            float texU_PlusOne_Lower = uPlus1 * wallLength / texturesLow[0].getWidth();
-            texU_PlusOne_Lower = (xOffLow + texU_PlusOne_Lower * w.Lower_xScale) % 1.f;
-            float texU_PlusOne_Upper = uPlus1 * wallLength / texturesHigh[0].getWidth();
-            texU_PlusOne_Upper = (xOffHigh + texU_PlusOne_Upper * w.Upper_xScale) % 1.f;
-
-            float mainTexPixelWidth = Math.abs( textures[0].getWidth() * (texU_PlusOne_Main - texU_Main ));
-            float lowerTexPixelWidth = Math.abs( texturesLow[0].getWidth() * (texU_PlusOne_Lower - texU_Lower ));
-            float upperTexPixelWidth = Math.abs( texturesHigh[0].getWidth() * (texU_PlusOne_Upper - texU_Upper ));
-
-            Pixmap tex, texLower, texUpper;
-            final int MAX_INDEX = PixmapContainer.MIPMAP_COUNT - 1;
-            tex = textures[ Math.max(0, Math.min(MAX_INDEX, Math.round(mainTexPixelWidth) )) ];
-            texLower = texturesLow[ Math.max(0, Math.min(MAX_INDEX, Math.round(lowerTexPixelWidth)  )) ];
-            texUpper = texturesHigh[ Math.max(0, Math.min(MAX_INDEX, Math.round(upperTexPixelWidth)  )) ];
-
-/*
-hProgress...
-u...
-
-// Shoulkd xOffset be in pixels.. or percentage?
-
-temp = (wall-length/tex-width)/xScale
-
-texU = xOffset + u * temp 
-
-hProgress2...
-u2...
-
-texU2 = xOffset + u2 * temp
-
-xxx = widthOnTextureOfThisScreenColumn = (texU2 - texU) / tex-width
-
-pixmapIndex = Floor/Round(xxx - 1)
-*/
-
-            /*Pixmap tex, texLower, texUpper;
+            float texX=0;
+            int pixmap_ind=0;
             {
-                final int mipMapCount = PixmapContainer.MIPMAP_COUNT;
-                final float mipMapResistanceFactor = 1f;
-                float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
-                float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
-                float texPixelWidth = Math.abs( textures[0].getWidth() * (uPlus1-u) );
-                int mipMapIndex = Math.max(0, Math.min( (int)( (int)(Math.sqrt(texPixelWidth))/mipMapResistanceFactor ), mipMapCount-1));
-                tex = textures[mipMapIndex];
-                texLower = texturesLow[mipMapIndex];
-                texUpper = texturesHigh[mipMapIndex];
+                texX = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
+                float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
+                float pixWidth = (texX_PlusOne - texX) * textures[0].getWidth();
+                pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
+                        pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
+                )));
+                tex = textures[pixmap_ind];
+                texLower = tex;
+                texUpper = tex;
             }
 
-            //Get Horizontal Texture Co-Ords before entering per-pixel column loop
-            float texU, texU_Upper=0, texU_Lower=0;
-            float tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.xOffset;
-            texU = (tempXOff + u * w.xScale) % 1.0f;
-            if (isPortal) {
-                tempXOff = w.Lower_xOffset < 0 ? 1.f - Math.abs(w.Lower_xOffset) % 1.f : w.Lower_xOffset;
-                texU_Lower = (tempXOff + u * w.Lower_xScale) % 1.0f;
-                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.Upper_xOffset) % 1.f : w.Upper_xOffset;
-                texU_Upper = (tempXOff + u * w.Upper_xScale) % 1.0f;
-            }*/
+            float texX_Lower=0, texX_Upper=0;
+            if (isPortal){
+                texX_Lower = w.Lower_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
+                float texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
+                float pixWidth = (texX_PlusOne - texX_Lower) * texturesLow[0].getWidth();
+                pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
+                        pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
+                )));
+                texLower = texturesLow[pixmap_ind];
+           
+                texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
+                texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
+                pixWidth = (texX_PlusOne - texX_Upper) * texturesLow[0].getWidth();
+                pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
+                        pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
+                )));
+                texUpper = texturesHigh[pixmap_ind];
+            }
 
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
                 float v = (drawY - quadBottom) / quadHeight;
@@ -341,25 +302,25 @@ pixmapIndex = Floor/Round(xxx - 1)
                 if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
                     continue;
 
-                float pixU;
+                float pixX;
                 
                 float yOff, yScale;
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixU = texU_Main;
+                    pixX = texX;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
-                    pixU = texU_Lower;
+                    pixX = texX_Lower;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixU = texU_Main;
+                    pixX = texX;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
-                    pixU = texU_Upper;
+                    pixX = texX_Upper;
                 }
 
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
@@ -367,15 +328,14 @@ pixmapIndex = Floor/Round(xxx - 1)
 
                 Color drawColor;
                     if (!w.isPortal)
-                        drawColor = grabColor(tex, pixU, texV);
+                        drawColor = grabColor(tex, pixX, texV);
                     else if (v <= lowerWallCutoffV)
-                        drawColor = grabColor(texLower, pixU, texV);
+                        drawColor = grabColor(texLower, pixX, texV);
                     else
-                        drawColor = grabColor(texUpper, pixU, texV);
+                        drawColor = grabColor(texUpper, pixX, texV);
 
                 drawColor.lerp(depthFogColor,fog);
                 drawColor.lerp(darkColor, 1.f - light);
-            
 
                 setPixel(drawX, drawY, drawColor);
 
