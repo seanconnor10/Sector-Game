@@ -218,27 +218,43 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             //if (u<0.01f) u = 0.01f; if (u>0.99) u = 0.99f;
 
             Pixmap tex, texLower, texUpper;
+
+            final int MAX_MIP_IND = PixmapContainer.MIPMAP_COUNT - 1;
+
+            float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
+            float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
+
+            float texX=0;
+            int pixmap_ind=0;
             {
-                final int mipMapCount = PixmapContainer.MIPMAP_COUNT;
-                final float mipMapResistanceFactor = 1f;
-                float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
-                float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
-                float texPixelWidth = Math.abs( textures[0].getWidth() * (uPlus1-u) );
-                int mipMapIndex = Math.max(0, Math.min( (int)( (int)(Math.sqrt(texPixelWidth))/mipMapResistanceFactor ), mipMapCount-1));
-                tex = textures[mipMapIndex];
-                texLower = texturesLow[mipMapIndex];
-                texUpper = texturesHigh[mipMapIndex];
+                texX = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
+                float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
+                float pixWidth = (texX_PlusOne - texX) * textures[0].getWidth();
+                pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
+                        pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
+                )));
+                tex = textures[pixmap_ind];
+                texLower = tex;
+                texUpper = tex;
             }
 
-            //Get Horizontal Texture Co-Ords before entering per-pixel column loop
-            float texU, texU_Upper=0, texU_Lower=0;
-            float tempXOff = w.xOffset < 0 ? 1.f - Math.abs(w.xOffset) % 1.f : w.xOffset;
-            texU = (tempXOff + u * w.xScale) % 1.0f;
-            if (isPortal) {
-                tempXOff = w.Lower_xOffset < 0 ? 1.f - Math.abs(w.Lower_xOffset) % 1.f : w.Lower_xOffset;
-                texU_Lower = (tempXOff + u * w.Lower_xScale) % 1.0f;
-                tempXOff = w.Upper_xOffset < 0 ? 1.f - Math.abs(w.Upper_xOffset) % 1.f : w.Upper_xOffset;
-                texU_Upper = (tempXOff + u * w.Upper_xScale) % 1.0f;
+            float texX_Lower=0, texX_Upper=0;
+            if (isPortal){
+                texX_Lower = w.Lower_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
+                float texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
+                float pixWidth = (texX_PlusOne - texX_Lower) * texturesLow[0].getWidth();
+                pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
+                        pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
+                )));
+                texLower = texturesLow[pixmap_ind];
+
+                texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
+                texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
+                pixWidth = (texX_PlusOne - texX_Upper) * texturesLow[0].getWidth();
+                pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
+                        pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
+                )));
+                texUpper = texturesHigh[pixmap_ind];
             }
 
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
@@ -253,19 +269,19 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixU = texU;
+                    pixU = texX;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
-                    pixU = texU_Lower;
+                    pixU = texX_Lower;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixU = texU;
+                    pixU = texX;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
-                    pixU = texU_Upper;
+                    pixU = texX_Upper;
                 }
 
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
