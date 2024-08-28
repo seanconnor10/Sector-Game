@@ -260,8 +260,6 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
                 float v = (drawY - quadBottom) / quadHeight;
 
-                if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
-                    continue;
 
                 float pixU;
 
@@ -275,9 +273,11 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                     yScale = w.Lower_yScale;
                     pixU = texX_Lower;
                 } else if (v<upperWallCutoffV) {
-                    yOff = w.yOffset;
+                    //Middle of Portal
+                    continue;
+                    /*yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixU = texX;
+                    pixU = texX;*/
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;

@@ -337,7 +337,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 drawColor.lerp(depthFogColor,fog);
                 drawColor.lerp(darkColor, 1.f - light);
 
-                setPixel(drawX, drawY, drawColor);
+                buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor));
 
             } //End Per Pixel Loop
 
@@ -366,6 +366,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         final float scaleFactor = 32.f;
         float floorXOffset = camX/scaleFactor, floorYOffset = camY/scaleFactor;
         int vOffset = (int) camVLook;
+
         if (occlusionBottom[drawX] < rasterBottom) {
             float heightOffset = (camZ - secFloorZ) / scaleFactor;
             int floorEndScreenY = Math.min(rasterBottom, occlusionTop[drawX]);
@@ -380,22 +381,14 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 float floorX = heightOffset * (drawX-halfWidth) / (drawY-halfHeight);
                 float floorY = heightOffset * fov / (drawY-halfHeight);
 
-                float rotFloorX = floorX*playerSin - floorY*playerCos + floorXOffset;
-                float rotFloorY = floorX*playerCos + floorY*playerSin + floorYOffset;
-
-                if (rotFloorX<=0) rotFloorX = -rotFloorX;
-                if (rotFloorY<0) rotFloorY = -rotFloorY;
+                float rotFloorX = Math.abs( floorX*playerSin - floorY*playerCos + floorXOffset );
+                float rotFloorY = Math.abs( floorX*playerCos + floorY*playerSin + floorYOffset );
 
                 rotFloorX /= 4;
                 rotFloorY /= 4;
 
                 rotFloorX = rotFloorX%1;
                 rotFloorY = rotFloorY%1;
-
-                while(rotFloorX<0.0) rotFloorX+=1.0f;
-                while(rotFloorX>1.0f) rotFloorX-=1.0f;
-                while(rotFloorY<0.0) rotFloorY+=1.0f;
-                while(rotFloorY>1.0f) rotFloorY-=1.0f;
 
                 /* CHECKERBOARD
                 boolean checkerBoard = ( (int)(rotFloorX*8%2) == (int)(rotFloorY*8%2) );
@@ -409,12 +402,13 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
                 float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
 
-                Color drawColor = grabColor(tex, rotFloorX, rotFloorY);
+                //Color drawColor = grabColor(tex, rotFloorX, rotFloorY);
+                Color drawColor = new Color(tex.getPixel( (int)(rotFloorX*tex.getWidth()), (int)((1.f-rotFloorY)*tex.getHeight()) ));
 
                 drawColor.lerp(depthFogColor, getFogFactor(dist));
                 drawColor.lerp(darkColor, 1.0f - light);
 
-                setPixel(drawX, drawY - vOffset, drawColor);
+                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor));
 
             }
         }
@@ -459,22 +453,14 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 float ceilX = heightOffset * (drawX - halfWidth) / (drawY - halfHeight);
                 float ceilY = heightOffset * fov / (drawY - halfHeight);
 
-                float rotX = ceilX * playerSin - ceilY * playerCos - floorXOffset;
-                float rotY = ceilX * playerCos + ceilY * playerSin - floorYOffset;
-
-                if (rotX <= 0) rotX = -rotX;
-                if (rotY < 0) rotY = -rotY;
+                float rotX = Math.abs( ceilX * playerSin - ceilY * playerCos - floorXOffset );
+                float rotY = Math.abs( ceilX * playerCos + ceilY * playerSin - floorYOffset );
 
                 rotX /= 4f;
                 rotY /= 4f;
 
                 rotX = rotX % 1;
                 rotY = rotY % 1;
-
-                while (rotX < 0.0) rotX += 1.0f;
-                while (rotX > 1.0f) rotX -= 1.0f;
-                while (rotY < 0.0) rotY += 1.0f;
-                while (rotY > 1.0f) rotY -= 1.0f;
 
                 /*boolean checkerBoard = ( (int)(rotX*8%2) == (int)(rotY*8%2) );
                 Color drawColor = new Color( checkerBoard ? 0xFF_A0_20_50 : 0xFF_20_50_A0 );
@@ -491,10 +477,13 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 drawColor.lerp(depthFogColor, getFogFactor(dist));
                 drawColor.lerp(darkColor, 1.0f - light);
-                setPixel(drawX, drawY - vOffset, drawColor);
+
+                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor));
+
             } else { //If isSky
                 Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
-                setPixel(drawX, drawY - vOffset, drawColor);
+                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor));
+
             }
 
         }
