@@ -8,12 +8,13 @@ import com.badlogic.gdx.utils.IntArray;
 import com.disector.*;
 import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.Positionable;
+import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
 
-public class GameWorld {
+public class GameWorld implements I_AppFocus{
     private final Application app;
     private final Array<Wall> walls;
     private final Array<Sector> sectors;
@@ -25,13 +26,19 @@ public class GameWorld {
 
     public Player player1;
 
-    public GameWorld(Application app, InputChainNode input) {
+    public GameWorld(Application app, InputChainInterface inputParent) {
         this.app = app;
         this.walls = app.walls;
         this.sectors = app.sectors;
+        this.input = new InputChainNode(inputParent, "GameWorld");
+        this.input.on();
         player1 = new Player(this, input);
         player1.z = 100.f;
-        this.input = input;
+    }
+
+    @Override
+    public InputChainInterface getInputReference() {
+        return input;
     }
 
     public void step(float dt) {

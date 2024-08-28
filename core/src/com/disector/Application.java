@@ -19,6 +19,7 @@ import com.disector.console.CommandExecutor;
 import com.disector.console.Console;
 import com.disector.editor.Editor;
 import com.disector.gameworld.GameWorld;
+import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputRecorder;
 import com.disector.maploader.OldTextFormatMapLoader;
@@ -63,7 +64,7 @@ public class Application extends ApplicationAdapter {
 
     public InputRecorder mainInput = new InputRecorder();
     public InputChainNode consoleInput;
-    public InputChainNode appInput; //Given to the AppFocusTarget (i.e. Game, Editor, Menu)
+    public InputChainInterface appInput; //Now a reference to the individual InputChainNode of each AppFocus
 
     @Override
     public void create () {
@@ -92,13 +93,11 @@ public class Application extends ApplicationAdapter {
         console = new Console( new CommandExecutor(this), mainInput);
 
         consoleInput = console.getInputAdapter();
-        appInput = new InputChainNode(mainInput, "AppFocusInput");
-        appInput.on();
 
         createTestMap();
         createTestMaterial();
 
-        if (gameWorld==null) gameWorld = new GameWorld(this, appInput);
+        if (gameWorld==null) gameWorld = new GameWorld(this, mainInput);
         if (renderer==null) renderer = new SoftwareRenderer(this);
         if (gameMapRenderer==null) gameMapRenderer = new GameMapRenderer(this, gameWorld);
 
@@ -210,6 +209,9 @@ public class Application extends ApplicationAdapter {
 
     public void swapFocus(AppFocusTarget target) {
 
+        if (appInput != null)
+            appInput.off();
+
         switch(focus) {
             case GAME:
                 Gdx.input.setCursorCatched(false);
@@ -227,18 +229,23 @@ public class Application extends ApplicationAdapter {
                 if (renderer==null) renderer = new SoftwareRenderer(this);
                 if (gameMapRenderer==null) gameMapRenderer = new GameMapRenderer(this, gameWorld);
                 Gdx.input.setCursorCatched(true);
+                appInput = gameWorld.getInputReference();
                 break;
             case MENU:
+                //appInput = ...
                 break;
             case EDITOR:
                 if (gameWorld == null) {
                     System.out.println("Must instance GameWorld before Editor.");
                     break;
                 }
-                if (editor==null) editor = new Editor(this, appInput);
+                if (editor==null) editor = new Editor(this, mainInput);
+                appInput = editor.getInputReference();
                 break;
             default:
         }
+
+        appInput.on();
 
         focus = target;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
