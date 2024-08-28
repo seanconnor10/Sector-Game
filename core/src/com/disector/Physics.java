@@ -20,10 +20,10 @@ public class Physics {
             /*
                 Giving rayWallIntersection a non-zero angle fixing containsPoint failing
                 This all worked correctly in the previous SectorGame where a Wall's
-                Points were Integers not Floats... Fix at some point..
+                Points were Integers not Floats... Fix at some point...
              */
-            Vector2 intersect = rayWallIntersection(walls.get(wInd), 0, x, y, false);
-            if (intersect != null && intersect.x > x)
+            Vector2 intersect = rayWallIntersection(walls.get(wInd), 1, x, y, false);
+            if (intersect != null /*&& intersect.x > x*/)
                 intersections++;
         }
 
