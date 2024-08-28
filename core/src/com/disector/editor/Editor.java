@@ -10,11 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
-import com.disector.Application;
-import com.disector.Physics;
-import com.disector.Sector;
-import com.disector.Wall;
-import com.disector.Material;
+import com.disector.*;
 import com.disector.editor.actions.EditAction;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
@@ -22,7 +18,7 @@ import com.disector.renderer.EditingSoftwareRenderer;
 
 import java.util.Stack;
 
-public class Editor {
+public class Editor implements I_AppFocus {
     static BitmapFont font = new BitmapFont( Gdx.files.local("assets/font/fira.fnt") );
 
     final Application app;
@@ -108,6 +104,11 @@ public class Editor {
 
         for (Panel panel : panels)
             panel.rearrangeButtons();
+    }
+
+    @Override
+    public InputChainInterface getInputReference() {
+        return input;
     }
 
     // -----------------------------------------------
