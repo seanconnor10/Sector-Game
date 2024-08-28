@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.disector.Wall;
 import com.disector.Sector;
 import com.disector.Application;
-import com.disector.assets.Material;
+import com.disector.Material;
 import com.disector.assets.PixmapContainer;
 
 public class EditingSoftwareRenderer extends SoftwareRenderer {

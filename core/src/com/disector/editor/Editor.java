@@ -14,12 +14,11 @@ import com.disector.Application;
 import com.disector.Physics;
 import com.disector.Sector;
 import com.disector.Wall;
-import com.disector.assets.Material;
+import com.disector.Material;
 import com.disector.editor.actions.EditAction;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.EditingSoftwareRenderer;
-import com.disector.renderer.SoftwareRenderer;
 
 import java.util.Stack;
 

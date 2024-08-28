@@ -1,4 +1,4 @@
-package com.disector.assets;
+package com.disector;
 
 import com.badlogic.gdx.graphics.Pixmap;
 

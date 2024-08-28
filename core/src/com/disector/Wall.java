@@ -22,11 +22,8 @@ public class Wall {
     public PortalType type = PortalType.NORMAL;
 
     public enum PortalType {
-        NORMAL, TEXTURE, TEXTURE_BLOCK_OBJECT, TEXTURE_BLOCK_ALL, DISJOINTED;
+        NORMAL, TEXTURE, TEXTURE_BLOCK_OBJECT, TEXTURE_BLOCK_ALL, TELEPORT;
     }
-
-    //TODO Add separate offset and scale for upper AND lower
-    //TODO plus Portal types... NORMAL, TEXTURE_PERMEABLE, TEXTURE_BLOCKING_OBJECT, TEXTURE_BLOCKING_ALL
 
     public Wall() {
 

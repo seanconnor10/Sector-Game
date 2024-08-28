@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.disector.*;
-import com.disector.assets.Material;
+import com.disector.Material;
 import com.disector.assets.PixmapContainer;
 
 import java.util.ArrayDeque;

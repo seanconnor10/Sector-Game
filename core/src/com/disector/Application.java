@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import com.disector.Config.Config;
-import com.disector.assets.Material;
 import com.disector.assets.PixmapContainer;
 import com.disector.console.CommandExecutor;
 import com.disector.console.Console;
@@ -28,8 +27,6 @@ import com.disector.renderer.GameMapRenderer;
 import com.disector.renderer.SoftwareRenderer;
 import com.disector.maploader.MapLoader;
 import com.disector.maploader.TextFileMapLoader;
-
-import java.sql.Time;
 
 public class Application extends ApplicationAdapter {
     public static Config config;

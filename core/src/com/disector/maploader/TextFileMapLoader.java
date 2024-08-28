@@ -2,19 +2,17 @@ package com.disector.maploader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Array;
 
 import com.disector.Application;
 import com.disector.Sector;
 import com.disector.Wall;
-import com.disector.assets.Material;
+import com.disector.Material;
 import com.disector.assets.PixmapContainer;
 import com.disector.gameworld.GameWorld;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class TextFileMapLoader implements MapLoader {

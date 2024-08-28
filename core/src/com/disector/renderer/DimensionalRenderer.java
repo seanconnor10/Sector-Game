@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.disector.Application;
-import com.disector.assets.Material;
+import com.disector.Material;
 
 public abstract class DimensionalRenderer extends Renderer{
     Pixmap buffer;
