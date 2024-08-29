@@ -28,6 +28,9 @@ public class STATE_SplittingWall extends EditorState {
         if (shouldFinish)
             return;
 
+        if (editor.selection.highlightedWall == null || editor.selection.highlightedWallIndex == -1)
+            return;
+
         WallInfoPack highlightedWall = new WallInfoPack(
                 editor.selection.getWallHighlight(),
                 editor.selection.getWallHighlightIndex(),
