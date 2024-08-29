@@ -80,8 +80,6 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
         actorsToUpdate.add(indexControl);
         mainTable.add(indexControl);
 
-        mainTable.row();
-
         COMP_ControlGroup light_control = new COMP_ControlGroup("Light", getSkin(), editor);
         light_control.minusAction  = () -> light_control.textField.setText(shiftLight(-0.1f));
         light_control.plusAction   = () -> light_control.textField.setText(shiftLight(0.1f));
@@ -90,6 +88,10 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
         actorsToUpdate.add(light_control);
         mainTable.add(light_control);
 
+        mainTable.row();
+
+        mainTable.add( new Label("-= MIDDLE =-", getSkin()) );
+
         COMP_ControlGroup mat_control = new COMP_ControlGroup("Material", getSkin(), editor);
         mat_control.minusAction  = () -> mat_control.textField.setText(shiftMaterial(true, MATERIAL_LOCATION.MID));
         mat_control.plusAction   = () -> mat_control.textField.setText(shiftMaterial(false, MATERIAL_LOCATION.MID));
@@ -97,24 +99,6 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
         mat_control.onUpdateMap  = () -> mat_control.textField.setText("" + wall.mat);
         actorsToUpdate.add(mat_control);
         mainTable.add(mat_control);
-
-        mainTable.row();
-
-        COMP_ControlGroup matLower_control = new COMP_ControlGroup("Mat Lower", getSkin(), editor);
-        matLower_control.minusAction  = () -> matLower_control.textField.setText(shiftMaterial(true, MATERIAL_LOCATION.LOWER));
-        matLower_control.plusAction   = () -> matLower_control.textField.setText(shiftMaterial(false, MATERIAL_LOCATION.LOWER));
-        matLower_control.onTextSubmit = () -> setMaterial(matLower_control.textField.getText(), MATERIAL_LOCATION.LOWER);
-        matLower_control.onUpdateMap  = () -> matLower_control.textField.setText("" + wall.matLower);
-        actorsToUpdate.add(matLower_control);
-        mainTable.add(matLower_control);
-
-        COMP_ControlGroup matUpper_control = new COMP_ControlGroup("Mat Upper", getSkin(), editor);
-        matUpper_control.minusAction  = () -> matUpper_control.textField.setText(shiftMaterial(true, MATERIAL_LOCATION.UPPER));
-        matUpper_control.plusAction   = () -> matUpper_control.textField.setText(shiftMaterial(false, MATERIAL_LOCATION.UPPER));
-        matUpper_control.onTextSubmit = () -> setMaterial(matUpper_control.textField.getText(), MATERIAL_LOCATION.UPPER);
-        matUpper_control.onUpdateMap  = () -> matUpper_control.textField.setText("" + wall.matUpper);
-        actorsToUpdate.add(matUpper_control);
-        mainTable.add(matUpper_control);
 
         mainTable.row();
 
@@ -151,6 +135,66 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
         yOffset_control.onUpdateMap  = () -> yOffset_control.textField.setText("" + wall.yOffset);
         actorsToUpdate.add(yOffset_control);
         mainTable.add(yOffset_control);
+
+        mainTable.row();
+
+        mainTable.add( new Label("-= LOWER =-", getSkin()) );
+
+        COMP_ControlGroup matLower_control = new COMP_ControlGroup("Material", getSkin(), editor);
+        matLower_control.minusAction  = () -> matLower_control.textField.setText(shiftMaterial(true, MATERIAL_LOCATION.LOWER));
+        matLower_control.plusAction   = () -> matLower_control.textField.setText(shiftMaterial(false, MATERIAL_LOCATION.LOWER));
+        matLower_control.onTextSubmit = () -> setMaterial(matLower_control.textField.getText(), MATERIAL_LOCATION.LOWER);
+        matLower_control.onUpdateMap  = () -> matLower_control.textField.setText("" + wall.matLower);
+        actorsToUpdate.add(matLower_control);
+        mainTable.add(matLower_control);
+
+        mainTable.row();
+
+        COMP_ControlGroup Lower_xScale_control = new COMP_ControlGroup("X Scale", getSkin(), editor);
+        Lower_xScale_control.minusAction  = () -> Lower_xScale_control.textField.setText( shiftLowerXScale(-0.2f) );
+        Lower_xScale_control.plusAction   = () -> Lower_xScale_control.textField.setText( shiftLowerXScale(0.2f) );
+        Lower_xScale_control.onTextSubmit = () -> setLowerXScale(Float.parseFloat(Lower_xScale_control.textField.getText()));
+        Lower_xScale_control.onUpdateMap  = () -> Lower_xScale_control.textField.setText("" + wall.Lower_xScale);
+        actorsToUpdate.add(Lower_xScale_control);
+        mainTable.add(Lower_xScale_control);
+
+        COMP_ControlGroup Lower_yScale_control = new COMP_ControlGroup("Y Scale", getSkin(), editor);
+        Lower_yScale_control.minusAction  = () -> Lower_yScale_control.textField.setText( shiftLowerYScale(-0.2f) );
+        Lower_yScale_control.plusAction   = () -> Lower_yScale_control.textField.setText( shiftLowerYScale(0.2f) );
+        Lower_yScale_control.onTextSubmit = () -> setLowerYScale(Float.parseFloat(Lower_yScale_control.textField.getText()));
+        Lower_yScale_control.onUpdateMap  = () -> Lower_yScale_control.textField.setText("" + wall.Lower_yScale);
+        actorsToUpdate.add(Lower_yScale_control);
+        mainTable.add(Lower_yScale_control);
+
+        mainTable.row();
+
+        COMP_ControlGroup Lower_xOffset_control = new COMP_ControlGroup("X Offset", getSkin(), editor);
+        Lower_xOffset_control.minusAction  = () -> Lower_xOffset_control.textField.setText( shiftLowerXOffset(-0.1f) );
+        Lower_xOffset_control.plusAction   = () -> Lower_xOffset_control.textField.setText( shiftLowerXOffset(0.1f) );
+        Lower_xOffset_control.onTextSubmit = () -> setLowerXOffset(Float.parseFloat(Lower_xOffset_control.textField.getText()));
+        Lower_xOffset_control.onUpdateMap  = () -> Lower_xOffset_control.textField.setText("" + wall.Lower_xOffset);
+        actorsToUpdate.add(Lower_xOffset_control);
+        mainTable.add(Lower_xOffset_control);
+
+        COMP_ControlGroup Lower_yOffset_control = new COMP_ControlGroup("Y Offset", getSkin(), editor);
+        Lower_yOffset_control.minusAction  = () -> Lower_yOffset_control.textField.setText( shiftLowerYOffset(-0.1f) );
+        Lower_yOffset_control.plusAction   = () -> Lower_yOffset_control.textField.setText( shiftLowerYOffset(0.1f) );
+        Lower_yOffset_control.onTextSubmit = () -> setLowerYOffset(Float.parseFloat(Lower_yOffset_control.textField.getText()));
+        Lower_yOffset_control.onUpdateMap  = () -> Lower_yOffset_control.textField.setText("" + wall.Lower_yOffset);
+        actorsToUpdate.add(Lower_yOffset_control);
+        mainTable.add(Lower_yOffset_control);
+
+        mainTable.row();
+
+        mainTable.add( new Label("-= UPPER =-", getSkin()) );
+
+        COMP_ControlGroup matUpper_control = new COMP_ControlGroup("Material", getSkin(), editor);
+        matUpper_control.minusAction  = () -> matUpper_control.textField.setText(shiftMaterial(true, MATERIAL_LOCATION.UPPER));
+        matUpper_control.plusAction   = () -> matUpper_control.textField.setText(shiftMaterial(false, MATERIAL_LOCATION.UPPER));
+        matUpper_control.onTextSubmit = () -> setMaterial(matUpper_control.textField.getText(), MATERIAL_LOCATION.UPPER);
+        matUpper_control.onUpdateMap  = () -> matUpper_control.textField.setText("" + wall.matUpper);
+        actorsToUpdate.add(matUpper_control);
+        mainTable.add(matUpper_control);
 
         mainTable.row();
 
@@ -293,6 +337,102 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
         return "" + wall.yOffset;
     }
 
+    private String setLowerXScale(float amt) {
+        wall.Lower_xScale = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_xScale;
+    }
+
+    private String shiftLowerXScale(float amt) {
+        wall.Lower_xScale += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_xScale;
+    }
+
+    private String setLowerYScale(float amt) {
+        wall.Lower_yScale = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_yScale;
+    }
+
+    private String shiftLowerYScale(float amt) {
+        wall.Lower_yScale += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_yScale;
+    }
+
+    private String setLowerXOffset(float amt) {
+        wall.Lower_xOffset = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_xOffset;
+    }
+
+    private String shiftLowerXOffset(float amt) {
+        wall.Lower_xOffset += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_xOffset;
+    }
+
+    private String setLowerYOffset(float amt) {
+        wall.Lower_yOffset = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_yOffset;
+    }
+
+    private String shiftLowerYOffset(float amt) {
+        wall.Lower_yOffset += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Lower_yOffset;
+    }
+
+    private String setUpperXScale(float amt) {
+        wall.Upper_xScale = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_xScale;
+    }
+
+    private String shiftUpperXScale(float amt) {
+        wall.Upper_xScale += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_xScale;
+    }
+
+    private String setUpperYScale(float amt) {
+        wall.Upper_yScale = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_yScale;
+    }
+
+    private String shiftUpperYScale(float amt) {
+        wall.Upper_yScale += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_yScale;
+    }
+
+    private String setUpperXOffset(float amt) {
+        wall.Upper_xOffset = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_xOffset;
+    }
+
+    private String shiftUpperXOffset(float amt) {
+        wall.Upper_xOffset += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_xOffset;
+    }
+
+    private String setUpperYOffset(float amt) {
+        wall.Upper_yOffset = amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_yOffset;
+    }
+
+    private String shiftUpperYOffset(float amt) {
+        wall.Upper_yOffset += amt;
+        editor.shouldUpdateViewRenderer = true;
+        return "" + wall.Upper_yOffset;
+    }
+    
     private enum MATERIAL_LOCATION{
         MID, UPPER, LOWER;
     }

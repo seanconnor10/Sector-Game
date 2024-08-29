@@ -377,13 +377,20 @@ public class Editor implements I_AppFocus {
         menuPanel.rect.x = 0;
         menuPanel.rect.y = height-menuPanel.rect.height;
 
+        propertiesPanel.rect.height = height-menuPanel.rect.height;
+        propertiesPanel.rect.width = (int) (width*0.6f);
         propertiesPanel.rect.x = 0;
         propertiesPanel.rect.y = 0;
-        propertiesPanel.rect.width = width;
-        propertiesPanel.rect.height = height - MENU_BAR_HEIGHT;
 
-        viewPanel.rect.set(-1,-1,-1,-1);
-        mapPanel.rect.set(-1,-1,-1,-1);
+        viewPanel.rect.height = (int) ( (height-menuPanel.rect.height)*0.5f);
+        viewPanel.rect.width = width - propertiesPanel.rect.width;
+        viewPanel.rect.x = propertiesPanel.rect.width;
+        viewPanel.rect.y = viewPanel.rect.height;
+
+        mapPanel.rect.height = viewPanel.rect.y;
+        mapPanel.rect.width = propertiesPanel.rect.width;
+        mapPanel.rect.x = propertiesPanel.rect.width;
+        mapPanel.rect.y = 0;
 
         logPanel = propertiesPanel;
     }

@@ -70,7 +70,7 @@ class PropertiesPanel extends Panel {
         int w = Math.max( (int) r.width,  1 );
         int h = Math.max( (int) r.height, 1 );
         frame = new FrameBuffer(pixelFormat, w, h, false);
-        stage.getViewport().update(w, h, false);
+        stage.getViewport().update(w, h);
     }
 
     private void setupStage() {
