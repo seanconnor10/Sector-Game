@@ -91,7 +91,7 @@ public class Console {
             public boolean keyDown (int keycode) {
                 if (active) {
                     final int LINES_PER_PAGE = (int) (Gdx.graphics.getHeight()*screenPercentage/lineHeight);
-                    final int TOP_OF_PAGE = textLines.size + 2 - LINES_PER_PAGE;
+                    final int TOP_OF_PAGE = Math.max(0, textLines.size + 2 - LINES_PER_PAGE);
 
                     switch(keycode) {
                     case Input.Keys.FORWARD_DEL: //'Delete' Key
