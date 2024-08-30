@@ -23,6 +23,7 @@ class STATE_BisectingSector extends EditorState {
 
     IntArray affectedIndices = new IntArray();
     Array<Wall> affectedWalls = new Array<>();
+    Array<Wall> preexistingPortals = new Array<>();
     Array<Wall> newPortals = new Array<>();
 
     float start_x, start_y;
@@ -141,6 +142,8 @@ class STATE_BisectingSector extends EditorState {
             ) {
                 affectedIndices.add(wInd);
                 affectedWalls.add(w);
+                if (w.isPortal)
+                    preexistingPortals.add(w);
                 addedPreexistingWall = true;
                 prev_x = w.x2;
                 prev_y = w.y2;
@@ -152,6 +155,8 @@ class STATE_BisectingSector extends EditorState {
             ) {
                 affectedIndices.add(wInd);
                 affectedWalls.add(w);
+                if (w.isPortal)
+                    preexistingPortals.add(w);
                 addedPreexistingWall = true;
                 prev_x = w.x1;
                 prev_y = w.y1;
@@ -217,6 +222,13 @@ class STATE_BisectingSector extends EditorState {
                     w.linkA = newSectorInd;
                     w.linkB = secInd;
                 }
+            } else if (preexistingPortals.contains(w, true)) {
+                sector.walls.removeValue(wInd);
+                newSector.addWallSafely(wInd);
+                if (w.linkA == secInd)
+                    w.linkA = newSectorInd;
+                if (w.linkB == secInd)
+                    w.linkB = newSectorInd;
             } else {
                 sector.walls.removeValue(wInd);
                 newSector.addWallSafely(wInd);
