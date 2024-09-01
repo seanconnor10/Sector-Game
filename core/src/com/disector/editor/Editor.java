@@ -58,7 +58,7 @@ public class Editor implements I_AppFocus {
     EditorState state;
     float mouseX, mouseY;
     private int width, height;
-    public boolean shouldUpdateViewRenderer;
+    public boolean shouldUpdateViewRenderer = true;
     boolean isGridSnapping = true;
     int gridSize = 32;
 
@@ -83,7 +83,6 @@ public class Editor implements I_AppFocus {
                 return super.keyDown(keycode);
             }
         };
-        this.input.on();
 
         mapPanel        = new MapPanel(this);
         viewPanel       = new ViewPanel(this);

@@ -65,6 +65,9 @@ public class STATE_MakeInnerSubSector extends EditorState {
                 w.matLower = w.mat;
                 w.matUpper = w.mat;
             }
+
+            editor.onMapLoad();
+            editor.shouldUpdateViewRenderer = true;
         }
 
 

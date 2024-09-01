@@ -245,7 +245,8 @@ public class Application extends ApplicationAdapter {
             default:
         }
 
-        appInput.on();
+        if (appInput != null && ( console == null || !console.isActive() ))
+            appInput.on();
 
         focus = target;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -261,10 +262,6 @@ public class Application extends ApplicationAdapter {
         renderer.placeCamera(gameWorld.getPlayerPosition(), gameWorld.getPlayerVLook(), gameWorld.getPlayerSectorIndex());
         renderer.renderWorld();
         renderer.drawFrame();
-
-        /*if (renderer.screenHasEmptySpace()) {
-            gameWorld.refreshPlayerSectorIndex();
-        }*/
 
         if (gameWorld.shouldDisplayMap()) {
             gameMapRenderer.placeCamera(gameWorld.getPlayerPosition(), 0, gameWorld.getPlayerSectorIndex());
@@ -327,9 +324,14 @@ public class Application extends ApplicationAdapter {
 		}
 
         if (mainInput.isJustPressed(Input.Keys.GRAVE)) {
-            console.toggle();
-            appInput.toggle();
-            consoleInput.toggle();
+            boolean consoleOn = console.toggle();
+            if (consoleOn) {
+                consoleInput.on();
+                appInput.off();
+            } else {
+                consoleInput.off();;
+                appInput.on();
+            }
         }
 
     }
@@ -424,6 +426,8 @@ public class Application extends ApplicationAdapter {
     }
 
     public void destroyEditor() {
+        if (appInput == editor.getInputReference())
+            appInput = null;
         editor = null;
     }
 

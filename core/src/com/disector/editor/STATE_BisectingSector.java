@@ -29,7 +29,14 @@ class STATE_BisectingSector extends EditorState {
     float start_x, start_y;
     float prev_x, prev_y;
 
-    private float clickDistance = 10f;;
+    private float clickDistance = 8f;;
+
+    /*
+        When the first wall is a portal We're determining the sector were splitting depending on
+        What side of the wall is first clicked in handleFirstClick...
+        Really we should determine which side it depending on where the first new portal is
+        (8/29/24)
+     */
 
     STATE_BisectingSector(Editor editor, Panel panel) {
         super(editor, panel);

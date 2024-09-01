@@ -40,6 +40,9 @@ public class STATE_SplittingWall extends EditorState {
         if (highlightedWall.distToNearest < editor.gridSize) {
             addSplitHalfToMapData(highlightedWall);
         }
+
+        editor.onMapLoad();
+        editor.shouldUpdateViewRenderer = true;
     }
 
     @Override

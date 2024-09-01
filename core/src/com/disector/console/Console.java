@@ -160,8 +160,13 @@ public class Console {
         return input;
     }
 
-    public void toggle() {
+    public boolean toggle() {
         active = !active;
+        return active;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public void updateAndDraw(float delta) {
