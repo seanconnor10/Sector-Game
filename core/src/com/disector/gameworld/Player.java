@@ -14,22 +14,28 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    public Vector2 position = new Vector2(0.f, 0.f);
-    public float z, r;
-    public float vLook; // 'Angle' of vertical view direction
-    float height;
-    Vector2 velocity = new Vector2(0.f, 0.f);
-    float zSpeed;
-    int currentSectorIndex;
-    boolean onGround;
-
     final float MAX_SPEED = 100.f, ACCEL = 10.0f;
     final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.5f;
     final float TURN_SPEED = 3.0f, VLOOK_SPEED = 200.0f;
     final float VLOOK_CLAMP = 300.f;
-    final int STANDING_HEIGHT = 20;
-    final int CROUCHING_HEIGHT = 5;
+
+    final float CROUCH_SPEED = 50;
+    final float HEADSPACE = 3;
+    final float STANDING_HEIGHT = 32;
+    final float CROUCHING_HEIGHT = 5;
     final float RADIUS = 5.f;
+
+    public Vector2 position = new Vector2(0.f, 0.f);
+    public float z, r;
+    public float vLook; // 'Angle' of vertical view direction
+    float height = STANDING_HEIGHT;
+
+    Vector2 velocity = new Vector2(0.f, 0.f);
+    float zSpeed;
+
+    int currentSectorIndex;
+    boolean onGround;
+
 
     Player(GameWorld world, InputChainInterface input) {
         this.world = world;
@@ -48,6 +54,8 @@ public class Player implements Movable {
         boolean turnRightDown = input.getActionInfo("TURN_RIGHT").isDown;
         boolean lookUpDown    = input.getActionInfo("LOOK_UP")   .isDown;
         boolean lookDownDown  = input.getActionInfo("LOOK_DOWN") .isDown;
+
+        boolean crouch        = input.isDown(Input.Keys.CONTROL_LEFT);
 
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);
@@ -84,7 +92,11 @@ public class Player implements Movable {
         vLook = Math.min( Math.max(vLook, -VLOOK_CLAMP), VLOOK_CLAMP );
 
         //Crouching
-        height = (input.isDown(Input.Keys.CONTROL_LEFT)) ? CROUCHING_HEIGHT : STANDING_HEIGHT;
+        if (crouch && height != CROUCHING_HEIGHT) {
+            height = Math.max(height - CROUCH_SPEED*dt, CROUCHING_HEIGHT);
+        } else if (height != STANDING_HEIGHT) {
+            height = Math.min(height + CROUCH_SPEED*dt, STANDING_HEIGHT);
+        }
 
         //Jump
         if (onGround && input.isJustPressed(Input.Keys.SPACE))
