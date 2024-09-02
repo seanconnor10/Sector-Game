@@ -113,13 +113,8 @@ public class Player implements Movable {
     }
 
     @Override
-    public Vector3 copyPosition3D() {
-        return new Vector3(position.x, position.y, z);
-    }
-
-    @Override
     public float getZ() {
-        return z;
+        return z - height;
     }
 
     @Override
@@ -134,7 +129,7 @@ public class Player implements Movable {
 
     @Override
     public float getHeight() {
-        return height;
+        return height + HEADSPACE;
     }
 
     @Override
@@ -143,8 +138,10 @@ public class Player implements Movable {
     }
 
     //Movable Implementations ////////////////
+
+
     @Override
-    public Vector2 snagVelocity() {
+    public Vector2 getVelocity() {
         return velocity;
     }
 
@@ -159,18 +156,13 @@ public class Player implements Movable {
     }
 
     @Override
-    public Vector2 copyVelocity() {
-        return new Vector2(velocity);
-    }
-
-    @Override
     public void setZSpeed(float zSpeed) {
         this.zSpeed = zSpeed;
     }
 
     @Override
     public void setZ(float z) {
-        this.z = z;
+        this.z = z + height;
     }
 
     @Override

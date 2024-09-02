@@ -194,8 +194,8 @@ public class Physics {
         Wall w = collisionInfo.w;
 
         float resolutionDistance = obj.getRadius() - collisionInfo.distToNearest;
-        float xLast = obj.snagPosition().x - obj.snagVelocity().y;
-        float yLast = obj.snagPosition().y - obj.snagVelocity().y;
+        float xLast = obj.snagPosition().x - obj.getVelocity().x;
+        float yLast = obj.snagPosition().y - obj.getVelocity().y;
 
         float scalar;
 

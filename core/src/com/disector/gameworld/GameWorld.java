@@ -54,7 +54,7 @@ public class GameWorld implements I_AppFocus{
     //*****************************************************
 
     public Vector4 getPlayerPosition() {
-        return new Vector4(player1.copyPosition(), player1.z+player1.height, player1.r);
+        return new Vector4(player1.copyPosition(), player1.z, player1.r);
     }
 
     public float getPlayerRadius() {
@@ -121,7 +121,7 @@ public class GameWorld implements I_AppFocus{
         }
 
         Vector2 objPos = obj.snagPosition(); //Snag grabs a reference to the Vector so we can change it
-        Vector2 velocity = obj.snagVelocity();
+        Vector2 velocity = obj.getVelocity();
 
         objPos.x += velocity.x * dt;
         objPos.y += velocity.y * dt;

@@ -12,7 +12,6 @@ public interface Positionable {
 
     Vector2 snagPosition();
     Vector2 copyPosition();
-    Vector3 copyPosition3D();
     float getZ();
     float getHeight();
     float getRadius();
