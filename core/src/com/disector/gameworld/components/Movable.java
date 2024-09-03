@@ -11,8 +11,7 @@ public interface Movable extends Positionable{
      * Extends on Positionable
      ************************* D: ******/
 
-    Vector2 snagVelocity();
-    Vector2 copyVelocity();
+    Vector2 getVelocity();
     float getZSpeed();
     void setZSpeed(float zSpeed);
     void setZ(float z);

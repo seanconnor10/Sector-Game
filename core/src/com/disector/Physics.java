@@ -170,8 +170,8 @@ public class Physics {
         float perpendicularVelY = proj_norm * wallYNormal;
         float parallelVelX = velocity.x - perpendicularVelX;
         float parallelVelY = velocity.y - perpendicularVelY;
-        final float elasticity = 0.2f;
-        final float restitution = 0.95f;
+        final float elasticity = 0.5f;
+        final float restitution = 0.9f;
 
         return new Vector2(
             parallelVelX * restitution - perpendicularVelX * elasticity,
@@ -194,8 +194,8 @@ public class Physics {
         Wall w = collisionInfo.w;
 
         float resolutionDistance = obj.getRadius() - collisionInfo.distToNearest;
-        float xLast = obj.snagPosition().x - obj.snagVelocity().y;
-        float yLast = obj.snagPosition().y - obj.snagVelocity().y;
+        float xLast = obj.snagPosition().x - obj.getVelocity().x;
+        float yLast = obj.snagPosition().y - obj.getVelocity().y;
 
         float scalar;
 
