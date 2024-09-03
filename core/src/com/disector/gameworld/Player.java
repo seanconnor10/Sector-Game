@@ -14,14 +14,14 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    final float MAX_SPEED = 100.f, ACCEL = 10.0f;
+    final float MAX_SPEED = 150.f, ACCEL = 20.0f;
     final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.5f;
     final float TURN_SPEED = 3.0f, VLOOK_SPEED = 200.0f;
     final float VLOOK_CLAMP = 300.f;
 
-    final float CROUCH_SPEED = 50;
+    final float CROUCH_SPEED = 100;
     final float HEADSPACE = 3;
-    final float STANDING_HEIGHT = 32;
+    final float STANDING_HEIGHT = 25;
     final float CROUCHING_HEIGHT = 5;
     final float RADIUS = 5.f;
 
@@ -77,8 +77,26 @@ public class Player implements Movable {
         float currentSpeed = velocity.len();
         if (currentSpeed > MAX_SPEED) velocity.setLength(MAX_SPEED);
 
-        //Friction when not inputting
-        if (inputVector.isZero(0.05f)) velocity.scl( 1.f - 3.f*dt);
+        //Friction
+        float friction;
+        if (!onGround)
+            friction = 0.1f;
+        else if (inputVector.isZero(0.05f))
+            friction = 0.7f;
+        else {
+            float speedAngle = (float) Math.atan2(velocity.x, velocity.y);
+            float velAngle = (float) Math.atan2(inputVector.x, inputVector.y) ;
+            if (speedAngle>Math.PI) speedAngle -= (float) Math.PI*2;
+            if (speedAngle<-Math.PI) speedAngle += (float) Math.PI*2;
+            if (velAngle>Math.PI) velAngle -= (float) Math.PI*2;
+            if (velAngle<-Math.PI) velAngle += (float) Math.PI*2;
+            float angleDifference = (float) Math.min( Math.abs(speedAngle-velAngle), Math.abs(Math.PI-speedAngle - (Math.PI-velAngle) ) );
+            while(angleDifference>Math.PI) angleDifference -= (float) Math.PI*2;
+            while(angleDifference<-Math.PI) angleDifference += (float) Math.PI*2;
+            float lerp = (float) ( Math.abs(angleDifference)/Math.PI );
+            friction = 0.4f + lerp*0.3f;
+        }
+        velocity.scl( 1f - friction*(float)Math.sqrt(dt));
 
         //Rotate player + look up and down
         if (Gdx.input.isCursorCatched()) {
@@ -94,7 +112,7 @@ public class Player implements Movable {
         //Crouching
         if (crouch && height != CROUCHING_HEIGHT) {
             height = Math.max(height - CROUCH_SPEED*dt, CROUCHING_HEIGHT);
-        } else if (height != STANDING_HEIGHT) {
+        } else if (!crouch && height != STANDING_HEIGHT) {
             height = Math.min(height + CROUCH_SPEED*dt, STANDING_HEIGHT);
         }
 

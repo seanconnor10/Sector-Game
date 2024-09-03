@@ -192,7 +192,7 @@ public class GameWorld implements I_AppFocus{
 
         //Grav
         if (obj.getZ() > teeterHeight) obj.setZSpeed(obj.getZSpeed() - 200.f*dt);
-        if (obj.getZSpeed() < -100.0f) obj.setZSpeed(-100.0f);
+        if (obj.getZSpeed() < -300.0f) obj.setZSpeed(-300.0f);
         //Enact motion
         obj.setZ( obj.getZ() + obj.getZSpeed()*dt );
         //Hit Floor
@@ -205,6 +205,7 @@ public class GameWorld implements I_AppFocus{
             obj.setZ(lowestCeilHeight-obj.getHeight());
             if (obj.getZSpeed() > 0) obj.setZSpeed(0);
         }
+
 
     }
 
