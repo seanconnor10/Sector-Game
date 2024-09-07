@@ -197,12 +197,18 @@ public class Application extends ApplicationAdapter {
     }
 
     private void loadConfig(String filePath) {
-        config = new Config( Gdx.files.local(filePath) );
-        printFPS = config.printFps;
-        vsyncEnabled = config.vsync; Gdx.graphics.setVSync(vsyncEnabled);
-        frameWidth = config.frameWidth;
-        frameHeight = config.frameHeight;
-        pixelFormat = config.use32bitColor ? Pixmap.Format.RGBA8888 : Pixmap.Format.RGBA4444;
+        try {
+            config = new Config(Gdx.files.local(filePath));
+            printFPS = config.printFps;
+            vsyncEnabled = config.vsync;
+            Gdx.graphics.setVSync(vsyncEnabled);
+            frameWidth = config.frameWidth;
+            frameHeight = config.frameHeight;
+            pixelFormat = config.use32bitColor ? Pixmap.Format.RGBA8888 : Pixmap.Format.RGBA4444;
+        } catch (Exception e) {
+            System.out.println("Error Loading Config... Defaulting");
+            config = new Config();
+        }
     }
 
     // --------------------------------------------------------
@@ -342,51 +348,18 @@ public class Application extends ApplicationAdapter {
         walls.clear(); sectors.clear();
 
         Sector s = new Sector(); s.floorZ = 0; s.ceilZ = 50;
-        walls.add(new Wall( 20, 20, 100, 20     )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 100, 20, 100, 80    )); s.walls.add(walls.size-1);
-        Wall firstPortal = new Wall( 100, 80, 175, 80 );
-            firstPortal.isPortal = true;
-            firstPortal.linkA = 1;
-            firstPortal.linkB = 0;
-            walls.add(firstPortal);
-            s.walls.add(walls.size-1);
-        walls.add(new Wall( 175, 80, 175, -20   )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 175, -20, 75, -125  )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 75, -125, 20, -125  )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 20, -125, 20, -80   )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 20, -80, 50, -80    )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 50, -80, 50, -50    )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 50, -50, 20, 20     )); s.walls.add(walls.size-1);
-        sectors.add(s);
+        walls.add(new Wall( 0, 0, 0, 128      )); s.walls.add(walls.size-1);
+        walls.add(new Wall( 0, 128, 128, 128    )); s.walls.add(walls.size-1);
+        walls.add(new Wall( 128, 128, 128, 0    )); s.walls.add(walls.size-1);
+        walls.add(new Wall( 128, 0, 0, 0      )); s.walls.add(walls.size-1);
 
-        s = new Sector(); s.floorZ = -15; s.ceilZ = 40;
-        s.walls.add(2); //Index 2 is First Portal
-        walls.add(new Wall(100, 80, 90, 125 )); s.walls.add(walls.size-1);
-        Wall secondPortal = new Wall(90, 125, 185, 125);
-            secondPortal.isPortal = true;
-            secondPortal.linkA = 2;
-            secondPortal.linkB = 1;
-            walls.add(secondPortal);
-            s.walls.add(walls.size-1);
-        walls.add(new Wall(185, 125,  175, 80 )); s.walls.add(walls.size-1);
-        sectors.add(s);
-
-        s = new Sector(); s.floorZ = -40; s.ceilZ = 20;
-        s.walls.add(walls.size-2); //Add 'secondPortal'
-        walls.add(new Wall( 90, 125, 90, 145    )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 90, 145, 135, 145   )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 135, 145, 135, 200   )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 135, 200, 150, 200   )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 150, 200, 150, 145   )); s.walls.add(walls.size-1);
-        walls.add(new Wall( 150, 145, 185, 125  )); s.walls.add(walls.size-1);
         sectors.add(s);
 
     }
 
     private void createTestMaterial() {
         materials.clear();
-        String texName = "WOOD2";
-        materials.add(new Material( textures.get(texName), texName, false));
+        materials.add(new Material());
     }
 
     private void randomizeTextures() {

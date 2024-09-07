@@ -196,10 +196,12 @@ public class SoftwareRenderer extends DimensionalRenderer {
         Pixmap[] textures, texturesLow, texturesHigh;
         try {
             textures = materials.get(w.mat).tex;
+            if (textures == null)
+                throw new NullPointerException("Material Exists yet Pixmap is null");
             texturesLow = textures;
             texturesHigh = textures;
 
-        } catch (Exception e) {
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
             textures = ERROR_TEXTURE;
             texturesLow = ERROR_TEXTURE;
@@ -218,13 +220,17 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
             try {
                 texturesLow = materials.get(w.matLower).tex;
-            } catch (Exception e) {
+                if (texturesLow == null)
+                    throw new NullPointerException("Lower Material Exists yet Pixmap is null");
+            } catch (NullPointerException | ArrayIndexOutOfBoundsException e)  {
                 texturesLow = ERROR_TEXTURE;
             }
 
             try {
                 texturesHigh = materials.get(w.matUpper).tex;
-            } catch (Exception e) {
+                if (texturesHigh == null)
+                    throw new NullPointerException("Upper Material Exists yet Pixmap is null");
+            } catch (NullPointerException | ArrayIndexOutOfBoundsException e)  {
                 texturesHigh = ERROR_TEXTURE;
             }
 

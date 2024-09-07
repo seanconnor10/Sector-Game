@@ -16,10 +16,26 @@ public class Config {
     public int frameHeight = 180;
 
     public Config(FileHandle file) {
-        load(file);
+        try {
+            load(file);
+        } catch (Exception e) {
+            System.out.println("Error Loading Config");
+        }
+    }
+
+    public Config() {
+
     }
 
     private void load(FileHandle file) {
+        if (file == null)
+            return;
+
+        if (!file.exists() || file.isDirectory()) {
+            System.out.println("File not Found when Loading Config");
+            return;
+        }
+
         System.out.println("Loading Config at " + file.path());
         Scanner fileScan = new Scanner(file.readString());
 

@@ -283,7 +283,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                     yScale = w.Upper_yScale;
                     pixU = texX_Upper;
                 }
-
+                
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
                 float texV = (tempYOff + v * yScale) % 1.0f;
 
