@@ -111,15 +111,15 @@ class STATE_TextureAlign extends EditorState{
                 } else {
                     switch (target.type) {
                         case WALL_MAIN:
-                            if (allowHorizontal) wall.xScale += 0.02f * deltaX;
+                            if (allowHorizontal) wall.xOffset -= 0.02f * deltaX;
                             if (allowVertical) wall.yOffset += 0.02f * deltaY;
                             break;
                         case WALL_LOWER:
-                            if (allowHorizontal) wall.Lower_xOffset += 0.02f * deltaX;
+                            if (allowHorizontal) wall.Lower_xOffset -= 0.02f * deltaX;
                             if (allowVertical) wall.Lower_yOffset += 0.02f * deltaY;
                             break;
                         case WALL_UPPER:
-                            if (allowHorizontal) wall.Upper_xOffset += 0.02f * deltaX;
+                            if (allowHorizontal) wall.Upper_xOffset -= 0.02f * deltaX;
                             if (allowVertical) wall.Upper_yOffset += 0.02f * deltaY;
                             break;
                         default:
