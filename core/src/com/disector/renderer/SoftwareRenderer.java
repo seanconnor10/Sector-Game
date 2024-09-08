@@ -198,15 +198,12 @@ public class SoftwareRenderer extends DimensionalRenderer {
             textures = materials.get(w.mat).tex;
             if (textures == null)
                 throw new NullPointerException("Material Exists yet Pixmap is null");
-            texturesLow = textures;
-            texturesHigh = textures;
-
         } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
             textures = ERROR_TEXTURE;
-            texturesLow = ERROR_TEXTURE;
-            texturesHigh = ERROR_TEXTURE;
         }
+        texturesLow = textures;
+        texturesHigh = textures;
 
         if (isPortal) {
             drawnPortals.push(wInd); // !!
