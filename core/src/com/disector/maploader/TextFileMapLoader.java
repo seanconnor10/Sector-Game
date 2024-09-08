@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class TextFileMapLoader implements MapLoader {
+    private static DecimalFormat fd2 = new DecimalFormat("#0.00");
+    private static DecimalFormat fd4 = new DecimalFormat("#0.0000");
+
     private final Array<Sector> sectors;
     private final Array<Wall> walls;
     private final GameWorld world;
@@ -393,26 +396,32 @@ public class TextFileMapLoader implements MapLoader {
 
         //Texture Align Middle
         if (w.xOffset != 0f || w.yOffset != 0f) {
-            str.append("Offset ").append( form2(w.xOffset) ).append(" ").append( form2(w.yOffset) ).append(" :: ");
+            str.append("Offset ").append( fd4.format(w.xOffset) ).append(" ")
+                .append( fd4.format(w.yOffset) ).append(" :: ");
         }
         if (w.xScale != 1f || w.yScale != 1f) {
-            str.append("Scale ").append( form2(w.xScale) ).append(" ").append( form2(w.yScale) ).append(" :: ");
+            str.append("Scale ").append( fd4.format(w.xScale) ).append(" ")
+                .append( fd4.format(w.yScale) ).append(" :: ");
         }
 
         //Texture Align Lower
         if (w.Lower_xOffset != 0f || w.Lower_yOffset != 0f) {
-            str.append("Offset_Lower ").append( form2(w.Lower_xOffset) ).append(" ").append( form2(w.Lower_yOffset) ).append(" :: ");
+            str.append("Offset_Lower ").append( fd4.format(w.Lower_xOffset) ).append(" ")
+                .append( fd4.format(w.Lower_yOffset) ).append(" :: ");
         }
         if (w.Lower_xScale != 1f || w.Lower_yScale != 1f) {
-            str.append("Scale_Lower ").append( form2(w.Lower_xScale) ).append(" ").append( form2(w.Lower_yScale) ).append(" :: ");
+            str.append("Scale_Lower ").append( fd4.format(w.Lower_xScale) ).append(" ")
+                .append( fd4.format(w.Lower_yScale) ).append(" :: ");
         }
 
         //Texture Align Upper
         if (w.Upper_xOffset != 0f || w.Upper_yOffset != 0f) {
-            str.append("Offset_Upper ").append( form2(w.Upper_xOffset) ).append(" ").append( form2(w.Upper_yOffset) ).append(" :: ");
+            str.append("Offset_Upper ").append( fd4.format(w.Upper_xOffset) ).append(" ")
+                .append( fd4.format(w.Upper_yOffset) ).append(" :: ");
         }
         if (w.Upper_xScale != 1f || w.Upper_yScale != 1f) {
-            str.append("Scale_Upper ").append( form2(w.Upper_xScale) ).append(" ").append( form2(w.Upper_yScale) ).append(" :: ");
+            str.append("Scale_Upper ").append( fd4.format(w.Upper_xScale) ).append(" ")
+                .append( fd4.format(w.Upper_yScale) ).append(" :: ");
         }
 
         str.append("\n");
@@ -448,9 +457,10 @@ public class TextFileMapLoader implements MapLoader {
 
     private String form2(double num) {
         //Prints a double with two fractional digit
-        return new DecimalFormat("#0.00").format(num);
+        //return new DecimalFormat("#0.00").format(num);
+        return fd2.format(num);
     }
-
+    
     // ------------------------------------------------------
 
     private <E extends Enum<E>> boolean enumContains(String str, Class<E> enumClass) {
