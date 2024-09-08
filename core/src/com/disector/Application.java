@@ -84,7 +84,7 @@ public class Application extends ApplicationAdapter {
         shape.setColor(Color.WHITE);
 
         textures = new PixmapContainer();
-        textures.loadFolder("");
+        //textures.loadFolder("");
 
         InputRecorder.repopulateKeyCodeMap();
         Gdx.input.setInputProcessor(mainInput);
