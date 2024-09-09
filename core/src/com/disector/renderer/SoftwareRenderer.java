@@ -11,6 +11,7 @@ import com.disector.Material;
 import com.disector.assets.PixmapContainer;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 
 public class SoftwareRenderer extends DimensionalRenderer {
@@ -19,11 +20,12 @@ public class SoftwareRenderer extends DimensionalRenderer {
     protected int[] occlusionBottom;
     protected int[] occlusionTop;
     protected final Deque<Integer> drawnPortals = new ArrayDeque<>();
+    protected float[] depth;
     //private HashSet<Integer> transformedWalls = new HashSet<>();
     //private HashSet<Integer> transformedSectors = new HashSet<>();
 
-    protected final Color depthFogColor = new Color(0.2f, 0.05f, 0.2f, 1f);
-    protected final Color darkColor = new Color(0x20_0A_10_FF);
+    protected final Color depthFogColor = new Color(0.1f, 0.05f, 0.2f, 1f);
+    protected final Color darkColor = new Color(0x20_0A_00_FF);
 
     protected final boolean AGGRESSIVE_MIPMAPS = false;
 
@@ -43,6 +45,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         resetDrawData();
         buffer.fill();
         drawSector(camCurrentSector, 0, frameWidth-1);
+        drawDepthOverlay();
     }
 
     @Override
@@ -52,7 +55,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float fovDeg = getDegFromFov();
         super.resizeFrame(w, h);
         setFovFromDeg(fovDeg);
-        reInitDrawData(w);
+        reInitDrawData(w, h);
     }
 
     @Override
@@ -245,10 +248,11 @@ public class SoftwareRenderer extends DimensionalRenderer {
             quadTop = p1_plotHigh + hProgress*(p2_plotHigh-p1_plotHigh);
             quadHeight = quadTop - quadBottom;
 
-            float fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
+            float dist, fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
             {
                 float screenXProgress = (drawX-leftEdgePrecise) / (rightEdgePrecise-leftEdgePrecise);
-                fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
+                dist = x1 + screenXProgress*(x2-x1);
+                fog = getFogFactor(dist);
             }
 
             float light = fullBright ? 1.0f : w.light;
@@ -297,6 +301,14 @@ public class SoftwareRenderer extends DimensionalRenderer {
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 texUpper = texturesHigh[pixmap_ind];
+            }
+
+
+            //Fill Depth Array where appropriate
+            try {
+                Arrays.fill(depth, drawX * frameHeight + rasterBottom, drawX * frameHeight + rasterTop, dist);
+            } catch (IllegalArgumentException e) {
+
             }
 
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
@@ -503,9 +515,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
         }
     }
 
-    protected void reInitDrawData(int newFrameWidth) {
+    protected void reInitDrawData(int newFrameWidth, int newFrameHeight) {
         occlusionBottom = new int[newFrameWidth];
         occlusionTop = new int[newFrameWidth];
+        depth = new float[newFrameWidth * newFrameHeight];
     }
 
     protected void resetDrawData() {
@@ -517,6 +530,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             occlusionBottom[i] = 0;
             occlusionTop[i] = frameHeight;
         }
+        Arrays.fill(depth, Float.MAX_VALUE);
     }
 
     protected float getFogFactor(float dist) {
@@ -546,5 +560,16 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     protected void setPixel(int x, int y, Color color) {
         buffer.drawPixel(x, y, Color.rgba8888(color));
+    }
+
+    protected void drawDepthOverlay() {
+        for (int i=0; i<depth.length; i++) {
+//            i = 401  x = 1 y = 0
+            int x = i/frameHeight;
+            int y = i%frameHeight;
+            Color col = new Color( buffer.getPixel(x, y) );
+            col.lerp(Color.RED, depth[i]/500f);
+            buffer.drawPixel(x, y, Color.rgba8888(col)) ;
+        }
     }
 }
