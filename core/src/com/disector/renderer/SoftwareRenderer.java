@@ -45,7 +45,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
         resetDrawData();
         buffer.fill();
         drawSector(camCurrentSector, 0, frameWidth-1);
-        drawDepthOverlay();
     }
 
     @Override
@@ -306,10 +305,13 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
             //Fill Depth Array where appropriate
             try {
-                Arrays.fill(depth, drawX * frameHeight + rasterBottom, drawX * frameHeight + rasterTop, dist);
-            } catch (IllegalArgumentException e) {
-
-            }
+                Arrays.fill(
+                    depth,
+                    drawX * frameHeight + Math.min(occlusionBottom[drawX], rasterBottom),
+                    drawX * frameHeight + Math.max(occlusionTop[drawX], rasterTop),
+                    dist
+                );
+            } catch (IllegalArgumentException e) {}
 
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
                 float v = (drawY - quadBottom) / quadHeight;
