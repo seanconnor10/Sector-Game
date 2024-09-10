@@ -33,6 +33,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     protected Array<Sprite> sprites = new Array<>();
     private static final Pixmap TEST_SPRITE_IMG = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
+    private static final Pixmap TEST_WALL_IMG = new Pixmap(Gdx.files.local("assets/img/wood_window.png"));
 
     protected final Color depthFogColor = new Color(0.1f, 0.05f, 0.2f, 1f);
     protected final Color darkColor = new Color(0x20_0A_00_FF);
@@ -617,7 +618,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         float u, v, startV, du, dv; // 'du' = delta U ...
         u = (rasterLeft-leftEdgePlot) / (rightEdgePlot - leftEdgePlot);
-        v = 1.f - (rasterBottom-bottomEdgePlot) / (topEdgePlot - bottomEdgePlot);
+        v = 1.f - ( (rasterBottom-bottomEdgePlot) / (topEdgePlot - bottomEdgePlot) );
         startV = v;
         du = ( (rasterLeft+1 - leftEdgePlot) / (rightEdgePlot - leftEdgePlot) ) - u;
         dv = (1.f - (rasterBottom+1 - bottomEdgePlot) / (topEdgePlot - bottomEdgePlot)) - v;
@@ -629,8 +630,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
         for (int dx = rasterLeft; dx < rasterRight; dx++) {
 
             for (int dy = rasterBottom; dy < rasterTop; dy++) {
-                if (depth[dx * frameHeight + dy] < x)
+                if (depth[dx * frameHeight + dy] < x) {
+                    v += dv;
                     continue;
+                }
 
                 int texX = (int) (u * imgW);
                 int texY = (int) (v * imgH);
@@ -736,11 +739,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         sprites.clear();
         try {
-            sprites.add(new FacingSprite(TEST_SPRITE_IMG, 10, 5, 0, 16, 64));
-            sprites.add(new FacingSprite(TEST_SPRITE_IMG, 30, 5, 0, 16, 64));
-            sprites.add(new FacingSprite(TEST_SPRITE_IMG, 25, 25, 0, 16, 64));
-            sprites.add(new WallSprite(TEST_SPRITE_IMG, 30, 30, 0, 30, 60, 64));
-
+            sprites.add(new FacingSprite(TEST_SPRITE_IMG, -100, 144, -24, 16, 64));
+            sprites.add(new FacingSprite(TEST_SPRITE_IMG, -100, 40, -24, 16, 64));
+            sprites.add(new WallSprite(TEST_WALL_IMG, -144, 8, -96, -168, 8, 32));
         } catch (Exception e) {
 
         }
