@@ -1,6 +1,8 @@
 ## My Things
 OUTPUT/*
 ScreenDrawingAnimation.gif
+*.sublime-project
+*.sublime-workspace
 
 ## Java
 *.class
