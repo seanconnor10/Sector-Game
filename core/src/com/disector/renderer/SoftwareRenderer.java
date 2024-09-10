@@ -532,14 +532,30 @@ public class SoftwareRenderer extends DimensionalRenderer {
     protected void drawSprites() {
         //Transform Co-Ords
         float playerCos = (float) Math.cos(-camR) , playerSin = (float) Math.sin(-camR);
+        float tempvar;
         for (Sprite spr : sprites) {
             spr.x -= camX;
             spr.y -= camY;
 
-            float tempX = spr.x;
+            tempvar = spr.x;
             spr.x = spr.x * playerCos - spr.y * playerSin;
-            spr.y = spr.y * playerCos + tempX * playerSin;
+            spr.y = spr.y * playerCos + tempvar * playerSin;
             spr.depth = spr.x;
+
+            switch (spr.type) {
+                case WALL:
+                    WallSprite wSpr = (WallSprite) spr;
+                    wSpr.x2 -= camX;
+                    wSpr.y2 -= camY;
+
+                    tempvar = wSpr.x2;
+                    wSpr.x2 = wSpr.x2 * playerCos - wSpr.y2 * playerSin;
+                    wSpr.y2 = wSpr.y2 * playerCos + tempvar * playerSin;
+                    //spr.depth = spr.x;
+                    break;
+                default:
+            }
+
         }
 
         //Sort by Depth
@@ -564,6 +580,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     protected void drawFacingSprite(FacingSprite spr) {
         float x = spr.x;
+        if (x < 0) return;
         float y = spr.y;
         float z = spr.z;
 
@@ -615,16 +632,66 @@ public class SoftwareRenderer extends DimensionalRenderer {
             }
 
             v = startV;
-
             u += du;
         }
-
-
-
     }
 
     protected void drawWalLSprite(WallSprite spr) {
+        float x1 = spr.x, y1 = spr.y, x2 = spr.x2, y2 = spr.y2, z = spr.z, height = spr.height;
+        float fov = camFOV;
 
+        //Clip wall if an edge is behind camera
+        float leftClipU = 0.f, rightClipU = 1.f;
+        float length = (float) Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
+
+        if (x1 < 0) { //If on-screen-left edge of wall is on camera, clip wall to point at edge of frame
+            float slope = (y2-y1) / (x2-x1);
+            float yAxisIntersect = y1 - slope*x1;
+            leftClipU = (float) Math.sqrt( x1*x1 + (yAxisIntersect-y1)*(yAxisIntersect-y1) ) / length;
+            x1 = 0.01f; //Avoid dividing by zero
+            y1 = yAxisIntersect;
+        }
+
+        if (x2 < 0) { //Now for right edge of wall and right edge of frame
+            float slope = (y2-y1) / (x2-x1);
+            float yAxisIntersect = y1 - slope*x1;
+            rightClipU = 1.f - (float) ( Math.sqrt( x2*x2 + (yAxisIntersect-y2)*(yAxisIntersect-y2) ) / length );
+            x2 = 0.01f; //Avoid dividing by zero
+            y2 = yAxisIntersect;
+        }
+
+        float p1_plot = halfWidth - y1 * fov / x1;
+        float p2_plot = halfWidth - y2 * fov / x2;
+
+        if (p2_plot < p1_plot) return;
+        if (p2_plot < 0 && p1_plot < 0) return;
+
+        float midline = halfHeight - camVLook;
+        float p1_plot_low  = midline + ( (z-camZ) * fov / x1 );
+        float p1_plot_high = midline + ( (z+height-camZ) * fov / x1 );
+        float p2_plot_low  = midline + ( (z-camZ) * fov / x2 );
+        float p2_plot_high = midline + ( (z+height-camZ) * fov / x2 );
+
+        Pixmap img = spr.img;
+        float imgW = img.getWidth();
+        float imgH = img.getHeight();
+
+        float startX = Math.clamp(p1_plot, 0, frameWidth);
+        float endX = Math.clamp(p2_plot, 0, frameWidth);
+
+        for (float dx = startX; dx < endX; dx++) {
+            float hProgress = (dx - p1_plot) / (p2_plot- p1_plot);
+
+            float u = ((1 - hProgress)*(leftClipU/x1) + hProgress*(rightClipU/x2)) / ( (1-hProgress)*(1/x1) + hProgress*(1/x2));
+
+            float startY = p1_plot_low + hProgress*(p2_plot_low-p1_plot_low);
+            float endY = p1_plot_high + hProgress*(p2_plot_high-p1_plot_high);
+
+            for (float dy = startY; dy < endY; dy++) {
+                float v = (dy-startY) / (endY-startY);
+                buffer.drawPixel((int)dx, (int)dy, img.getPixel((int)(u*imgW), (int)(v*imgH)));
+            }
+        }
     }
 
     // --------------------------------------------------------------------
@@ -651,6 +718,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             sprites.add(new FacingSprite(TEST_SPRITE_IMG, 10, 5, 0, 16, 64));
             sprites.add(new FacingSprite(TEST_SPRITE_IMG, 30, 5, 0, 16, 64));
             sprites.add(new FacingSprite(TEST_SPRITE_IMG, 25, 25, 0, 16, 64));
+            sprites.add(new WallSprite(TEST_SPRITE_IMG, 30, 30, 0, 30, 60, 64));
 
         } catch (Exception e) {
 
