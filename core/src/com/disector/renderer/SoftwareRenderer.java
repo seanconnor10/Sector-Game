@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Array;
 import com.disector.*;
 import com.disector.Material;
 import com.disector.assets.PixmapContainer;
+import com.disector.renderer.sprites.FacingSprite;
+import com.disector.renderer.sprites.Sprite;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -24,6 +26,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
     //private HashSet<Integer> transformedWalls = new HashSet<>();
     //private HashSet<Integer> transformedSectors = new HashSet<>();
 
+    protected Array<Sprite> sprites = new Array<>();
+
     protected final Color depthFogColor = new Color(0.1f, 0.05f, 0.2f, 1f);
     protected final Color darkColor = new Color(0x20_0A_00_FF);
 
@@ -38,6 +42,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         temp.dispose();
 
         setFovFromDeg(Application.config.fov);
+
     }
 
     @Override
@@ -45,7 +50,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         resetDrawData();
         buffer.fill();
         drawSector(camCurrentSector, 0, frameWidth-1);
-        drawDepthOverlay();
+        drawSprites();
     }
 
     @Override
@@ -107,6 +112,95 @@ public class SoftwareRenderer extends DimensionalRenderer {
         //we can know that currentSectorIndex of the camera is
         //misplaced
         return;// false;
+    }
+
+    protected void drawSprites() {
+        //Transform Co-Ords
+        float playerCos = (float) Math.cos(-camR) , playerSin = (float) Math.sin(-camR);
+        for (Sprite spr : sprites) {
+            spr.x -= camX;
+            spr.y -= camY;
+
+            float tempX = spr.x;
+            spr.x = spr.x * playerCos - spr.y * playerSin;
+            spr.y = spr.y * playerCos + tempX * playerSin;
+            spr.depth = spr.x;
+        }
+
+        //Sort by Depth
+        sprites.sort( (o1, o2) -> {
+            return Float.compare(o1.depth, o2.depth);
+        } );
+
+        //Call Draw Function
+        for (Sprite spr : sprites) {
+            switch (spr.getClass().getSimpleName()) {
+                case "FacingSprite":
+                    drawBillboard((FacingSprite) spr);
+                    break;
+                case "WallSpite":
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    protected void drawBillboard(FacingSprite spr) {
+        float x = spr.x;
+        float y = spr.y;
+        float z = spr.z;
+
+        float width = spr.width;
+        float height = spr.height;
+
+        float fovDivX = camFOV / x;
+
+        //Center of billboard spr on screen
+        float xPlot = halfWidth - y * fovDivX;
+
+        //Half of sprite's width on screen space
+        float spr_h_w = fovDivX * (width/2f);
+
+        //Where the edges on actually plotted on screen space
+        float leftEdgePlot = xPlot - spr_h_w;
+        float rightEdgePlot = xPlot + spr_h_w;
+
+        float bottomEdgePlot = halfHeight - camVLook + (z-camZ) * fovDivX;
+        float topEdgePlot = halfHeight - camVLook + (z+height-camZ) * fovDivX;
+
+        //Where we will begin drawing in screen space
+        int rasterLeft = (int) Math.max(0, leftEdgePlot);
+        int rasterRight = (int) Math.min(frameWidth-1, rightEdgePlot);
+
+        int rasterBottom = (int) Math.max(0, bottomEdgePlot);
+        int rasterTop = (int) Math.min(frameHeight-1, topEdgePlot);
+
+        float u, v, startV, du, dv; // 'du' = delta U ...
+        u = (rasterLeft-leftEdgePlot) / (rightEdgePlot - leftEdgePlot);
+        v = 1.f - (rasterBottom-bottomEdgePlot) / (topEdgePlot - bottomEdgePlot);
+        startV = v;
+        du = ( (rasterLeft+1 - leftEdgePlot) / (rightEdgePlot - leftEdgePlot) ) - u;
+        dv = (1.f - (rasterBottom+1 - bottomEdgePlot) / (topEdgePlot - bottomEdgePlot)) - v;
+
+        for (int dx = rasterLeft; dx < rasterRight; dx++) {
+            if (depth[dx * frameHeight] < x)
+                continue;
+
+            for (int dy = rasterBottom; dy < rasterTop; dy++) {
+
+                buffer.drawPixel(dx, dy, 0xFF1010FF);
+
+                v += dv;
+            }
+
+            v = startV;
+
+            u += du;
+        }
+
+
+
     }
 
     protected void drawWall(int wInd, int currentSectorIndex, int spanStart, int spanEnd) {
@@ -306,10 +400,13 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
             //Fill Depth Array where appropriate
             try {
-                Arrays.fill(depth, drawX * frameHeight + rasterBottom, drawX * frameHeight + rasterTop, dist);
-            } catch (IllegalArgumentException e) {
-
-            }
+                Arrays.fill(
+                    depth,
+                    drawX * frameHeight + Math.min(occlusionBottom[drawX], rasterBottom),
+                    drawX * frameHeight + Math.max(occlusionTop[drawX], rasterTop),
+                    dist
+                );
+            } catch (IllegalArgumentException e) {}
 
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
                 float v = (drawY - quadBottom) / quadHeight;
@@ -531,6 +628,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
             occlusionTop[i] = frameHeight;
         }
         Arrays.fill(depth, Float.MAX_VALUE);
+
+        sprites.clear();
+        sprites.add(new FacingSprite(null, 0,0,0, 64, 64));
+
     }
 
     protected float getFogFactor(float dist) {
