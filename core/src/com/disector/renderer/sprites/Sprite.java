@@ -8,10 +8,29 @@ public class Sprite {
 
     public float depth;
 
+    public boolean blocksMovement, blocksProjectile, blocksHitscan;
+
+    public enum TYPE {
+        FACING, WALL;
+    }
+
+    public TYPE type;
+
     public Sprite(Pixmap img, float x, float y, float z) {
         this.img = img;
         this.x = x;
         this.y = y;
         this.z = z;
+
+        switch (this.getClass().getSimpleName()) {
+            case "FacingSprite":
+                type = TYPE.FACING;
+                break;
+            case "WallSprite":
+                type = TYPE.WALL;
+                break;
+            default:
+                break;
+        }
     }
 }
