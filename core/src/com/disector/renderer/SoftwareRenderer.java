@@ -13,6 +13,10 @@ import com.disector.renderer.sprites.FacingSprite;
 import com.disector.renderer.sprites.Sprite;
 import com.disector.renderer.sprites.WallSprite;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
@@ -599,6 +603,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float leftEdgePlot = xPlot - spr_h_w;
         float rightEdgePlot = xPlot + spr_h_w;
 
+        if (leftEdgePlot >= frameWidth || rightEdgePlot < 0) return;
+
         float bottomEdgePlot = halfHeight - camVLook + (z-camZ) * fovDivX;
         float topEdgePlot = halfHeight - camVLook + (z+height-camZ) * fovDivX;
 
@@ -616,9 +622,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
         du = ( (rasterLeft+1 - leftEdgePlot) / (rightEdgePlot - leftEdgePlot) ) - u;
         dv = (1.f - (rasterBottom+1 - bottomEdgePlot) / (topEdgePlot - bottomEdgePlot)) - v;
 
-        Pixmap img = spr.img;
-        float imgW = img.getWidth();
-        float imgH = img.getHeight();
+        IntBuffer pixels = spr.img.getPixels().asIntBuffer();
+        float imgW = spr.img.getWidth();
+        float imgH = spr.img.getHeight();
 
         for (int dx = rasterLeft; dx < rasterRight; dx++) {
 
@@ -626,7 +632,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 if (depth[dx * frameHeight + dy] < x)
                     continue;
 
-                buffer.drawPixel(dx, dy, img.getPixel((int)(u*imgW), (int)(v*imgH)));
+                int texX = (int) (u * imgW);
+                int texY = (int) (v * imgH);
+                int i = (int) Math.clamp(texY*imgW + texX, 0, pixels.limit()-1);
+                buffer.drawPixel(dx, dy, pixels.get(i));
 
                 v += dv;
             }
@@ -642,9 +651,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         //Clip wall if an edge is behind camera
         float leftClipU = 0.f, rightClipU = 1.f;
-        float length = (float) Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
 
         if (x1 < 0) { //If on-screen-left edge of wall is on camera, clip wall to point at edge of frame
+            float length = (float) Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
             float slope = (y2-y1) / (x2-x1);
             float yAxisIntersect = y1 - slope*x1;
             leftClipU = (float) Math.sqrt( x1*x1 + (yAxisIntersect-y1)*(yAxisIntersect-y1) ) / length;
@@ -653,6 +662,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         }
 
         if (x2 < 0) { //Now for right edge of wall and right edge of frame
+            float length = (float) Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
             float slope = (y2-y1) / (x2-x1);
             float yAxisIntersect = y1 - slope*x1;
             rightClipU = 1.f - (float) ( Math.sqrt( x2*x2 + (yAxisIntersect-y2)*(yAxisIntersect-y2) ) / length );
@@ -664,7 +674,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float p2_plot = halfWidth - y2 * fov / x2;
 
         if (p2_plot < p1_plot) return;
-        if (p2_plot < 0 && p1_plot < 0) return;
+        if (p2_plot < 1 && p1_plot < 1) return;
 
         float midline = halfHeight - camVLook;
         float p1_plot_low  = midline + ( (z-camZ) * fov / x1 );
@@ -673,25 +683,36 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float p2_plot_high = midline + ( (z+height-camZ) * fov / x2 );
 
         Pixmap img = spr.img;
-        float imgW = img.getWidth();
-        float imgH = img.getHeight();
+        IntBuffer pixels = img.getPixels().asIntBuffer();
+        IntBuffer framePixelsCopy = buffer.getPixels().asIntBuffer();
+        int imgW = img.getWidth();
+        int imgH = img.getHeight();
 
-        float startX = Math.clamp(p1_plot, 0, frameWidth);
-        float endX = Math.clamp(p2_plot, 0, frameWidth);
+        int startX = (int) Math.clamp(p1_plot, 0, frameWidth);
+        int endX = (int) Math.clamp(p2_plot, 0, frameWidth);
 
-        for (float dx = startX; dx < endX; dx++) {
+        for (int dx = startX; dx < endX; dx++) {
             float hProgress = (dx - p1_plot) / (p2_plot- p1_plot);
 
             float u = ((1 - hProgress)*(leftClipU/x1) + hProgress*(rightClipU/x2)) / ( (1-hProgress)*(1/x1) + hProgress*(1/x2));
 
-            float startY = p1_plot_low + hProgress*(p2_plot_low-p1_plot_low);
-            float endY = p1_plot_high + hProgress*(p2_plot_high-p1_plot_high);
+            int yLow = (int) (p1_plot_low + hProgress*(p2_plot_low-p1_plot_low));
+            int yHigh = (int) (p1_plot_high + hProgress*(p2_plot_high-p1_plot_high));
+            int yStart = Math.clamp(yLow, 0, frameHeight-1);
+            int yEnd = Math.clamp(yHigh, 0, frameHeight-1);
 
-            for (float dy = startY; dy < endY; dy++) {
-                float v = (dy-startY) / (endY-startY);
-                buffer.drawPixel((int)dx, (int)dy, img.getPixel((int)(u*imgW), (int)(v*imgH)));
+            for (int dy = yStart; dy < yEnd; dy++) {
+                if (depth[dx * frameHeight + dy] < x1 + u*(x2-x1))
+                    continue;
+
+                float v = 1.f - ( (dy-yLow) / (float)(yHigh-yLow) );
+                int texX = (int) (u * imgW);
+                int texY = (int) (v * imgH);
+                int i = Math.clamp((long) texY *imgW + texX, 0, pixels.limit()-1);
+                buffer.drawPixel(dx, dy, pixels.get(i));
             }
         }
+
     }
 
     // --------------------------------------------------------------------
