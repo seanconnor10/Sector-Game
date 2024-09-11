@@ -754,7 +754,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     protected float getFogFactor(float dist) {
         if (!drawFog) return 0f;
-        final float fogDistance = 600;
+        final float fogDistance = 1200;
         return Math.max(0, Math.min(fogDistance, dist) ) / fogDistance;
     }
 
