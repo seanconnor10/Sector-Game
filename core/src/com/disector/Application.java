@@ -265,9 +265,17 @@ public class Application extends ApplicationAdapter {
 
         gameWorld.step(deltaTime);
 
+        if (renderer instanceof SoftwareRenderer) {
+            ((SoftwareRenderer) renderer).addSpriteList(gameWorld.getSpriteList());
+        }
+
         renderer.placeCamera(gameWorld.getPlayerPosition(), gameWorld.getPlayerVLook(), gameWorld.getPlayerSectorIndex());
         renderer.renderWorld();
         renderer.drawFrame();
+
+        if (renderer instanceof SoftwareRenderer) {
+            ((SoftwareRenderer) renderer).clearSprites();
+        }
 
         if (gameWorld.shouldDisplayMap()) {
             gameMapRenderer.placeCamera(gameWorld.getPlayerPosition(), 0, gameWorld.getPlayerSectorIndex());

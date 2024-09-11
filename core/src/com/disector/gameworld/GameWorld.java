@@ -1,5 +1,6 @@
 package com.disector.gameworld;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
@@ -10,6 +11,8 @@ import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.Positionable;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
+import com.disector.renderer.sprites.FacingSprite;
+import com.disector.renderer.sprites.Sprite;
 
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
@@ -25,6 +28,7 @@ public class GameWorld implements I_AppFocus{
     private boolean shouldDisplayMap;
 
     public Player player1;
+    public Grenade grenade;
 
     public GameWorld(Application app, InputChainInterface inputParent) {
         this.app = app;
@@ -33,6 +37,7 @@ public class GameWorld implements I_AppFocus{
         this.input = new InputChainNode(inputParent, "GameWorld");
         this.input.on();
         player1 = new Player(this, input);
+        grenade = new Grenade();
         player1.z = 100.f;
     }
 
@@ -49,6 +54,13 @@ public class GameWorld implements I_AppFocus{
 
         player1.movementInput(dt);
         moveObj(player1);
+        moveObj(grenade);
+        if (input.isJustPressed(Input.Keys.G)) {
+            grenade.position.set(player1.position);
+            grenade.z = player1.z - player1.CROUCHING_HEIGHT;
+            grenade.velocity.set( (float) Math.cos(player1.r) * 300, (float) Math.sin(player1.r) * 300);
+            grenade.zSpeed = 32 + player1.zSpeed;
+        }
     }
 
     //*****************************************************
@@ -102,6 +114,12 @@ public class GameWorld implements I_AppFocus{
 
         player1.currentSectorIndex = sec;
         return sec;
+    }
+
+    public Sprite[] getSpriteList() {
+        Sprite[] arr = new Sprite[1];
+        arr[0] = grenade.getInfo();
+        return arr;
     }
 
     //*****************************************************

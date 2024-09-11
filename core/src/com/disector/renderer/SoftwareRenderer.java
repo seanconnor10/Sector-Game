@@ -13,9 +13,6 @@ import com.disector.renderer.sprites.FacingSprite;
 import com.disector.renderer.sprites.Sprite;
 import com.disector.renderer.sprites.WallSprite;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -58,7 +55,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
         buffer.fill();
         drawSector(camCurrentSector, 0, frameWidth-1);
         drawSprites();
-
     }
 
     @Override
@@ -82,6 +78,21 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     public float getDegFromFov() {
         return 2.f * (float) Math.toDegrees( Math.atan(halfWidth / camFOV) );
+    }
+
+    public void addSpriteList(Sprite[] sprites) {
+        this.sprites.addAll(sprites);
+    }
+
+    public void clearSprites() {
+        sprites.clear();
+        try {
+            sprites.add(new FacingSprite(TEST_SPRITE_IMG, -100, 144, -24, 16, 64));
+            sprites.add(new FacingSprite(TEST_SPRITE_IMG, -100, 40, -24, 16, 64));
+            sprites.add(new WallSprite(TEST_WALL_IMG, -144, 8, -96, -168, 8, 32));
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -737,14 +748,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
         }
         Arrays.fill(depth, Float.MAX_VALUE);
 
-        sprites.clear();
-        try {
-            sprites.add(new FacingSprite(TEST_SPRITE_IMG, -100, 144, -24, 16, 64));
-            sprites.add(new FacingSprite(TEST_SPRITE_IMG, -100, 40, -24, 16, 64));
-            sprites.add(new WallSprite(TEST_WALL_IMG, -144, 8, -96, -168, 8, 32));
-        } catch (Exception e) {
-
-        }
     }
 
     // ----------------------------------------------------------------------
