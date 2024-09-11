@@ -9,8 +9,11 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
 
 class Grenade implements Movable, HasFacingSprite {
-	private static final float RADIUS = 12f, HEIGHT = 12f;
+	//Used for Collision Checking
+	private static final float RADIUS = 3f, HEIGHT = 3f;
+
 	private static final Pixmap PIXMAP = new Pixmap(Gdx.files.local("assets/img/grenade.png"));
+	private static final int IMG_W = 10, IMG_H = 10;
 
 	int currentSectorIndex = 0;
 
@@ -22,7 +25,7 @@ class Grenade implements Movable, HasFacingSprite {
 
 	@Override
 	public FacingSprite getInfo() {
-		return new FacingSprite(PIXMAP, position.x, position.y, z, RADIUS, HEIGHT);
+		return new FacingSprite(PIXMAP, position.x, position.y, z, IMG_W, IMG_H);
 	}
 
 	@Override
