@@ -218,7 +218,4 @@ public class Physics {
         objPos.y += (float) Math.sin(collisionInfo.w.normalAngle) * resolutionDistance;
     }
 
-    private static boolean almostSame(float n, float m) {
-        return (Math.abs(n - m) < 0.1f);
-    }
 }

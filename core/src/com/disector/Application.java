@@ -163,6 +163,7 @@ public class Application extends ApplicationAdapter {
             mapLoader.load(filePath);
             success = true;
             gameWorld.refreshPlayerSectorIndex();
+            gameWorld.mapLoad();
             float newFloorZ = sectors.get(gameWorld.getPlayerSectorIndex()).floorZ;
             if (gameWorld.getPlayerPosition().z < newFloorZ) {
                 gameWorld.player1.setZ(newFloorZ);
@@ -264,6 +265,10 @@ public class Application extends ApplicationAdapter {
             Gdx.input.setCursorCatched( !Gdx.input.isCursorCatched() );
 
         gameWorld.step(deltaTime);
+
+        if (renderer.camFOV != renderer.baseFOV * gameWorld.player1.zoom) {
+            renderer.camFOV = renderer.baseFOV * gameWorld.player1.zoom;
+        }
 
         if (renderer instanceof SoftwareRenderer) {
             ((SoftwareRenderer) renderer).addSpriteList(gameWorld.getSpriteList());

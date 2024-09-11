@@ -25,6 +25,7 @@ public abstract class Renderer {
     float halfWidth, halfHeight;
 
     public float camX, camY, camZ, camR, camVLook;
+    public float baseFOV = 175f;
     public float camFOV = 175.f;
     public int camCurrentSector;
 
@@ -45,11 +46,7 @@ public abstract class Renderer {
     public abstract void drawFrame();
 
     public void setFov(float val) {
-        camFOV = val;
-    }
-
-    public float getFov() {
-        return camFOV;
+        baseFOV = val;
     }
 
     public void placeCamera(Vector4 pos, float vLook, int camCurrentSector) {

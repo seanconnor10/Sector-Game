@@ -73,11 +73,11 @@ public class SoftwareRenderer extends DimensionalRenderer {
     }
 
     public void setFovFromDeg(float deg) {
-        camFOV = (float) ( halfWidth / Math.tan(Math.toRadians(deg/2)) );
+        baseFOV = (float) ( halfWidth / Math.tan(Math.toRadians(deg/2)) );
     }
 
     public float getDegFromFov() {
-        return 2.f * (float) Math.toDegrees( Math.atan(halfWidth / camFOV) );
+        return 2.f * (float) Math.toDegrees( Math.atan(halfWidth / baseFOV) );
     }
 
     public void addSpriteList(Sprite[] sprites) {

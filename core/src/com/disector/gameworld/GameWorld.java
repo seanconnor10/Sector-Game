@@ -1,6 +1,7 @@
 package com.disector.gameworld;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.loaders.PixmapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
@@ -13,6 +14,8 @@ import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.sprites.FacingSprite;
 import com.disector.renderer.sprites.Sprite;
+
+import java.util.Arrays;
 
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
@@ -28,7 +31,7 @@ public class GameWorld implements I_AppFocus{
     private boolean shouldDisplayMap;
 
     public Player player1;
-    public Grenade grenade;
+    private final Array<Grenade> grenades = new Array<>();
 
     public GameWorld(Application app, InputChainInterface inputParent) {
         this.app = app;
@@ -37,7 +40,6 @@ public class GameWorld implements I_AppFocus{
         this.input = new InputChainNode(inputParent, "GameWorld");
         this.input.on();
         player1 = new Player(this, input);
-        grenade = new Grenade();
         player1.z = 100.f;
     }
 
@@ -54,12 +56,25 @@ public class GameWorld implements I_AppFocus{
 
         player1.movementInput(dt);
         moveObj(player1);
-        moveObj(grenade);
+
+        for (Grenade g : grenades) {
+            moveObj(g);
+            if (g.velocity.isZero(10)) {
+                grenades.removeValue(g, true);
+            }
+        }
+
         if (input.isJustPressed(Input.Keys.G)) {
+            Grenade grenade = new Grenade();
+            grenade.currentSectorIndex = player1.currentSectorIndex;
             grenade.position.set(player1.position);
-            grenade.z = player1.z - player1.CROUCHING_HEIGHT;
-            grenade.velocity.set( (float) Math.cos(player1.r) * 300, (float) Math.sin(player1.r) * 300);
-            grenade.zSpeed = 32 + player1.zSpeed;
+            grenade.z = player1.z - player1.CROUCHING_HEIGHT - 0.5f;
+            grenade.velocity.set(
+                    player1.velocity.x + (float) Math.cos(player1.r) * 300,
+                    player1.velocity.y + (float) Math.sin(player1.r) * 300
+            );
+            grenade.zSpeed = 16 + player1.zSpeed;
+            grenades.add(grenade);
         }
     }
 
@@ -117,14 +132,18 @@ public class GameWorld implements I_AppFocus{
     }
 
     public Sprite[] getSpriteList() {
-        Sprite[] arr = new Sprite[1];
-        arr[0] = grenade.getInfo();
-        return arr;
+        int size = grenades.size;
+        Sprite[] sprites = new Sprite[size];
+        for (int i=0; i<size; i++) {
+            sprites[i] = grenades.get(i).getInfo();
+        }
+        return sprites;
     }
 
-    //*****************************************************
+    // ****************************************************
 
     private void moveObj(Movable obj) {
+
         final int MAX_COLLISIONS = 100;
 
         /*
@@ -201,6 +220,7 @@ public class GameWorld implements I_AppFocus{
 
             Physics.resolveCollision(closestCollision, obj);
             velocity.set(Physics.bounceVector(velocity, closestCollision.w));
+            if (velocity.isZero(1)) velocity.set(Vector2.Zero);
 
             collisionsProcessed++;
 
@@ -248,6 +268,12 @@ public class GameWorld implements I_AppFocus{
             }
         }
         return collisions;
+    }
+
+    // // ****************************************************
+
+    public void mapLoad() {
+        grenades.clear();
     }
 
 }

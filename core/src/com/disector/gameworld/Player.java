@@ -33,6 +33,8 @@ public class Player implements Movable {
     Vector2 velocity = new Vector2(0.f, 0.f);
     float zSpeed;
 
+    public float zoom = 1f;
+
     int currentSectorIndex;
     boolean onGround;
 
@@ -56,6 +58,10 @@ public class Player implements Movable {
         boolean lookDownDown  = input.getActionInfo("LOOK_DOWN") .isDown;
 
         boolean crouch        = input.isDown(Input.Keys.CONTROL_LEFT);
+
+        float prevZoom = zoom;
+        zoom = Gdx.input.isButtonPressed(Input.Buttons.RIGHT) ? 3 : 1;
+        vLook *= zoom/prevZoom;
 
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);
