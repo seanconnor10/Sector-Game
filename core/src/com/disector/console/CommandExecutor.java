@@ -252,4 +252,10 @@ public class CommandExecutor {
     public String file() {
         return app.activeMapFile.path();
     }
+
+    @ConsoleCommand(helpText = "Set Palette To Enforce on loaded Textures")
+    public String palette(String loc) {
+        Application.paletteLocation = loc;
+        return null;
+    }
 }

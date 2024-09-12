@@ -8,6 +8,7 @@ import com.disector.Application;
 import com.disector.Sector;
 import com.disector.Wall;
 import com.disector.Material;
+import com.disector.assets.Palette;
 import com.disector.assets.PixmapContainer;
 import com.disector.gameworld.GameWorld;
 
@@ -288,8 +289,15 @@ public class TextFileMapLoader implements MapLoader {
         for (Wall w : newWalls) {
             walls.add(new Wall(w));
         }
+        
+        Palette pall = null;
+        try {
+          pall = new Palette(Gdx.files.local("assets/pal/" + Application.paletteLocation));
+        } catch (Exception e) {
+          pall = null;
+        }
 
-        appTextures.loadArray(newMaterials);
+        appTextures.loadArray(newMaterials, pall);
 
         materials.clear();
         for (Material m : newMaterials) {

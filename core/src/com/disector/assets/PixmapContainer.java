@@ -16,41 +16,10 @@ public class PixmapContainer {
     private static final FileHandle imgDir = Gdx.files.local("assets/img");
     public static final int MIPMAP_COUNT = 5;
 
-    private static final Pallette pall = new Pallette(Gdx.files.local("assets/pal/bly16.txt"));
-
     private Pixmap[][] pixmaps;
     private TreeMap<String, Pixmap[]> pixmapsByName;
 
-    public void loadFolder(String path) {
-        System.out.println("Pixmap Container Loading  All Images In " + imgDir);
-        long timeStamp = TimeUtils.millis();
-
-        Array<FileHandle> imgFiles = new Array<>();
-
-        for (FileHandle file : imgDir.child(path) .list()) {
-            if (handleIsImage(file))
-                imgFiles.add(file);
-            System.out.println(handleIsImage(file) ? "    " + file : "    REJECTED " + file);
-        }
-
-        //Make 'pixmaps' 2D-Array
-        pixmaps = new Pixmap[imgFiles.size][MIPMAP_COUNT];
-        pixmapsByName = new TreeMap<>();
-        for (int i=0; i<imgFiles.size; i++) {
-            Texture temp = new Texture(imgFiles.get(i), Pixmap.Format.RGBA8888, false);
-            if (!temp.getTextureData().isPrepared()) temp.getTextureData().prepare();
-            pixmaps[i][0] = temp.getTextureData().consumePixmap();
-            for (int k = 1; k< MIPMAP_COUNT; k++) {
-                pixmaps[i][k] = halvePixmap(pixmaps[i][k-1]);
-            }
-            pixmapsByName.put(imgFiles.get(i).nameWithoutExtension().toUpperCase(), pixmaps[i]);
-            temp.dispose();
-        }
-
-        System.out.println("    Done in " + TimeUtils.timeSinceMillis(timeStamp) + "ms" );
-    }
-
-    public void loadArray(Array<Material> blankMaterials) {
+    public void loadArray(Array<Material> blankMaterials, Palette pall) {
         //Takes an Array of Materials without the Texture loaded,
         //Loads the texture and adds reference to this PixmapContainer
         long timeStamp = TimeUtils.millis();
@@ -73,7 +42,7 @@ public class PixmapContainer {
 
             Pixmap pixmap = new Pixmap(file);
 
-            pall.palletize(pixmap);
+            if (pall != null) pall.palletize(pixmap);
 
             pixmaps[i] = makeMipMapSeries(pixmap);
 
@@ -88,6 +57,11 @@ public class PixmapContainer {
         System.out.println("    Done in " + TimeUtils.timeSinceMillis(timeStamp) + "ms" );
 
     }
+
+    public void loadArray(Array<Material> blankMaterials) {
+        loadArray(blankMaterials, null);
+    }
+
 
     public Pixmap[] get(String name) {
         return pixmapsByName.getOrDefault(name, null);

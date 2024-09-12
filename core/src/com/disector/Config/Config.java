@@ -14,6 +14,7 @@ public class Config {
     public boolean use32bitColor = false;
     public int frameWidth = 320;
     public int frameHeight = 180;
+    public String palette = null;
 
     public Config(FileHandle file) {
         try {
@@ -93,6 +94,12 @@ public class Config {
                             fieldFound = true;
                         }
                         break;
+                    case "String":
+                        valueStr = fileValues.get(fieldName);
+                        if (valueStr != null) {
+                            field.set(this, valueStr);
+                            fieldFound = true;
+                        }
                 }
 
                 System.out.println("    " + fieldName + (!fieldFound ? "NOT FOUND.." : " set to " + field.get(this).toString() ));

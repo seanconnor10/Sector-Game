@@ -8,23 +8,39 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Scanner;
 
 
-public class Pallette {
+public class Palette {
     Color[] colors;
 
-    public Pallette(FileHandle file) {
-        Scanner in = new Scanner(file.read());
+    public Palette(FileHandle file) {
+        load(file);
+    }
 
+    private void load(FileHandle file) {
         Array<Color> cols = new Array<>();
+
+        boolean beginsWithAlpha = file.extension().equalsIgnoreCase("txt");
+
+        Scanner in = new Scanner(file.read());
         while(in.hasNext()) {
             String line = in.nextLine();
-            if (!line.startsWith(";")) {
-                cols.add( Color.valueOf(line.substring(2) + "FF") );
-            }
+
+            if (line.startsWith(";") || line.startsWith("//"))
+                continue;
+
+            line = line.replace("#", "");
+
+            if (beginsWithAlpha)
+                line = line.substring(2);
+
+            if (line.length() == 6)
+                line = line + "FF";
+
+            cols.add( Color.valueOf(line) );
         }
 
         colors = cols.toArray(Color.class);
-
     }
+
 
     public void palletize(Pixmap pix) {
         int w = pix.getWidth();
@@ -69,4 +85,6 @@ public class Pallette {
 
         in.set(closest);
     }
+
+
 }

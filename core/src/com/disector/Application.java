@@ -55,6 +55,7 @@ public class Application extends ApplicationAdapter {
     public PixmapContainer textures;
 
     public Pixmap.Format pixelFormat;
+    public static String paletteLocation;
 
     public int frameWidth = 400;  //Actual default in Config class
     public int frameHeight = 225;
@@ -206,6 +207,7 @@ public class Application extends ApplicationAdapter {
             frameWidth = config.frameWidth;
             frameHeight = config.frameHeight;
             pixelFormat = config.use32bitColor ? Pixmap.Format.RGBA8888 : Pixmap.Format.RGBA4444;
+            paletteLocation = config.palette;
         } catch (Exception e) {
             System.out.println("Error Loading Config... Defaulting");
             config = new Config();
