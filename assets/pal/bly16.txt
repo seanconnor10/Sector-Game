@@ -1,0 +1,21 @@
+;paint.net Palette File
+;Downloaded from Lospec.com/palette-list
+;Palette Name: bly16
+;Description: A general use palette with desaturated colors
+;Colors: 16
+FF333344
+FF444455
+FF774444
+FF445566
+FFbb5555
+FF667788
+FF996699
+FF448888
+FFdd8855
+FF77aa66
+FF66aa99
+FF99aabb
+FFee99aa
+FF88bbbb
+FFeebb77
+FFeeddcc

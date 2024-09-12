@@ -40,10 +40,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
     public SoftwareRenderer(Application app) {
         super(app);
 
-        Texture temp = new Texture(Gdx.files.local("assets/img/error_tex.png"));
-        temp.getTextureData().prepare();
-        ERROR_TEXTURE = PixmapContainer.makeMipMapSeries(temp);
-        temp.dispose();
+        Pixmap pm = new Pixmap(Gdx.files.internal("assets/img/error_tex.png"));
+        ERROR_TEXTURE = PixmapContainer.makeMipMapSeries(pm);
 
         setFovFromDeg(Application.config.fov);
 

@@ -16,6 +16,8 @@ public class PixmapContainer {
     private static final FileHandle imgDir = Gdx.files.local("assets/img");
     public static final int MIPMAP_COUNT = 5;
 
+    private static final Pallette pall = new Pallette(Gdx.files.local("assets/pal/bly16.txt"));
+
     private Pixmap[][] pixmaps;
     private TreeMap<String, Pixmap[]> pixmapsByName;
 
@@ -54,6 +56,7 @@ public class PixmapContainer {
         long timeStamp = TimeUtils.millis();
         System.out.println("Loading Textures from Materials Array");
 
+        clear();
         pixmaps = new Pixmap[blankMaterials.size][MIPMAP_COUNT];
         pixmapsByName = new TreeMap<>();
 
@@ -68,15 +71,15 @@ public class PixmapContainer {
                 continue; //Avoid loading same image twice, even if two different
             }
 
-            Texture temp = new Texture(file, Pixmap.Format.RGBA8888, false);
-            if (!temp.getTextureData().isPrepared()) temp.getTextureData().prepare();
+            Pixmap pixmap = new Pixmap(file);
 
-            pixmaps[i] = makeMipMapSeries(temp);
+            pall.palletize(pixmap);
+
+            pixmaps[i] = makeMipMapSeries(pixmap);
 
             mat.tex = pixmaps[i];
             pixmapsByName.put(file.nameWithoutExtension().toUpperCase(), pixmaps[i]);
 
-            temp.dispose();
             loadedImages.add(file.toString());
             System.out.println("    " + i + ") " + file);
             i++;
@@ -90,9 +93,9 @@ public class PixmapContainer {
         return pixmapsByName.getOrDefault(name, null);
     }
 
-    public static Pixmap[] makeMipMapSeries(Texture tex) {
+    public static Pixmap[] makeMipMapSeries(Pixmap pix) {
         Pixmap[] pixmaps = new Pixmap[MIPMAP_COUNT];
-        pixmaps[0] = tex.getTextureData().consumePixmap();
+        pixmaps[0] = pix;
         for (int i = 1; i< MIPMAP_COUNT; i++) {
             pixmaps[i] = halvePixmap(pixmaps[i-1]);
         }
@@ -131,5 +134,18 @@ public class PixmapContainer {
 
         return handle;
     }
+
+    private void clear() {
+        if (pixmaps == null) return;
+        for (Pixmap[] pp : pixmaps) {
+            for (Pixmap p : pp) {
+                if (p == null) continue;
+                p.dispose();
+            }
+        }
+        pixmapsByName.clear();
+
+    }
+
 
 }
