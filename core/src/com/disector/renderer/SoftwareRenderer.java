@@ -32,8 +32,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
     private static final Pixmap TEST_SPRITE_IMG = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
     private static final Pixmap TEST_WALL_IMG = new Pixmap(Gdx.files.local("assets/img/wood_window.png"));
 
-    protected final Color depthFogColor = new Color(0.1f, 0.05f, 0.2f, 1f);
-    protected final Color darkColor = new Color(0x20_0A_00_FF);
+    protected final Color depthFogColor = new Color(0.05f, 0.0f, 0.1f, 1f);
+    protected final Color darkColor = new Color(0x00_00_00_FF);
 
     protected final boolean AGGRESSIVE_MIPMAPS = false;
 

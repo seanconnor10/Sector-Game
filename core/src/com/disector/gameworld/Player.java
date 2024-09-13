@@ -14,7 +14,7 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    final float MAX_SPEED = 150.f, ACCEL = 20.0f;
+    final float MAX_SPEED = 100.f, ACCEL = 10.0f;
     final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.5f;
     final float TURN_SPEED = 3.0f, VLOOK_SPEED = 200.0f;
     final float VLOOK_CLAMP = 300.f;
