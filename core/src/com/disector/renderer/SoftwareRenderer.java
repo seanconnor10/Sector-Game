@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.disector.*;
 import com.disector.Material;
+
 import com.disector.assets.PixmapContainer;
 import com.disector.renderer.sprites.FacingSprite;
 import com.disector.renderer.sprites.Sprite;

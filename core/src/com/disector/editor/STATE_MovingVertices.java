@@ -36,7 +36,7 @@ public class STATE_MovingVertices extends EditorState {
         letGo();
 
         float x = xUnSnapped(), y = yUnSnapped();
-        final float grabDistance = 5.0f / editor.mapRenderer.zoom;
+        final float grabDistance = 5.0f ;/// editor.mapRenderer.zoom;
 
         for (Wall w : editor.walls) {
             if (squareCollision(w.x1, w.y1, x, y, grabDistance))

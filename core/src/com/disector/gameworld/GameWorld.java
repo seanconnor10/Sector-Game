@@ -262,7 +262,7 @@ public class GameWorld implements I_AppFocus{
             Wall w = walls.get(wInd);
             if (Physics.boundingBoxCheck(w, obj.copyPosition(), obj.getRadius())) {
                 WallInfoPack info = new WallInfoPack(w, wInd, objPos);
-                if (info.distToNearest < obj.getRadius()) {
+                if (info.distToNearest < obj.getRadius() - 0.01f) {
                     collisions.add(info);
                 }
             }
