@@ -9,7 +9,7 @@ MATERIAL (7) :: Img MARBLE ::
 MATERIAL (8) :: Img STRIPE :: 
 MATERIAL (9) :: Img STARS :: Sky :: 
 SECTOR (0) :: Height 0 100 :: Mat 0 0 :: Light 0.50 0.40 :: Has 0 1 2 3 4 5 6 7 15 16 17 18 19 20 21 22 23 24 25 26 27 28 55 56 66 67 71 72 ::
-SECTOR (1) :: Height -10 48 :: Mat 7 0 :: Light 0.60 0.50 :: Has 2 8 9 10 11 12 13 14 15 16 17 73 77 78 79 81 82 83 ::
+SECTOR (1) :: Height -10 48 :: Mat 7 0 :: Light 0.60 0.50 :: Has 2 8 9 10 11 12 13 14 15 16 17 73 77 78 79 81 82 83 108 109 110 126 127 ::
 SECTOR (2) :: Height 0 100 :: Mat 4 0 :: Light 0.80 0.40 :: Has 25 26 27 28 29 30 31 32 ::
 SECTOR (3) :: Height 0 100 :: Mat 7 0 :: Light 0.40 0.40 :: Has 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 ::
 SECTOR (4) :: Height 0 200 :: Mat 7 0 :: Light 0.50 0.01 :: Has 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 ::
@@ -19,8 +19,12 @@ SECTOR (7) :: Height 78 150 :: Mat 0 0 :: Light 0.20 0.00 :: Has 4 57 58 59 60 6
 SECTOR (8) :: Height 0 100 :: Mat 0 0 :: Light 0.50 0.40 :: Has 66 ::
 SECTOR (9) :: Height 42 100 :: Mat 0 0 :: Light 0.50 0.40 :: Has 66 68 69 70 71 72 ::
 SECTOR (10) :: Height 20 48 :: Mat 7 0 :: Light 0.40 0.50 :: Has 73 74 75 76 77 78 ::
-SECTOR (11) :: Height -5 48 :: Mat 4 0 :: Light 0.60 0.50 :: Has 80 81 82 83 ::
-SECTOR (12) :: Height -5 43 :: Mat 4 0 :: Light 0.60 0.50 :: Has 80 84 85 86 ::
+SECTOR (11) :: Height -5 43 :: Mat 4 4 :: Light 0.60 0.50 :: Has 80 81 82 83 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 ::
+SECTOR (12) :: Height -5 43 :: Mat 4 4 :: Light 0.60 0.50 :: Has 80 84 85 86 87 88 89 90 91 111 112 113 114 115 ::
+SECTOR (13) :: Height -5 43 :: Mat 4 4 :: Light 0.60 0.50 :: Has 115 116 117 118 ::
+SECTOR (14) :: Height -5 43 :: Mat 4 4 :: Light 0.60 0.50 :: Has 117 119 120 121 122 123 124 125 ::
+SECTOR (15) :: Height -5 43 :: Mat 4 4 :: Light 0.60 0.50 :: Has 124 ::
+SECTOR (16) :: Height 20 33 :: Mat 4 4 :: Light 0.60 0.50 :: Has 124 127 128 129 ::
 WALL (0) :: Pos 0 96 16.000001907348633 112 :: Mat DIRT :: Light 0.50 :: 
 WALL (1) :: Pos 160 112 176 72 :: Mat DIRT :: Light 0.30 :: 
 WALL (2) :: Pos 168 -24 128 -16 :: Mat DIRT :: Light 0.30 :: Port 0 -> 1 :: 
@@ -32,7 +36,7 @@ WALL (7) :: Pos 16 16 8 48 :: Mat DIRT :: Light 0.60 ::
 WALL (8) :: Pos 168 -24 192 -64 :: Mat DIRT :: Light 0.60 :: 
 WALL (9) :: Pos 192 -64 192 -96 :: Mat DIRT :: Light 0.60 :: 
 WALL (10) :: Pos 192 -96 176 -104 :: Mat DIRT :: Light 0.60 :: 
-WALL (11) :: Pos 112 -112 59.69230651855469 -101.53845977783203 :: Mat DIRT :: Light 0.60 :: 
+WALL (11) :: Pos 112 -112 96 -112 :: Mat DIRT :: Light 0.60 :: 
 WALL (12) :: Pos 28 -100 16 -88 :: Mat DIRT :: Light 0.50 :: 
 WALL (13) :: Pos -4 -84 12 -60 :: Mat DIRT :: Light 0.30 :: 
 WALL (14) :: Pos 12 -60 0 -32 :: Mat DIRT :: Light 0.50 :: 
@@ -72,10 +76,10 @@ WALL (47) :: Pos 100 44 108 56 :: Mat DIRT :: UpperMat METAL :: Light 0.60 :: Po
 WALL (48) :: Pos 84 68 76 56 :: Mat DIRT :: UpperMat METAL :: Light 0.40 :: Port 5 -> 4 :: 
 WALL (49) :: Pos 108 56 100 68 :: Mat DIRT :: UpperMat METAL :: Light 0.40 :: Port 5 -> 4 :: Offset_Upper 0.3800 1.2800 :: 
 WALL (50) :: Pos 100 68 84 68 :: Mat DIRT :: UpperMat METAL :: Light 0.10 :: Port 5 -> 4 :: Offset_Upper 0.1800 0.7000 :: 
-WALL (51) :: Pos 88 56 92 52 :: Mat DIRT :: UpperMat TILE :: Light 0.60 :: Port 6 -> 5 :: 
-WALL (52) :: Pos 92 52 96 56 :: Mat DIRT :: UpperMat TILE :: Light 0.40 :: Port 6 -> 5 :: 
-WALL (53) :: Pos 96 56 92 60 :: Mat DIRT :: UpperMat TILE :: Light 0.10 :: Port 6 -> 5 :: 
-WALL (54) :: Pos 92 60 88 56 :: Mat DIRT :: UpperMat TILE :: Light 0.20 :: Port 6 -> 5 :: 
+WALL (51) :: Pos 88 56 92 52 :: Mat DIRT :: UpperMat TILE4 :: Light 0.70 :: Port 6 -> 5 :: 
+WALL (52) :: Pos 92 52 96 56 :: Mat DIRT :: UpperMat TILE4 :: Light 0.90 :: Port 6 -> 5 :: 
+WALL (53) :: Pos 96 56 92 60 :: Mat DIRT :: UpperMat TILE4 :: Light 0.30 :: Port 6 -> 5 :: 
+WALL (54) :: Pos 92 60 88 56 :: Mat DIRT :: UpperMat TILE4 :: Light 0.40 :: Port 6 -> 5 :: 
 WALL (55) :: Pos 56 128 80 132 :: Mat DIRT :: Light 0.60 :: 
 WALL (56) :: Pos 16.000001907348633 112 24 112 :: Mat DIRT :: Light 0.50 :: 
 WALL (57) :: Pos 24 112 24 116 :: Mat DIRT :: Light 0.60 :: 
@@ -101,10 +105,53 @@ WALL (76) :: Pos 40 -96 28 -100 :: Mat DIRT :: Light 0.60 ::
 WALL (77) :: Pos 40 -88 28 -100 :: Mat DIRT :: LowerMat MARBLE :: Light 0.60 :: Port 1 -> 10 :: 
 WALL (78) :: Pos 52 -84 40 -88 :: Mat DIRT :: LowerMat MARBLE :: Light 0.60 :: Port 1 -> 10 :: 
 WALL (79) :: Pos 16 -88 -4 -84 :: Mat DIRT :: Light 0.40 :: 
-WALL (80) :: Pos 176 -104 112 -112 :: Mat DIRT :: Light 0.60 :: Port 11 -> 12 :: 
-WALL (81) :: Pos 112 -112 112 -88 :: Mat DIRT :: LowerMat INDUSTRIAL :: Light 0.60 :: Port 11 -> 1 :: 
-WALL (82) :: Pos 112 -88 176 -88 :: Mat DIRT :: LowerMat INDUSTRIAL :: Light 0.70 :: Port 11 -> 1 :: 
-WALL (83) :: Pos 176 -88 176 -104 :: Mat DIRT :: LowerMat INDUSTRIAL :: Light 0.30 :: Port 11 -> 1 :: 
-WALL (84) :: Pos 176 -104 176 -136 :: Mat DIRT :: Light 0.60 :: 
-WALL (85) :: Pos 176 -136 112 -136 :: Mat DIRT :: Light 0.60 :: 
-WALL (86) :: Pos 112 -136 112 -112 :: Mat DIRT :: Light 0.60 :: 
+WALL (80) :: Pos 176 -104 160.24615478515625 -105.96923065185547 :: Mat DIRT :: Light 0.60 :: Port 11 -> 12 :: 
+WALL (81) :: Pos 112 -112 112 -88 :: Mat DIRT :: LowerMat INDUSTRIAL :: UpperMat INDUSTRIAL :: Light 0.60 :: Port 11 -> 1 :: 
+WALL (82) :: Pos 112 -88 128 -88 :: Mat DIRT :: LowerMat INDUSTRIAL :: UpperMat INDUSTRIAL :: Light 0.70 :: Port 11 -> 1 :: 
+WALL (83) :: Pos 176 -88 176 -104 :: Mat DIRT :: LowerMat INDUSTRIAL :: UpperMat INDUSTRIAL :: Light 0.30 :: Port 11 -> 1 :: 
+WALL (84) :: Pos 176 -104 172 -116 :: Mat DIRT :: Light 0.60 :: 
+WALL (85) :: Pos 176 -240 112 -240 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (86) :: Pos 112 -240 112 -208 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (87) :: Pos 172 -116 176 -128 :: Mat DIRT :: Light 0.60 :: 
+WALL (88) :: Pos 176 -128 176 -240 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (89) :: Pos 120 -120 112 -112 :: Mat DIRT :: Light 0.60 :: 
+WALL (90) :: Pos 116 -132 120 -120 :: Mat DIRT :: Light 0.60 :: 
+WALL (91) :: Pos 112 -140 116 -132 :: Mat DIRT :: Light 0.60 :: 
+WALL (92) :: Pos 116 -96 116 -100 :: Mat DIRT :: Light 1.00 :: 
+WALL (93) :: Pos 116 -100 120 -104 :: Mat DIRT :: Light 1.00 :: 
+WALL (94) :: Pos 120 -104 124 -104 :: Mat DIRT :: Light 1.00 :: 
+WALL (95) :: Pos 124 -104 128 -100 :: Mat DIRT :: Light 1.00 :: 
+WALL (96) :: Pos 128 -100 128 -96 :: Mat DIRT :: Light 1.00 :: 
+WALL (97) :: Pos 128 -96 124 -92 :: Mat DIRT :: Light 1.00 :: 
+WALL (98) :: Pos 124 -92 120 -92 :: Mat DIRT :: Light 1.00 :: 
+WALL (99) :: Pos 120 -92 116 -96 :: Mat DIRT :: Light 1.00 :: 
+WALL (100) :: Pos 172 -96 168 -92 :: Mat TILE4 :: Light 0.30 :: Offset 0.0100 0.0000 :: 
+WALL (101) :: Pos 168 -92 164 -92 :: Mat TILE4 :: Light 0.50 :: Offset 0.0100 0.0000 :: 
+WALL (102) :: Pos 164 -92 160 -96 :: Mat TILE4 :: Light 0.50 :: Offset 0.0100 0.0000 :: 
+WALL (103) :: Pos 160 -96 160 -100 :: Mat TILE4 :: Light 0.80 :: Offset 0.0100 0.0000 :: 
+WALL (104) :: Pos 160 -100 164 -104 :: Mat TILE4 :: Light 1.00 :: Offset 0.0100 0.0000 :: 
+WALL (105) :: Pos 164 -104 168 -104 :: Mat TILE4 :: Light 0.90 :: Offset 0.0100 0.0000 :: 
+WALL (106) :: Pos 168 -104 172 -100 :: Mat TILE4 :: Light 0.60 :: Offset 0.0100 0.0000 :: 
+WALL (107) :: Pos 172 -100 172 -96 :: Mat TILE4 :: Light 0.10 :: Offset 0.0100 0.0000 :: 
+WALL (108) :: Pos 144 -88 160 -88 :: Mat DIRT :: LowerMat INDUSTRIAL :: UpperMat INDUSTRIAL :: Light 0.70 :: Port 11 -> 1 :: 
+WALL (109) :: Pos 160 -88 176 -88 :: Mat DIRT :: LowerMat INDUSTRIAL :: UpperMat INDUSTRIAL :: Light 0.70 :: Port 11 -> 1 :: 
+WALL (110) :: Pos 128 -88 144 -88 :: Mat DIRT :: LowerMat INDUSTRIAL :: UpperMat INDUSTRIAL :: Light 0.70 :: Port 11 -> 1 :: 
+WALL (111) :: Pos 144 -108 128.24615478515625 -109.96923065185547 :: Mat DIRT :: Light 0.60 :: Port 11 -> 12 :: 
+WALL (112) :: Pos 160.24615478515625 -105.96923065185547 144 -108 :: Mat DIRT :: Light 0.60 :: Port 11 -> 12 :: 
+WALL (113) :: Pos 128.24615478515625 -109.96923065185547 112 -112 :: Mat DIRT :: Light 0.60 :: Port 11 -> 12 :: 
+WALL (114) :: Pos 112 -176 112 -140 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (115) :: Pos 112 -208 112 -176 :: Mat INDUSTRIAL :: Light 0.60 :: Port 12 -> 13 :: 
+WALL (116) :: Pos 112 -208 104 -208 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (117) :: Pos 104 -208 104 -176 :: Mat INDUSTRIAL :: Light 0.60 :: Port 13 -> 14 :: 
+WALL (118) :: Pos 104 -176 112 -176 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (119) :: Pos 104 -208 104 -240 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (120) :: Pos 104 -240 64 -240 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (121) :: Pos 64 -240 64 -120 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (122) :: Pos 64 -120 72 -120 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (123) :: Pos 104 -120 104 -176 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (124) :: Pos 72 -120 96 -120 :: Mat INDUSTRIAL :: Light 0.60 :: Port 16 -> 14 :: 
+WALL (125) :: Pos 96 -120 104 -120 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (126) :: Pos 72 -112 59.69230651855469 -101.53845977783203 :: Mat DIRT :: Light 0.60 :: 
+WALL (127) :: Pos 96 -112 72 -112 :: Mat DIRT :: LowerMat STRIPE :: UpperMat STRIPE :: Light 0.60 :: Port 16 -> 1 :: Scale_Lower 0.2000 1.0000 :: Offset_Upper 0.3400 -0.4600 :: 
+WALL (128) :: Pos 72 -120 72 -112 :: Mat INDUSTRIAL :: Light 0.60 :: 
+WALL (129) :: Pos 96 -112 96 -120 :: Mat INDUSTRIAL :: Light 0.60 :: 
