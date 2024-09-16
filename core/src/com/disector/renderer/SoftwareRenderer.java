@@ -261,6 +261,11 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         }
 
+	int texHeightMid, texHeightLow, texHeightUpper;
+	texHeightMid = textures[0].getHeight();
+	texHeightLow = texturesLow[0].getHeight();
+	texHeightUpper = texturesHigh[0].getHeight();
+
         float lightMiddle, lightLower, lightUpper;
         if (fullBright) {
             lightMiddle = 1f;
@@ -319,7 +324,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             {
                 texX = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
-                float pixWidth = (texX_PlusOne - texX) * textures[0].getWidth();
+                float pixWidth = (texX_PlusOne - texX);// * textures[0].getWidth();
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -332,7 +337,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             if (isPortal){
                 texX_Lower = w.Lower_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
-                float pixWidth = (texX_PlusOne - texX_Lower) * texturesLow[0].getWidth();
+                float pixWidth = (texX_PlusOne - texX_Lower);// * texturesLow[0].getWidth();
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -340,7 +345,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
            
                 texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
                 texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
-                pixWidth = (texX_PlusOne - texX_Upper) * texturesLow[0].getWidth();
+                pixWidth = (texX_PlusOne - texX_Upper);// * texturesLow[0].getWidth();
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -355,31 +360,38 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 float pixX;
                 float yOff, yScale, light;
+		        float texHeight;
 
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
                     pixX = texX;
                     light = lightMiddle;
+                    texHeight = texHeightMid;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
                     pixX = texX_Lower;
                     light = lightLower;
+		            texHeight = texHeightLow;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
                     pixX = texX;
                     light = lightMiddle;
+		            texHeight = texHeightMid;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
                     pixX = texX_Upper;
                     light = lightUpper;
+		            texHeight = texHeightUpper;
                 }
 
+		        v = v * (secCeilZ - secFloorZ) / texHeight;
+
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
-                float texV = (tempYOff + v * yScale) % 1.0f;
+                float texV = (tempYOff + v/yScale) % 1.0f;
 
                 Color drawColor;
                     if (!w.isPortal)
@@ -439,8 +451,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 float rotFloorX = Math.abs( floorX*playerSin - floorY*playerCos + floorXOffset );
                 float rotFloorY = Math.abs( floorX*playerCos + floorY*playerSin + floorYOffset );
 
-                rotFloorX /= 4;
-                rotFloorY /= 4;
+                rotFloorX /= 2;
+                rotFloorY /= 2;
 
                 rotFloorX = rotFloorX%1;
                 rotFloorY = rotFloorY%1;
@@ -511,8 +523,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 float rotX = Math.abs( ceilX * playerSin - ceilY * playerCos - floorXOffset );
                 float rotY = Math.abs( ceilX * playerCos + ceilY * playerSin - floorYOffset );
 
-                rotX /= 4f;
-                rotY /= 4f;
+                rotX /= 2f;
+                rotY /= 2f;
 
                 rotX = rotX % 1;
                 rotY = rotY % 1;
