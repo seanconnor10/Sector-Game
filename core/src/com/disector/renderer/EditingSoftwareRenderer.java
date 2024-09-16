@@ -196,6 +196,22 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
         }
 
+        int texHeightMid, texHeightLow, texHeightUpper;
+        texHeightMid = textures[0].getHeight();
+        texHeightLow = texturesLow[0].getHeight();
+        texHeightUpper = texturesHigh[0].getHeight();
+
+        float lightMiddle, lightLower, lightUpper;
+        if (fullBright) {
+            lightMiddle = 1f;
+            lightLower = 1f;
+            lightUpper = 1f;
+        } else {
+            lightLower = w.lightLower;
+            lightMiddle = w.light;
+            lightUpper = w.lightUpper;
+        }
+
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;
 
@@ -213,8 +229,6 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 float screenXProgress = (drawX-leftEdgePrecise) / (rightEdgePrecise-leftEdgePrecise);
                 fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
             }
-
-            float light = fullBright ? 1.0f : w.light;
 
             rasterBottom = Math.max( (int) quadBottom, occlusionBottom[drawX]);
             rasterTop = Math.min( (int) quadTop, occlusionTop[drawX]);
@@ -234,7 +248,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             {
                 texX = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
-                float pixWidth = (texX_PlusOne - texX) * textures[0].getWidth();
+                float pixWidth = texX_PlusOne - texX;
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -247,7 +261,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             if (isPortal){
                 texX_Lower = w.Lower_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
-                float pixWidth = (texX_PlusOne - texX_Lower) * texturesLow[0].getWidth();
+                float pixWidth = texX_PlusOne - texX_Lower;
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -255,7 +269,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
                 texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
                 texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
-                pixWidth = (texX_PlusOne - texX_Upper) * texturesLow[0].getWidth();
+                pixWidth = texX_PlusOne - texX_Upper;
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -265,48 +279,59 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
                 float v = (drawY - quadBottom) / quadHeight;
 
+                if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
+                    continue;
 
-                float pixU;
+                float pixX;
+                float yOff, yScale, light;
+                float texHeight;
 
-                float yOff, yScale;
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixU = texX;
+                    pixX = texX;
+                    light = lightMiddle;
+                    texHeight = texHeightMid;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
-                    pixU = texX_Lower;
+                    pixX = texX_Lower;
+                    light = lightLower;
+                    texHeight = texHeightLow;
                 } else if (v<upperWallCutoffV) {
-                    //Middle of Portal
-                    continue;
-                    /*yOff = w.yOffset;
+                    yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixU = texX;*/
+                    pixX = texX;
+                    light = lightMiddle;
+                    texHeight = texHeightMid;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
-                    pixU = texX_Upper;
+                    pixX = texX_Upper;
+                    light = lightUpper;
+                    texHeight = texHeightUpper;
                 }
-                
+
+                float texVTemp = v * (secCeilZ - secFloorZ) / texHeight;
+
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
-                float texV = (tempYOff + v * yScale) % 1.0f;
+                float texV = (tempYOff + texVTemp/yScale) % 1.0f;
 
                 Color drawColor;
                 CLICK_TYPE type;
 
                 if (!w.isPortal) {
-                    drawColor = grabColor(tex, pixU, texV);
+                    drawColor = grabColor(tex, pixX, texV);
                     type = CLICK_TYPE.WALL_MAIN;
                 } else if (v <= lowerWallCutoffV) {
-                    drawColor = grabColor(texLower, pixU, texV);
+                    drawColor = grabColor(texLower, pixX, texV);
                     type = CLICK_TYPE.WALL_LOWER;
                 } else if (v <= upperWallCutoffV){
                     type = CLICK_TYPE.WALL_MAIN;
-                    drawColor = grabColor(tex, pixU, texV);
+                    drawColor = grabColor(tex, pixX, texV);
                 } else {
                     type = CLICK_TYPE.WALL_UPPER;
-                    drawColor = grabColor(texUpper, pixU, texV);
+                    drawColor = grabColor(texUpper, pixX, texV);
                 }
 
                 drawColor.lerp(depthFogColor,fog);

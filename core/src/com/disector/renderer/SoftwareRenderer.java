@@ -261,10 +261,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         }
 
-	int texHeightMid, texHeightLow, texHeightUpper;
-	texHeightMid = textures[0].getHeight();
-	texHeightLow = texturesLow[0].getHeight();
-	texHeightUpper = texturesHigh[0].getHeight();
+        int texHeightMid, texHeightLow, texHeightUpper;
+        texHeightMid = textures[0].getHeight();
+        texHeightLow = texturesLow[0].getHeight();
+        texHeightUpper = texturesHigh[0].getHeight();
 
         float lightMiddle, lightLower, lightUpper;
         if (fullBright) {
@@ -324,7 +324,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             {
                 texX = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
-                float pixWidth = (texX_PlusOne - texX);// * textures[0].getWidth();
+                float pixWidth = (texX_PlusOne - texX);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -337,7 +337,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             if (isPortal){
                 texX_Lower = w.Lower_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
-                float pixWidth = (texX_PlusOne - texX_Lower);// * texturesLow[0].getWidth();
+                float pixWidth = (texX_PlusOne - texX_Lower);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -345,7 +345,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
            
                 texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
                 texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
-                pixWidth = (texX_PlusOne - texX_Upper);// * texturesLow[0].getWidth();
+                pixWidth = (texX_PlusOne - texX_Upper);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
@@ -388,10 +388,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
 		            texHeight = texHeightUpper;
                 }
 
-		        v = v * (secCeilZ - secFloorZ) / texHeight;
+                float texVTemp = v * (secCeilZ - secFloorZ) / texHeight;
 
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
-                float texV = (tempYOff + v/yScale) % 1.0f;
+                float texV = (tempYOff + texVTemp/yScale) % 1.0f;
 
                 Color drawColor;
                     if (!w.isPortal)
