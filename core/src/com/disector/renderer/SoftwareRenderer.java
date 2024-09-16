@@ -33,8 +33,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
     private static final Pixmap TEST_SPRITE_IMG = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
     private static final Pixmap TEST_WALL_IMG = new Pixmap(Gdx.files.local("assets/img/wood_window.png"));
 
-    protected final Color depthFogColor = new Color(0.05f, 0.0f, 0.1f, 1f);
-    protected final Color darkColor = new Color(0x00_00_00_FF);
+    protected final Color depthFogColor = new Color(0.2f, 0.0f, 0.05f, 1f);
+    protected final Color darkColor = new Color(0x10_00_40_FF);
 
     protected final boolean AGGRESSIVE_MIPMAPS = false;
 
@@ -261,6 +261,17 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         }
 
+        float lightMiddle, lightLower, lightUpper;
+        if (fullBright) {
+            lightMiddle = 1f;
+            lightLower = 1f;
+            lightUpper = 1f;
+        } else {
+            lightLower = w.lightLower;
+            lightMiddle = w.light;
+            lightUpper = w.lightUpper;
+        }
+
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;
 
@@ -279,8 +290,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 dist = x1 + screenXProgress*(x2-x1);
                 fog = getFogFactor(dist);
             }
-
-            float light = fullBright ? 1.0f : w.light;
 
             rasterBottom = Math.max( (int) quadBottom, occlusionBottom[drawX]);
             rasterTop = Math.min( (int) quadTop, occlusionTop[drawX]);
@@ -345,24 +354,28 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     continue;
 
                 float pixX;
-                
-                float yOff, yScale;
+                float yOff, yScale, light;
+
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
                     pixX = texX;
+                    light = lightMiddle;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
                     pixX = texX_Lower;
+                    light = lightLower;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
                     pixX = texX;
+                    light = lightMiddle;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
                     pixX = texX_Upper;
+                    light = lightUpper;
                 }
 
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;

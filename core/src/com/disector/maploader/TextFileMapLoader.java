@@ -187,6 +187,8 @@ public class TextFileMapLoader implements MapLoader {
                                     break;
                                 case "LIGHT":
                                     wallBuild.light = Float.parseFloat(next);
+                                    wallBuild.lightUpper = parseFloatOrDefault(in.next(), 1f);
+                                    wallBuild.lightLower = parseFloatOrDefault(in.next(), 1f);
                                     subMode = "NONE";
                                     break;
                                 case "OFFSET":
@@ -395,7 +397,12 @@ public class TextFileMapLoader implements MapLoader {
         }
 
         //Light
-        str.append("Light ").append( form2(w.light) ).append(" :: ");
+        str.append("Light ")
+            .append( form2(w.light) ).append(" ")
+            .append( form2(w.lightUpper) ).append(" ")
+            .append( form2(w.lightLower) )
+            .append(" :: ");
+
 
         //Portal Links
         if (w.isPortal) {

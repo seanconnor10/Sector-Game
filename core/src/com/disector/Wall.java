@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Wall {
     //When adding more members, add to
-    // copy constructor,
+    // copy constructor (now the setFromCopy() method) ,
     //and MapLoaders' save() and load()
     public float x1, y1, x2, y2;
     public boolean isPortal;
@@ -12,6 +12,8 @@ public class Wall {
     public float normalAngle; //Angle of line protruding outward perpendicularly from wall into the sector
     public int mat, matUpper, matLower;
     public float light = 1.f;
+    public float lightUpper = 1f;
+    public float lightLower = 1.f;
     public float xOffset = 0.f, yOffset = 0.f;
     public float xScale = 1.f, yScale = 1.f;
     public float Upper_xOffset = 0.f, Upper_yOffset = 0.f;
@@ -38,30 +40,7 @@ public class Wall {
     }
 
     public Wall(Wall w) {
-        this.x1 = w.x1;
-        this.y1 = w.y1;
-        this.x2 = w.x2;
-        this.y2 = w.y2;
-        this.isPortal = w.isPortal;
-        this.linkA = w.linkA;
-        this.linkB = w.linkB;
-        this.mat = w.mat;
-        this.matUpper = w.matUpper;
-        this.matLower = w.matLower;
-        this.light = w.light;
-        this.xOffset = w.xOffset;
-        this.yOffset = w.yOffset;
-        this.xScale = w.xScale;
-        this.yScale = w.yScale;
-        this.Upper_xOffset = w.Upper_xOffset;
-        this.Upper_yOffset = w.Upper_yOffset;
-        this.Upper_xScale = w.Upper_xScale;
-        this.Upper_yScale = w.Upper_yScale;
-        this.Lower_xOffset = w.Lower_xOffset;
-        this.Lower_yOffset = w.Lower_yOffset;
-        this.Lower_xScale = w.Lower_xScale;
-        this.Lower_yScale = w.Lower_yScale;
-        setNormalAngle();
+        setFromCopy(w);
     }
 
     public void setFromCopy(Wall w) {
@@ -76,6 +55,8 @@ public class Wall {
         this.matUpper = w.matUpper;
         this.matLower = w.matLower;
         this.light = w.light;
+        this.lightUpper = w.lightUpper;
+        this.lightLower = w.lightLower;
         this.xOffset = w.xOffset;
         this.yOffset = w.yOffset;
         this.xScale = w.xScale;
