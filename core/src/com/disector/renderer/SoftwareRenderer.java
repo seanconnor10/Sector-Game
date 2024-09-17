@@ -277,6 +277,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
             lightUpper = w.lightUpper;
         }
 
+        float secHeight = secCeilZ - secFloorZ;
+
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;
 
@@ -352,11 +354,15 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 texUpper = texturesHigh[pixmap_ind];
             }
 
-            for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
-                float v = (drawY - quadBottom) / quadHeight;
+            float deltaV = 1 / quadHeight;
+            float v = (rasterBottom - quadBottom) / quadHeight;
 
-                if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
+            for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
+
+                if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) ) {
+                    v += deltaV;
                     continue;
+                }
 
                 float pixX;
                 float yOff, yScale, light;
@@ -388,23 +394,42 @@ public class SoftwareRenderer extends DimensionalRenderer {
 		            texHeight = texHeightUpper;
                 }
 
-                float texVTemp = v * (secCeilZ - secFloorZ) / texHeight;
-
+                /*float texVTemp = v * (secCeilZ - secFloorZ) / texHeight;
                 float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
-                float texV = (tempYOff + texVTemp/yScale) % 1.0f;
+                float texV = (tempYOff + texVTemp/yScale) % 1.0f;*/
 
+                float texV = yOff + v*secHeight/texHeight/yScale;
+
+                /*
                 Color drawColor;
-                    if (!w.isPortal)
-                        drawColor = grabColor(tex, pixX, texV);
-                    else if (v <= lowerWallCutoffV)
-                        drawColor = grabColor(texLower, pixX, texV);
-                    else
-                        drawColor = grabColor(texUpper, pixX, texV);
+                if (!w.isPortal)
+                    drawColor = grabColor(tex, pixX, texV);
+                else if (v <= lowerWallCutoffV)
+                    drawColor = grabColor(texLower, pixX, texV);
+                else
+                    drawColor = grabColor(texUpper, pixX, texV);
 
                 drawColor.lerp(depthFogColor,fog);
-                drawColor.lerp(darkColor, 1.f - light);
+                drawColor.lerp(darkColor, 1.f - light);*/
 
-                buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor));
+                int drawColor = tex.getPixel((int)(pixX* tex.getWidth()), (int)(texV*texHeight));
+
+                int r = drawColor >> 24 & 0xFF;
+                int g = drawColor >> 16 & 0xFF;
+                int b = drawColor >> 8 & 0xFF;
+
+                r = (int) ( r * light );
+                g = (int) ( g * light );
+                b = (int) ( b * light );
+
+                drawColor = r << 24 | g << 16 | b << 8 | 0xFF;
+
+                //int col = R <<  24 | G << 16 | B << 8 | A;
+
+                //buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor));
+                buffer.drawPixel(drawX, drawY, drawColor);
+
+                v += deltaV;
 
             } //End Per Pixel Loop
 
