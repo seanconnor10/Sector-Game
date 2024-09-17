@@ -11,6 +11,7 @@ import com.disector.Material;
 import com.disector.assets.Palette;
 import com.disector.assets.PixmapContainer;
 import com.disector.gameworld.GameWorld;
+import com.disector.gameworld.WallSpriteObject;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -86,6 +87,9 @@ public class TextFileMapLoader implements MapLoader {
                         break;
                     case "MATERIAL":
                         materialBuild = new Material();
+                        break;
+                    case "OBJECT":
+                        boolean hi = true;
                         break;
                     default:
                         break;
@@ -247,6 +251,23 @@ public class TextFileMapLoader implements MapLoader {
                                 default:
                                     break;
                             }
+                        }
+                        break;
+                    case "OBJECT":
+                        switch (next) {
+                            case "TYPE":
+                                switch(in.next().toUpperCase()) {
+                                    case "WALL_SPR":
+                                        world.wallSpriteObjects.add( (WallSpriteObject) parseWALL_SPR(in.next()) );
+                                        break;
+                                    default:
+                                        System.out.println("Unknown Game Object Type");
+                                        mode = "NONE";
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
                         }
                         break;
                     default:
@@ -549,4 +570,22 @@ public class TextFileMapLoader implements MapLoader {
 
     // ------------------------------------------------------
 
+    Object parseWALL_SPR(String params) {
+        params = params.replace(" ", "");
+        params = params.replace("(", "");
+        params = params.replace(")", "");
+        String[] seperated  = params.split(",");
+        float x1, y1, x2, y2, z, height;
+        int texInd;
+
+        x1 = parseFloat(seperated[0]);
+        y1 = parseFloat(seperated[1]);
+        x2 = parseFloat(seperated[2]);
+        y2 = parseFloat(seperated[3]);
+        z  = parseFloat(seperated[4]);
+        height = parseFloat(seperated[5]);
+        texInd = parseInt(seperated[6]);
+
+        return new WallSpriteObject(x1, y1, x2, y2, z, height, texInd);
+    }
 }

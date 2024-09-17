@@ -161,10 +161,10 @@ public class Application extends ApplicationAdapter {
         TextFileMapLoader mapLoader = new TextFileMapLoader(this);
         boolean success = false;
         try {
+            gameWorld.mapLoad();
             mapLoader.load(filePath);
             success = true;
             gameWorld.refreshPlayerSectorIndex();
-            gameWorld.mapLoad();
             float newFloorZ = sectors.get(gameWorld.getPlayerSectorIndex()).floorZ;
             if (gameWorld.getPlayerPosition().z < newFloorZ) {
                 gameWorld.player1.setZ(newFloorZ);

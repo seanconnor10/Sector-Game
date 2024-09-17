@@ -1,7 +1,6 @@
 package com.disector.gameworld;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.assets.loaders.PixmapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
@@ -12,10 +11,8 @@ import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.Positionable;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
-import com.disector.renderer.sprites.FacingSprite;
 import com.disector.renderer.sprites.Sprite;
-
-import java.util.Arrays;
+import com.disector.renderer.sprites.WallSprite;
 
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
@@ -31,7 +28,8 @@ public class GameWorld implements I_AppFocus{
     private boolean shouldDisplayMap;
 
     public Player player1;
-    private final Array<Grenade> grenades = new Array<>();
+    public final Array<Grenade> grenades = new Array<>();
+    public final Array<WallSpriteObject> wallSpriteObjects = new Array<>();
 
     public GameWorld(Application app, InputChainInterface inputParent) {
         this.app = app;
@@ -132,11 +130,23 @@ public class GameWorld implements I_AppFocus{
     }
 
     public Sprite[] getSpriteList() {
-        int size = grenades.size;
+        int size = grenades.size + wallSpriteObjects.size;
         Sprite[] sprites = new Sprite[size];
-        for (int i=0; i<size; i++) {
-            sprites[i] = grenades.get(i).getInfo();
+
+        int i=0;
+        for (Grenade g : grenades) {
+            sprites[i] = g.getInfo();
+            i++;
         }
+        for (WallSpriteObject w : wallSpriteObjects) {
+            sprites[i] = new WallSprite(
+                app.materials.get(w.texInd).tex[0],
+                w.x1, w.y1, w.z,
+                w.x2, w.y2, w.height
+            );
+            i++;
+        }
+
         return sprites;
     }
 
@@ -274,6 +284,7 @@ public class GameWorld implements I_AppFocus{
 
     public void mapLoad() {
         grenades.clear();
+        wallSpriteObjects.clear();
     }
 
 }
