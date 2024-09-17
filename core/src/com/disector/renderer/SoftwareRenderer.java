@@ -261,6 +261,18 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         }
 
+        Pixmap floorPixels, ceilPixels;
+        boolean ceilIsSky = false;
+        try {
+            floorPixels = materials.get(currentSector.matFloor).tex[0];
+            Material ceilMat = materials.get(currentSector.matCeil);
+            ceilPixels = ceilMat.tex[0];
+            ceilIsSky = ceilMat.isSky;
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            floorPixels = ERROR_TEXTURE[0];
+            ceilPixels = ERROR_TEXTURE[0];
+        }
+
         int texHeightMid, texHeightLow, texHeightUpper;
         texHeightMid = textures[0].getHeight();
         texHeightLow = texturesLow[0].getHeight();
@@ -367,6 +379,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 float pixX;
                 float yOff, yScale, light;
 		        float texHeight;
+                Pixmap pickedTex;
 
                 if (!isPortal) {
                     yOff = w.yOffset;
@@ -374,45 +387,34 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     pixX = texX;
                     light = lightMiddle;
                     texHeight = texHeightMid;
+                    pickedTex = tex;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
                     pixX = texX_Lower;
                     light = lightLower;
 		            texHeight = texHeightLow;
+                    pickedTex = texLower;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
                     pixX = texX;
                     light = lightMiddle;
 		            texHeight = texHeightMid;
+                    pickedTex = tex;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
                     pixX = texX_Upper;
                     light = lightUpper;
 		            texHeight = texHeightUpper;
+                    pickedTex = texUpper;
                 }
 
-                /*float texVTemp = v * (secCeilZ - secFloorZ) / texHeight;
-                float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
-                float texV = (tempYOff + texVTemp/yScale) % 1.0f;*/
 
                 float texV = yOff + v*secHeight/texHeight/yScale;
 
-                /*
-                Color drawColor;
-                if (!w.isPortal)
-                    drawColor = grabColor(tex, pixX, texV);
-                else if (v <= lowerWallCutoffV)
-                    drawColor = grabColor(texLower, pixX, texV);
-                else
-                    drawColor = grabColor(texUpper, pixX, texV);
-
-                drawColor.lerp(depthFogColor,fog);
-                drawColor.lerp(darkColor, 1.f - light);*/
-
-                int drawColor = tex.getPixel((int)(pixX* tex.getWidth()), (int)(texV*texHeight));
+                int drawColor = pickedTex.getPixel((int)(pixX* tex.getWidth()), (int)(texV*texHeight));
 
                 int r = drawColor >> 24 & 0xFF;
                 int g = drawColor >> 16 & 0xFF;
@@ -424,9 +426,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 drawColor = r << 24 | g << 16 | b << 8 | 0xFF;
 
-                //int col = R <<  24 | G << 16 | B << 8 | A;
-
-                //buffer.drawPixel(drawX, drawY, Color.rgba8888(drawColor));
                 buffer.drawPixel(drawX, drawY, drawColor);
 
                 v += deltaV;
@@ -435,10 +434,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
             //Floor and Ceiling
             if (occlusionBottom[drawX] < quadBottom && camZ > currentSector.floorZ)
-                drawFloor(w, currentSector.matFloor, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor);
+                drawFloor(floorPixels, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor);
 
             if (occlusionTop[drawX] > rasterTop && camZ < currentSector.ceilZ)
-                drawCeiling(w, currentSector.matCeil, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil);
+                drawCeiling(ceilPixels, ceilIsSky, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil);
 
             //Update Occlusion Matrix
             updateOcclusion(isPortal, drawX, quadTop, quadBottom, quadHeight, upperWallCutoffV, lowerWallCutoffV);
@@ -454,7 +453,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     }
 
-    protected void drawFloor(Wall w, int texInd, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light) {
+    protected void drawFloor(Pixmap pix, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light) {
         final float scaleFactor = 32.f;
         float floorXOffset = camX/scaleFactor, floorYOffset = camY/scaleFactor;
         int vOffset = (int) camVLook;
@@ -462,13 +461,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         if (occlusionBottom[drawX] < rasterBottom) {
             float heightOffset = (camZ - secFloorZ) / scaleFactor;
             int floorEndScreenY = Math.min(rasterBottom, occlusionTop[drawX]);
-            Pixmap tex;
-            try {
-                tex = materials.get(texInd).tex[0];
-            } catch (Exception e) {
-                //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
-                tex = ERROR_TEXTURE[0];
-            }
+
             for (int drawY = occlusionBottom[drawX] + vOffset; drawY<=floorEndScreenY + vOffset; drawY++) {
                 float floorX = heightOffset * (drawX-halfWidth) / (drawY-halfHeight);
                 float floorY = heightOffset * fov / (drawY-halfHeight);
@@ -482,41 +475,29 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotFloorX = rotFloorX%1;
                 rotFloorY = rotFloorY%1;
 
-                /* CHECKERBOARD
-                boolean checkerBoard = ( (int)(rotFloorX*8%2) == (int)(rotFloorY*8%2) );
-                Color drawColor = new Color( checkerBoard ? 0xFFD08010 : 0xFF10D080 );
-                float floorFogValue = 1.f - ((halfHeight-heightOffset-drawY)/(halfHeight-heightOffset));
-                floorFogValue = Math.min(1.f, Math.max(0.f,floorFogValue));
-                drawColor.lerp(0.1f,0f,0.2f,1f, floorFogValue);
-                buffer.drawPixel(drawX, drawY - vOffset, drawColor.toIntBits() );*/
-
                 float horizonScreenDistVert = halfHeight - drawY;
                 float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
                 float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
 
-                //Color drawColor = grabColor(tex, rotFloorX, rotFloorY);
-                Color drawColor = new Color(tex.getPixel( (int)(rotFloorX*tex.getWidth()), (int)((1.f-rotFloorY)*tex.getHeight()) ));
+                int drawColor = pix.getPixel( (int)(rotFloorX*pix.getWidth()), (int)((1.f-rotFloorY)*pix.getHeight()) );
 
-                drawColor.lerp(depthFogColor, getFogFactor(dist));
-                drawColor.lerp(darkColor, 1.0f - light);
+                int r = drawColor >> 24 & 0xFF;
+                int g = drawColor >> 16 & 0xFF;
+                int b = drawColor >> 8 & 0xFF;
 
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor));
+                r = (int) ( r * light );
+                g = (int) ( g * light );
+                b = (int) ( b * light );
+
+                drawColor = r << 24 | g << 16 | b << 8 | 0xFF;
+
+                buffer.drawPixel(drawX, drawY - vOffset, drawColor);
 
             }
         }
     }
 
-    protected void drawCeiling(Wall w, int texInd, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light) {
-        Pixmap tex;
-        boolean isSky = false;
-        try {
-            Material mat = materials.get(texInd);
-            tex = mat.tex[0];
-            isSky = drawParallax && mat.isSky;
-        } catch (Exception e) {
-            //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
-            tex = ERROR_TEXTURE[0];
-        }
+    protected void drawCeiling(Pixmap tex, boolean isSky, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light) {
 
         final float scaleFactor = 32.f;
 
@@ -554,23 +535,24 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotX = rotX % 1;
                 rotY = rotY % 1;
 
-                /*boolean checkerBoard = ( (int)(rotX*8%2) == (int)(rotY*8%2) );
-                Color drawColor = new Color( checkerBoard ? 0xFF_A0_20_50 : 0xFF_20_50_A0 );
-                float ceilFogValue = 1.0f - ( ((drawY-halfHeight) / halfHeight) );
-                ceilFogValue = (float) Math.min(1.f, Math.max(0.f,ceilFogValue));
-                drawColor.lerp(0.1f,0f,0.2f,1f, ceilFogValue);
-                buffer.drawPixel(drawX, drawY - vOffset, drawColor.toIntBits() );*/
-
                 float horizonScreenDistVert = -halfHeight + drawY;
                 float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+
                 float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
 
-                Color drawColor = grabColor(tex, rotX, rotY);
+                int drawColor = tex.getPixel((int)(rotX*tex.getWidth()), (int)(rotY*tex.getHeight()));
 
-                drawColor.lerp(depthFogColor, getFogFactor(dist));
-                drawColor.lerp(darkColor, 1.0f - light);
+                int r = drawColor >> 24 & 0xFF;
+                int g = drawColor >> 16 & 0xFF;
+                int b = drawColor >> 8 & 0xFF;
 
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor));
+                r = (int) ( r * light );
+                g = (int) ( g * light );
+                b = (int) ( b * light );
+
+                drawColor = r << 24 | g << 16 | b << 8 | 0xFF;
+
+                buffer.drawPixel(drawX, drawY - vOffset,drawColor);
 
             } else { //If isSky
                 Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
@@ -684,6 +666,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         dv = (1.f - (rasterBottom+1 - bottomEdgePlot) / (topEdgePlot - bottomEdgePlot)) - v;
 
         IntBuffer pixels = spr.img.getPixels().asIntBuffer();
+        spr.img.getFormat();
         float imgW = spr.img.getWidth();
         float imgH = spr.img.getHeight();
 
