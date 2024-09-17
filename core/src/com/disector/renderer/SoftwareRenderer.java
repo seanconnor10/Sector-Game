@@ -366,6 +366,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 texUpper = texturesHigh[pixmap_ind];
             }
 
+            texX %= 1;
+
             float deltaV = 1 / quadHeight;
             float v = (rasterBottom - quadBottom) / quadHeight;
 
@@ -412,7 +414,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 }
 
 
-                float texV = yOff + v*secHeight/texHeight/yScale;
+                float texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
 
                 int drawColor = pickedTex.getPixel((int)(pixX* tex.getWidth()), (int)(texV*texHeight));
 
