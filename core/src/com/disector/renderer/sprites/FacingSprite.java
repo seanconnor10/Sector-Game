@@ -2,7 +2,7 @@ package com.disector.renderer.sprites;
 
 import com.badlogic.gdx.graphics.Pixmap;
 
-public class FacingSprite extends Sprite{
+public final class FacingSprite extends Sprite{
     public float width;
     public float height;
 

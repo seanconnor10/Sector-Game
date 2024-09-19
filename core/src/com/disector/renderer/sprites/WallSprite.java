@@ -2,7 +2,7 @@ package com.disector.renderer.sprites;
 
 import com.badlogic.gdx.graphics.Pixmap;
 
-public class WallSprite extends Sprite{
+public final class WallSprite extends Sprite{
     public float x2, y2, height;
 
     public WallSprite(Pixmap img, float x, float y, float z, float x2, float y2, float height) {
