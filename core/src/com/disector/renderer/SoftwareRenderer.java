@@ -455,18 +455,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     (g >> 4 & 0xF)
                 );
 
-                //Float RGB (0 to 1.0) to 4BitInt
-                /*short drawColor4bit = (short) (
-                    ((int)(r/255f) >> 4 & 0xF) << 12 |
-                    drawColor & 0xFF << 8 | //Alpha
-                    ((int)(g/255f) >> 4 & 0xF) << 4 |
-                    ((int)(b/255f) >> 4 & 0xF)
-                );*/
-
                 ShortBuffer ints = buffer.getPixels().asShortBuffer();
                 ints.put(drawX + drawY*frameWidth, drawColor4bit);
-
-                //buffer.drawPixel(drawX, drawY, drawColor);
 
                 v += deltaV;
 
@@ -516,9 +506,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotFloorX = rotFloorX%1;
                 rotFloorY = rotFloorY%1;
 
-                float horizonScreenDistVert = halfHeight - drawY;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
+                //float horizonScreenDistVert = halfHeight - drawY;
+                //float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                //float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
 
                 int drawColor = pix.getPixel( (int)(rotFloorX*pix.getWidth()), (int)((1.f-rotFloorY)*pix.getHeight()) );
 
@@ -530,8 +520,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 g_8 *= light;
                 b_8 *= light;
 
-                //drawColor = r_8 << 24 | g_8 << 16 | b_8 << 8 | 0xFF;
-
                 short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
                     (b_8 >> 4 & 0xF) << 12 |
                     0xF              <<  8 |
@@ -541,8 +529,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
                 shortBuffer.put(i, drawColor4bit);
-
-                //buffer.drawPixel(drawX, drawY - vOffset, drawColor);
 
             }
         }
@@ -570,6 +556,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
         int vOffset = (int) camVLook;
         int ceilEndScreenY = occlusionTop[drawX] + vOffset;
 
+        ShortBuffer shortBuffer = buffer.getPixels().asShortBuffer();
+
         for (int drawY = Math.max(rasterTop, occlusionBottom[drawX]) + vOffset; drawY <= ceilEndScreenY; drawY++) {
 
             if (!isSky) {
@@ -586,10 +574,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotX = rotX % 1;
                 rotY = rotY % 1;
 
-                float horizonScreenDistVert = -halfHeight + drawY;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-
-                float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
+                //float horizonScreenDistVert = -halfHeight + drawY;
+                //float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                //float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
 
                 int drawColor = tex.getPixel((int)(rotX*tex.getWidth()), (int)(rotY*tex.getHeight()));
 
@@ -597,17 +584,40 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 int g = drawColor >> 16 & 0xFF;
                 int b = drawColor >> 8 & 0xFF;
 
-                r = (int) ( r * light );
-                g = (int) ( g * light );
-                b = (int) ( b * light );
+                r *= light;
+                g *= light;
+                b *= light;
 
-                drawColor = r << 24 | g << 16 | b << 8 | 0xFF;
+                short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
+                    (b >> 4 & 0xF) << 12 |
+                    0xF            <<  8 |
+                    (r >> 4 & 0xF) <<  4 |
+                    (g >> 4 & 0xF)
+                );
 
-                buffer.drawPixel(drawX, drawY - vOffset,drawColor);
+                int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
+                shortBuffer.put(i, drawColor4bit);
 
             } else { //If isSky
-                Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor));
+
+                int drawColor = tex.getPixel(
+                    (int)((centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth)*tex.getWidth()),
+                    (int)((1.f - (drawY/(float)tex.getHeight()))*tex.getHeight())
+                );
+
+                int r = drawColor >> 24 & 0xFF;
+                int g = drawColor >> 16 & 0xFF;
+                int b = drawColor >> 8 & 0xFF;
+
+                short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
+                    (b >> 4 & 0xF) << 12 |
+                    0xF            <<  8 |
+                    (r >> 4 & 0xF) <<  4 |
+                    (g >> 4 & 0xF)
+                );
+
+                int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
+                shortBuffer.put(i, drawColor4bit);
 
             }
 
