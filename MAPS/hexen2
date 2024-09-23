@@ -5,13 +5,24 @@ MATERIAL (3) :: Img HEX_STONE ::
 MATERIAL (4) :: Img HEX_RUST :: 
 MATERIAL (5) :: Img HEX_STEEL :: 
 SECTOR (0) :: Height 0 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 0 1 2 3 4 5 ::
-SECTOR (1) :: Height 0 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 22 23 24 25 26 27 28 ::
+SECTOR (1) :: Height 0 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 4 6 7 8 9 11 12 13 14 15 16 17 18 19 20 22 23 24 25 26 27 28 86 87 88 89 90 91 92 93 94 109 110 ::
 SECTOR (2) :: Height 20 74 :: Mat 3 3 :: Light 1.00 1.00 :: Has 18 19 22 26 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 ::
 SECTOR (3) :: Height 10 128 :: Mat 3 2 :: Light 1.00 1.00 :: Has 21 23 24 25 ::
 SECTOR (4) :: Height 50 74 :: Mat 3 3 :: Light 1.00 1.00 :: Has 17 20 27 28 29 30 31 32 33 34 35 36 37 ::
 SECTOR (5) :: Height 20 114 :: Mat 3 3 :: Light 1.00 1.00 :: Has 21 46 47 48 ::
 SECTOR (6) :: Height 15 74 :: Mat 4 3 :: Light 0.80 1.00 :: Has 49 50 51 52 53 54 55 56 57 58 59 60 ::
 SECTOR (7) :: Height 20 74 :: Mat 4 4 :: Light 1.00 1.00 :: Has 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 ::
+SECTOR (8) :: Height -80 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 85 86 95 108 ::
+SECTOR (9) :: Height -10 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 83 87 88 102 ::
+SECTOR (10) :: Height -20 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 89 101 102 103 ::
+SECTOR (11) :: Height -30 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 90 100 103 104 ::
+SECTOR (12) :: Height -40 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 91 99 104 105 ::
+SECTOR (13) :: Height -50 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 92 98 105 106 ::
+SECTOR (14) :: Height -60 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 93 97 106 107 ::
+SECTOR (15) :: Height -70 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 94 96 107 108 ::
+SECTOR (16) :: Height -80 128 :: Mat 1 2 :: Light 1.00 1.00 :: Has 10 84 85 110 ::
+SECTOR (17) :: Height -80 -20 :: Mat 3 4 :: Light 1.00 1.00 :: Has 112 113 114 115 ::
+SECTOR (18) :: Height -80 0 :: Mat 1 0 :: Light 1.00 1.00 :: Has 10 111 115 ::
 WALL (0) :: Pos -128 96 -32 96 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
 WALL (1) :: Pos 128 96 128 32 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
 WALL (2) :: Pos 128 32 -128 32 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
@@ -19,10 +30,10 @@ WALL (3) :: Pos -128 32 -128 96 :: Mat HEDGE :: Light 1.00 1.00 1.00 ::
 WALL (4) :: Pos -32 96 32 96 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 0 -> 1 :: 
 WALL (5) :: Pos 32 96 128 96 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
 WALL (6) :: Pos -32 96 -32 192 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
-WALL (7) :: Pos -32 192 -160 192 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (7) :: Pos -32 192 -160 192 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Offset 0.0000 0.2500 :: Scale 1.0000 0.2000 :: 
 WALL (8) :: Pos -160 192 -224 256 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
-WALL (9) :: Pos -224 256 -224 480 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
-WALL (10) :: Pos -224 480 -160 544 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (9) :: Pos -224 256 -224 288 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (10) :: Pos -224 480 -192 512 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 16 -> 18 :: 
 WALL (11) :: Pos -160 544 160 544 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
 WALL (12) :: Pos 160 544 224 480 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
 WALL (13) :: Pos 224 480 224 256 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
@@ -95,3 +106,36 @@ WALL (79) :: Pos -56 388 -60 384 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 7 
 WALL (80) :: Pos -60 384 -64 384 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 7 -> 2 :: 
 WALL (81) :: Pos -64 372 -64 360 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 7 -> 2 :: 
 WALL (82) :: Pos -64 360 -64 348 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 7 -> 2 :: 
+WALL (83) :: Pos -224 288 -224 304 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Offset 0.2500 0.9200 :: 
+WALL (84) :: Pos -224 448 -224 480 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (85) :: Pos -224 448 -192 448 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 8 -> 16 :: 
+WALL (86) :: Pos -192 448 -192 400 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 8 -> 1 :: 
+WALL (87) :: Pos -192 288 -224 288 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 9 -> 1 :: 
+WALL (88) :: Pos -192 304 -192 288 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 9 -> 1 :: 
+WALL (89) :: Pos -192 320 -192 304 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 10 -> 1 :: 
+WALL (90) :: Pos -192 336 -192 320 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 11 -> 1 :: 
+WALL (91) :: Pos -192 352 -192 336 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 12 -> 1 :: 
+WALL (92) :: Pos -192 368 -192 352 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 13 -> 1 :: 
+WALL (93) :: Pos -192 384 -192 368 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 14 -> 1 :: 
+WALL (94) :: Pos -192 400 -192 384 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 15 -> 1 :: 
+WALL (95) :: Pos -224 400 -224 448 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (96) :: Pos -224 384 -224 400 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (97) :: Pos -224 368 -224 384 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (98) :: Pos -224 352 -224 368 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (99) :: Pos -224 336 -224 352 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (100) :: Pos -224 320 -224 336 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Offset 0.4900 0.7600 :: 
+WALL (101) :: Pos -224 304 -224 320 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Offset 0.3700 0.8400 :: 
+WALL (102) :: Pos -224 304 -192 304 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 9 -> 10 :: 
+WALL (103) :: Pos -224 320 -192 320 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 10 -> 11 :: 
+WALL (104) :: Pos -224 336 -192 336 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 11 -> 12 :: 
+WALL (105) :: Pos -224 352 -192 352 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 12 -> 13 :: 
+WALL (106) :: Pos -224 368 -192 368 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 13 -> 14 :: 
+WALL (107) :: Pos -224 384 -192 384 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 14 -> 15 :: 
+WALL (108) :: Pos -224 400 -192 400 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 15 -> 8 :: 
+WALL (109) :: Pos -192 512 -160 544 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (110) :: Pos -192 448 -192 512 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: Port 16 -> 1 :: 
+WALL (111) :: Pos -224 480 -224 512 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
+WALL (112) :: Pos -224 544 -192 544 :: Mat HEX_RUST :: Light 1.00 1.00 1.00 :: 
+WALL (113) :: Pos -192 544 -192 512 :: Mat HEX_RUST :: Light 1.00 1.00 1.00 :: 
+WALL (114) :: Pos -224 512 -224 544 :: Mat HEX_RUST :: Light 1.00 1.00 1.00 :: 
+WALL (115) :: Pos -224 512 -192 512 :: Mat HEDGE :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 18 -> 17 :: 

@@ -493,6 +493,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
             int floorEndScreenY = Math.min(rasterBottom, occlusionTop[drawX]);
             ShortBuffer shortBuffer = buffer.getPixels().asShortBuffer();
 
+            final int max_pix_ind = frameHeight * frameWidth - 1;
+
             for (int drawY = occlusionBottom[drawX] + vOffset; drawY<=floorEndScreenY + vOffset; drawY++) {
                 float floorX = heightOffset * (drawX-halfWidth) / (drawY-halfHeight);
                 float floorY = heightOffset * fov / (drawY-halfHeight);
@@ -527,7 +529,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     (g_8 >> 4 & 0xF)
                 );
 
-                int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
+                int i = /*Math.clamp( */drawX + (drawY-vOffset)*frameWidth;//, 0, -1+frameWidth*frameHeight);
+                if (i<0) i=0;
+                if (i>max_pix_ind) i = max_pix_ind;
                 shortBuffer.put(i, drawColor4bit);
 
             }
