@@ -14,7 +14,8 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    final float MAX_SPEED = 200.f, ACCEL = 10.0f;
+    final float MAX_SPEED = 100.f, ACCEL = 10.0f;
+    final float CROUCH_MAX_SPEED = 60.f;
     final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.5f;
     final float TURN_SPEED = 3.0f, VLOOK_SPEED = 200.0f;
     final float VLOOK_CLAMP = 300.f;
@@ -63,6 +64,14 @@ public class Player implements Movable {
         zoom = Gdx.input.isButtonPressed(Input.Buttons.RIGHT) ? 3 : 1;
         vLook *= zoom/prevZoom;
 
+        //Temporary Test Control
+        //Press To Toss Player around
+        if (input.isJustPressed(Input.Keys.E)) {
+          velocity.x += -200 + 400 * Math.random();
+          velocity.y += -200 + 400 * Math.random();
+          zSpeed     += -50 + 120 * Math.random();
+        }
+
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);
         if (forwardDown) inputVector.x += 1.0f;
@@ -79,14 +88,16 @@ public class Player implements Movable {
         inputVector.rotateRad(r);
 
         //Update velocity with input vector
-        velocity.add( new Vector2(inputVector).scl(ACCEL) );
-        float currentSpeed = velocity.len();
-        if (currentSpeed > MAX_SPEED) velocity.setLength(MAX_SPEED);
+        if (velocity.len() <  (crouch ? CROUCH_MAX_SPEED : MAX_SPEED) ) {
+          velocity.add( new Vector2(inputVector).scl(ACCEL) );
+        //float currentSpeed = velocity.len();
+        //if (currentSpeed > MAX_SPEED) velocity.setLength(MAX_SPEED);
+        }
 
         //Friction
         float friction;
         if (!onGround)
-            friction = 0.1f;
+            friction = 0.01f;
         else if (inputVector.isZero(0.05f))
             friction = 0.7f;
         else {
