@@ -20,7 +20,7 @@ import static com.disector.Physics.findCurrentSectorBranching;
 public class GameWorld implements I_AppFocus{
     private final Application app;
     private final Array<Wall> walls;
-    private final Array<Sector> sectors;
+    final Array<Sector> sectors;
 
     private final InputChainNode input;
 
@@ -255,7 +255,7 @@ public class GameWorld implements I_AppFocus{
 
     }
 
-    private boolean heightCheck(Sector s, Positionable obj, float stepUpAllowance) {
+    public boolean heightCheck(Sector s, Positionable obj, float stepUpAllowance) {
         //Return whether the obj can fit the sector height-wise
         return obj.getZ()+obj.getHeight() < s.ceilZ && obj.getZ() >= s.floorZ-stepUpAllowance;
     }

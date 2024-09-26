@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import com.disector.Sector;
 import com.disector.gameworld.components.Movable;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputRecorder;
@@ -14,7 +15,8 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    final float MAX_SPEED = 200.f, ACCEL = 10.0f;
+    final float MAX_SPEED = 150.f, ACCEL = 10.0f;
+    final float MAX_SPEED_SLOW = 60.f;
     final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.5f;
     final float TURN_SPEED = 3.0f, VLOOK_SPEED = 200.0f;
     final float VLOOK_CLAMP = 300.f;
@@ -63,6 +65,14 @@ public class Player implements Movable {
         zoom = Gdx.input.isButtonPressed(Input.Buttons.RIGHT) ? 3 : 1;
         vLook *= zoom/prevZoom;
 
+        //Temporary Test Control
+        //Press To Toss Player around
+        if (input.isJustPressed(Input.Keys.E)) {
+          velocity.x += -300 + 600 * (float)Math.random();
+          velocity.y += -300 + 600 * (float)Math.random();
+          zSpeed     += -50 + 200  * (float)Math.random();
+        }
+
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);
         if (forwardDown) inputVector.x += 1.0f;
@@ -79,14 +89,19 @@ public class Player implements Movable {
         inputVector.rotateRad(r);
 
         //Update velocity with input vector
-        velocity.add( new Vector2(inputVector).scl(ACCEL) );
-        float currentSpeed = velocity.len();
-        if (currentSpeed > MAX_SPEED) velocity.setLength(MAX_SPEED);
+        float top_speed =
+            (height == STANDING_HEIGHT && !input.isDown(Input.Keys.SHIFT_LEFT)) ?
+            MAX_SPEED : MAX_SPEED_SLOW;
+        if (velocity.len() < top_speed) {
+          velocity.add( new Vector2(inputVector).scl(ACCEL) );
+        //float currentSpeed = velocity.len();
+        //if (currentSpeed > MAX_SPEED) velocity.setLength(MAX_SPEED);
+        }
 
         //Friction
         float friction;
         if (!onGround)
-            friction = 0.1f;
+            friction = 0.01f;
         else if (inputVector.isZero(0.05f))
             friction = 0.7f;
         else {
@@ -119,7 +134,9 @@ public class Player implements Movable {
         if (crouch && height != CROUCHING_HEIGHT) {
             height = Math.max(height - CROUCH_SPEED*dt, CROUCHING_HEIGHT);
         } else if (!crouch && height != STANDING_HEIGHT) {
-            height = Math.min(height + CROUCH_SPEED*dt, STANDING_HEIGHT);
+            Sector cur = world.sectors.get(currentSectorIndex);
+            if (cur.ceilZ-cur.floorZ >= STANDING_HEIGHT+HEADSPACE)
+                height = Math.min(height + CROUCH_SPEED*dt, STANDING_HEIGHT);
         }
 
         //Jump
