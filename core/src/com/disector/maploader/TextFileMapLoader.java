@@ -15,6 +15,7 @@ import com.disector.gameworld.WallSpriteObject;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class TextFileMapLoader implements MapLoader {
@@ -48,10 +49,13 @@ public class TextFileMapLoader implements MapLoader {
         Array<Sector> newSectors = new Array<>();
         Array<Material> newMaterials = new Array<>();
         HashMap<String, Integer> newMaterialsNameToIndexMap = new HashMap<>();
+        Array<WallSpriteObject> newWallSprites = new Array<>();
 
+        //Builder Objects
         Sector sectorBuild = null;
         Wall wallBuild = null;
         Material materialBuild = null;
+        WallSpriteObject wallSpritebuild = null;
 
         while (in.hasNext()) {
             next = in.next().trim().toUpperCase();
@@ -71,6 +75,10 @@ public class TextFileMapLoader implements MapLoader {
                         newMaterials.add(materialBuild);
                         materialBuild = null;
                         break;
+                    case "SPR_WALl":
+                        newWallSprites.add(wallSpritebuild);
+                        wallSpritebuild = null;
+                        break;
                     default:
                         break;
                 }
@@ -89,7 +97,10 @@ public class TextFileMapLoader implements MapLoader {
                         materialBuild = new Material();
                         break;
                     case "OBJECT":
-                        boolean hi = true;
+                        //boolean hi = true;
+                        break;
+                    case "SPR_WALL":
+                        wallSpritebuild = new WallSpriteObject();
                         break;
                     default:
                         break;
@@ -253,21 +264,42 @@ public class TextFileMapLoader implements MapLoader {
                             }
                         }
                         break;
-                    case "OBJECT":
-                        switch (next) {
-                            case "TYPE":
-                                switch(in.next().toUpperCase()) {
-                                    case "WALL_SPR":
-                                        world.wallSpriteObjects.add( (WallSpriteObject) parseWALL_SPR(in.next()) );
-                                        break;
-                                    default:
-                                        System.out.println("Unknown Game Object Type");
-                                        mode = "NONE";
-                                        break;
-                                }
-                                break;
-                            default:
-                                break;
+                    case "SPR_WALL":
+                        if (isWallSpriteKeyword(next)) {
+                            subMode = next;
+                        } else if (next.equals("::")) {
+                            subMode = "NONE";
+                        } else {
+                            switch (subMode) {
+                                case "POS":
+                                    wallSpritebuild.x1 = parseFloat(next);
+                                    wallSpritebuild.y1 = parseFloat(in.next());
+                                    wallSpritebuild.x2 = parseFloat(in.next());
+                                    wallSpritebuild.y2 = parseFloat(in.next());
+                                    wallSpritebuild.z  = parseFloat(in.next());
+                                    break;
+                                case "HEIGHT":
+                                    wallSpritebuild.height = parseFloat(next);
+                                    break;
+                                case "MAT":
+                                    if (canParseAsNumber(next)) {
+                                        wallSpritebuild.texInd = parseIntOrDefault(next, -1);
+                                    } else {
+                                        wallSpritebuild.texInd =
+                                            newMaterialsNameToIndexMap.getOrDefault(next.toUpperCase(), -1);
+                                    }
+                                    break;
+                                case "BLOCK_MOVE":
+                                    wallSpritebuild.BLOCK_MOVE = true;
+                                    break;
+                                case "BLOCK_PROJECTILE":
+                                    wallSpritebuild.BLOCK_PROJECTILE = true;
+                                    break;
+                                case "BLOCK_HITSCAN":
+                                    wallSpritebuild.BLOCK_HITSCAN = true;
+                                default:
+                                    break;
+                            }
                         }
                         break;
                     default:
@@ -284,20 +316,26 @@ public class TextFileMapLoader implements MapLoader {
             newWalls.add(wallBuild);
         if (materialBuild != null)
             newMaterials.add(materialBuild);
+        if (wallSpritebuild != null)
+            newWallSprites.add(wallSpritebuild);
 
         //Validate..
         int errors = 0;
+        HashSet<String> err_messages = new HashSet<>();
         for (Sector s : newSectors) {
             for (int wInd : s.walls.toArray()) {
-                if (wInd >= newWalls.size) {
+                if (wInd >= newWalls.size || wInd < 0) {
                     errors++;
-                    System.out.printf("Wall index %d does not exist\n", wInd);
+                    err_messages.add("A Sector's Wall index is invalid");
                 }
             }
         }
 
         if (errors != 0) {
             System.out.println("MAP DATA BAD");
+            for (String mess : err_messages) {
+                System.out.println("    " + mess);
+            }
             return false;
         }
 
@@ -311,6 +349,11 @@ public class TextFileMapLoader implements MapLoader {
         walls.clear();
         for (Wall w : newWalls) {
             walls.add(new Wall(w));
+        }
+
+        world.wallSpriteObjects.clear();
+        for (WallSpriteObject spr : newWallSprites) {
+            world.wallSpriteObjects.add(new WallSpriteObject(spr));
         }
         
         Palette pall = null;
@@ -517,6 +560,10 @@ public class TextFileMapLoader implements MapLoader {
         return enumContains(str, ObjectKeyword.class);
     }
 
+    private boolean isWallSpriteKeyword(String str) {
+        return enumContains(str, WallSpriteKeyword.class);
+    }
+
     private boolean isMaterialKeyword(String str) {
             return enumContains(str, MaterialKeyword.class);
     }
@@ -570,22 +617,4 @@ public class TextFileMapLoader implements MapLoader {
 
     // ------------------------------------------------------
 
-    Object parseWALL_SPR(String params) {
-        params = params.replace(" ", "");
-        params = params.replace("(", "");
-        params = params.replace(")", "");
-        String[] seperated  = params.split(",");
-        float x1, y1, x2, y2, z, height;
-        int texInd;
-
-        x1 = parseFloat(seperated[0]);
-        y1 = parseFloat(seperated[1]);
-        x2 = parseFloat(seperated[2]);
-        y2 = parseFloat(seperated[3]);
-        z  = parseFloat(seperated[4]);
-        height = parseFloat(seperated[5]);
-        texInd = parseInt(seperated[6]);
-
-        return new WallSpriteObject(x1, y1, x2, y2, z, height, texInd);
-    }
 }

@@ -191,8 +191,4 @@ WALL (142) :: Pos 216 40 192 48 :: Mat MYWOOD :: LowerMat HEDGE :: Light 1.00 1.
 WALL (143) :: Pos 192 48 152 48 :: Mat HEDGE :: LowerMat HEDGE :: Light 1.00 1.00 1.00 :: Port 31 -> 2 :: Scale 0.5000 1.0000 :: Scale_Lower 0.2500 6.0000 :: 
 WALL (144) :: Pos 152 48 128 40 :: Mat MYWOOD :: LowerMat HEDGE :: Light 1.00 1.00 1.00 :: Port 31 -> 2 :: Scale_Lower 0.2500 4.0000 :: 
 WALL (145) :: Pos 128 40 128 32 :: Mat MYWOOD :: LowerMat HEDGE :: Light 1.00 1.00 1.00 :: Port 31 -> 2 :: Scale_Lower 0.2500 4.0000 :: 
-OBJECT :: TYPE WALL_SPR (16,112,16,72,-24,44,13)
-OBJECT :: TYPE WALL_SPR (-112,138,-112,156,-24,44,14)
-OBJECT :: TYPE WALL_SPR (-112,160,-56,160,-12,44,4)
-OBJECT :: TYPE WALL_SPR (-56,160,-56,168,-12,44,8)
-OBJECT :: TYPE WALL_SPR (-112,168,-112,160,-12,44,8)
+SPR_WALL :: Pos 50 -10 -10 -10 -24 :: Height 45 :: Mat Metal :: BLOCK_MOVE

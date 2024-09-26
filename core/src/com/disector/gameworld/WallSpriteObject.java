@@ -1,15 +1,13 @@
 package com.disector.gameworld;
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.disector.renderer.sprites.WallSprite;
-
 public class WallSpriteObject {
-    float x1, y1, x2 = 100, y2;
-    float z, height = 64;
-    int texInd;
+    public float x1, y1, x2 = 100, y2;
+    public float z, height = 64;
+    public int texInd;
 
-    boolean BLOCK_MOVE;
-    boolean BLOCK_HITSCAN;
+    public boolean BLOCK_MOVE;
+    public boolean BLOCK_HITSCAN;
+    public boolean BLOCK_PROJECTILE;
 
     public WallSpriteObject() {
     }
@@ -24,4 +22,16 @@ public class WallSpriteObject {
         this.texInd = texInd;
     }
 
+    public WallSpriteObject(WallSpriteObject cpysrc) {
+        this.x1 = cpysrc.x1;
+        this.y1 = cpysrc.y1;
+        this.x2 = cpysrc.x2;
+        this.y2 = cpysrc.y2;
+        this.z  = cpysrc.z;
+        this.height = cpysrc.height;
+        this.texInd = cpysrc.texInd;
+        this.BLOCK_HITSCAN = cpysrc.BLOCK_HITSCAN;
+        this.BLOCK_PROJECTILE = cpysrc.BLOCK_PROJECTILE;
+        this.BLOCK_MOVE = cpysrc.BLOCK_MOVE;
+    }
 }

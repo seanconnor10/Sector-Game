@@ -114,16 +114,7 @@ public class GameWorld implements I_AppFocus{
             System.out.println("Player1 currentSectorIndex nonexistent");
         }
 
-        sec = Physics.findCurrentSectorBranching(getPlayerSectorIndex(), x, y);
-
-        /*sec = 0;
-
-        for (int i=0; i<sectors.size; i++) {
-            if (Physics.containsPoint(sectors.get(i), x, y)) {
-                sec = i;
-                break;
-            }
-        }*/
+        sec = Physics.findCurrentSectorBranching(0, x, y);
 
         player1.currentSectorIndex = sec;
         return sec;
@@ -164,7 +155,14 @@ public class GameWorld implements I_AppFocus{
         try {
             currentSector = sectors.get( obj.getCurrentSector() );
         } catch (IndexOutOfBoundsException indexException) {
-            System.out.println("Movable-Obj's currentSectorIndex Nonexistent");
+            obj.setCurrentSector(
+                //startIndex argument is zero so we set to something valid if not in a sector
+                Physics.findCurrentSectorBranching(
+                    0,
+                    obj.snagPosition().x,
+                    obj.snagPosition().y
+                )
+            );
         }
 
         Vector2 objPos = obj.snagPosition(); //Snag grabs a reference to the Vector so we can change it

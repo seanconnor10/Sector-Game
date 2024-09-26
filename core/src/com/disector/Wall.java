@@ -49,6 +49,7 @@ public class Wall {
         this.x2 = w.x2;
         this.y2 = w.y2;
         this.isPortal = w.isPortal;
+        this.type = w.type;
         this.linkA = w.linkA;
         this.linkB = w.linkB;
         this.mat = w.mat;
@@ -96,7 +97,7 @@ public class Wall {
     public Vector2 findNearestTo(Vector2 point) {
         //Project Vector that is the playerPosition Relative to the wall origin onto the vector that
         // is the Wall's point2 relative to its point1
-        // ... DotProduct divided by length of the wall (squared for some reason?) To not take sqrt of numerator..
+        // ... DotProduct divided by length of the wall (squared for some reason?) To not take sqrt of numerator...
         float projection = ( (point.x-x1)*(x2-x1) + (point.y-y1)*(y2-y1) ) / (float) Math.pow( length(), 2);
         projection = Math.min(0.99f, Math.max(0.01f, projection));
         return new Vector2(x1 + ((x2-x1)*projection), y1 + ( (y2-y1)*projection));
