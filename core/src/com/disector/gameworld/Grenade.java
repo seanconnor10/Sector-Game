@@ -1,5 +1,7 @@
 package com.disector.gameworld;
 
+import com.disector.Physics;
+import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.renderer.sprites.FacingSprite;
 import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.HasFacingSprite;
@@ -14,6 +16,10 @@ class Grenade implements Movable, HasFacingSprite {
 
 	private static final Pixmap PIXMAP = new Pixmap(Gdx.files.local("assets/img/grenade.png"));
 	private static final int IMG_W = 10, IMG_H = 10;
+
+	private static final PhysicsProperties PHYS_PROPS = new PhysicsProperties(
+	0.7f, 0.8f, 0.7f, 1.5f, 50.0f
+	);
 
 	int currentSectorIndex = 0;
 
@@ -91,6 +97,11 @@ class Grenade implements Movable, HasFacingSprite {
 	@Override
 	public void setCurrentSector(int sInd) {
 		currentSectorIndex = sInd;
+	}
+
+	@Override
+	public PhysicsProperties getProps() {
+		return PHYS_PROPS;
 	}
 }
 

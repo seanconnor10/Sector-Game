@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.disector.AppFocusTarget;
 import com.disector.Application;
 import com.badlogic.gdx.Gdx;
+import com.disector.assets.SoundManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -257,5 +258,15 @@ public class CommandExecutor {
     public String palette(String loc) {
         Application.paletteLocation = loc;
         return null;
+    }
+
+    @ConsoleCommand(helpText = "Call Static SndMng Init Method")
+    public String snd_init() {
+        try {
+            SoundManager.init();
+            return null;
+        } catch (Exception e) {
+            return e.toString();
+        }
     }
 }

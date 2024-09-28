@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import com.disector.Sector;
 import com.disector.gameworld.components.Movable;
+import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputRecorder;
 
@@ -26,6 +27,10 @@ public class Player implements Movable {
     final float STANDING_HEIGHT = 25;
     final float CROUCHING_HEIGHT = 5;
     final float RADIUS = 5.f;
+
+    final PhysicsProperties phys_props = new PhysicsProperties(
+    0.5f, 0.9f, 0.5f, 0.0f, 300.0f
+    );
 
     public Vector2 position = new Vector2(0.f, 0.f);
     public float z, r;
@@ -214,5 +219,10 @@ public class Player implements Movable {
     @Override
     public boolean isOnGround() {
         return onGround;
+    }
+
+    @Override
+    public PhysicsProperties getProps() {
+        return phys_props;
     }
 }

@@ -3,6 +3,7 @@ package com.disector;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import com.disector.Config.Config;
 import com.disector.assets.PixmapContainer;
+import com.disector.assets.SoundManager;
 import com.disector.console.CommandExecutor;
 import com.disector.console.Console;
 import com.disector.editor.Editor;
@@ -97,6 +99,8 @@ public class Application extends ApplicationAdapter {
 
         createTestMap();
         createTestMaterial();
+
+        SoundManager.init();
 
         if (gameWorld==null) gameWorld = new GameWorld(this, mainInput);
         if (renderer==null) renderer = new SoftwareRenderer(this);

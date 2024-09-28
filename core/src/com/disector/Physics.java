@@ -3,6 +3,7 @@ package com.disector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.disector.gameworld.components.Movable;
+import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.gameworld.components.Positionable;
 
 public class Physics {
@@ -162,7 +163,7 @@ public class Physics {
         //return (var > bound1) ^ (var > bound2); //May or may not include bounds
     }
 
-    public static Vector2 bounceVector(Vector2 velocity, Wall wall) {
+    public static Vector2 bounceVector(Vector2 velocity, Wall wall, PhysicsProperties props) {
         float wallXNormal = (float) Math.cos(wall.normalAngle);
         float wallYNormal = (float) Math.sin(wall.normalAngle);
         float proj_norm = velocity.x * wallXNormal + velocity.y * wallYNormal;
@@ -170,12 +171,12 @@ public class Physics {
         float perpendicularVelY = proj_norm * wallYNormal;
         float parallelVelX = velocity.x - perpendicularVelX;
         float parallelVelY = velocity.y - perpendicularVelY;
-        final float elasticity = 0.5f;
-        final float restitution = 0.9f;
+        final float e = props.elasticity; //0.5
+        final float r = props.restitution; //0.9
 
         return new Vector2(
-            parallelVelX * restitution - perpendicularVelX * elasticity,
-            parallelVelY * restitution - perpendicularVelY * elasticity
+            parallelVelX * r - perpendicularVelX * e,
+            parallelVelY * r - perpendicularVelY * e
         );
     }
 

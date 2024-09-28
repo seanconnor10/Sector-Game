@@ -17,4 +17,5 @@ public interface Movable extends Positionable{
     void setZ(float z);
     void setOnGround(boolean val);
     boolean isOnGround();
+    PhysicsProperties getProps();
 }

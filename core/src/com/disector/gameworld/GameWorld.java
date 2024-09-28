@@ -2,12 +2,15 @@ package com.disector.gameworld;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
 
 import com.badlogic.gdx.utils.IntArray;
 import com.disector.*;
+import com.disector.assets.SoundManager;
 import com.disector.gameworld.components.Movable;
+import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.gameworld.components.Positionable;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
@@ -57,7 +60,7 @@ public class GameWorld implements I_AppFocus{
 
         for (Grenade g : grenades) {
             moveObj(g);
-            if (g.velocity.isZero(10)) {
+            if (g.velocity.isZero(1)) {
                 grenades.removeValue(g, true);
             }
         }
@@ -80,6 +83,10 @@ public class GameWorld implements I_AppFocus{
 
     public Vector4 getPlayerPosition() {
         return new Vector4(player1.copyPosition(), player1.z, player1.r);
+    }
+
+    public Vector3 getPlayerXYZ() {
+        return new Vector3(player1.position.x, player1.position.y, player1.z);
     }
 
     public float getPlayerRadius() {
@@ -165,6 +172,7 @@ public class GameWorld implements I_AppFocus{
             );
         }
 
+        PhysicsProperties props = obj.getProps();
         Vector2 objPos = obj.snagPosition(); //Snag grabs a reference to the Vector so we can change it
         Vector2 velocity = obj.getVelocity();
 
@@ -223,12 +231,20 @@ public class GameWorld implements I_AppFocus{
                 (WallInfoPack o1, WallInfoPack o2) -> Float.compare(o1.distToNearest, o2.distToNearest)
             );
 
-            //Get reference to closest collision
+            //Get reference to the closest collision
             WallInfoPack closestCollision = wallsCollided.get(0);
 
             Physics.resolveCollision(closestCollision, obj);
-            velocity.set(Physics.bounceVector(velocity, closestCollision.w));
+            velocity.set(Physics.bounceVector(velocity, closestCollision.w, props));
             if (velocity.isZero(1)) velocity.set(Vector2.Zero);
+
+            SoundManager.playPosStatic(
+                SoundManager.SFX_Clink,
+                new Vector3(objPos, obj.getZ()),
+                getPlayerXYZ(),
+                player1.r,
+                300
+            );
 
             collisionsProcessed++;
 
@@ -252,6 +268,10 @@ public class GameWorld implements I_AppFocus{
             if (obj.getZSpeed() > 0) obj.setZSpeed(0);
         }
 
+        //Enact friction
+        if (props.zFriction != 0.f && obj.getZ() == teeterHeight) {
+            velocity.scl(1.f - props.zFriction*dt);
+        }
 
     }
 
