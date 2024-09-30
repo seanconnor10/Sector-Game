@@ -272,6 +272,9 @@ public class Application extends ApplicationAdapter {
 
         gameWorld.step(deltaTime);
 
+        SoundManager.ear_pos.set(gameWorld.getPlayerPosition());
+        SoundManager.update(deltaTime);
+
         if (renderer.camFOV != renderer.baseFOV * gameWorld.player1.zoom) {
             renderer.camFOV = renderer.baseFOV * gameWorld.player1.zoom;
         }

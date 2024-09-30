@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import com.disector.Sector;
+import com.disector.assets.SoundManager;
 import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.inputrecorder.InputChainInterface;
@@ -70,13 +71,6 @@ public class Player implements Movable {
         zoom = Gdx.input.isButtonPressed(Input.Buttons.RIGHT) ? 3 : 1;
         vLook *= zoom/prevZoom;
 
-        //Temporary Test Control
-        //Press To Toss Player around
-        if (input.isJustPressed(Input.Keys.E)) {
-          velocity.x += -300 + 600 * (float)Math.random();
-          velocity.y += -300 + 600 * (float)Math.random();
-          zSpeed     += -50 + 200  * (float)Math.random();
-        }
 
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);

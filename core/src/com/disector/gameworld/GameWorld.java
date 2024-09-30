@@ -61,6 +61,17 @@ public class GameWorld implements I_AppFocus{
         for (Grenade g : grenades) {
             moveObj(g);
             if (g.velocity.isZero(1)) {
+                SoundManager.playStaticPosition(SoundManager.SFX_Boom, new Vector3(g.position.x, g.position.y, g.getZ()), 500);
+                //Temporary Test Control
+                //Press To Toss Player around
+                float dist = getPlayerXYZ().dst(g.position.x, g.position.y, g.z);
+                if (dist < 100) {
+                    float force = 200 * (1 - (dist / 100));
+                    float angle = (float) Math.atan2(player1.position.x - g.position.x, player1.position.y -g.position.y);
+                    player1.velocity.x += force * (float) Math.cos(angle);
+                    player1.velocity.y += force * (float) Math.sin(angle);
+                    player1.zSpeed     += force;
+                }
                 grenades.removeValue(g, true);
             }
         }
@@ -238,11 +249,9 @@ public class GameWorld implements I_AppFocus{
             velocity.set(Physics.bounceVector(velocity, closestCollision.w, props));
             if (velocity.isZero(1)) velocity.set(Vector2.Zero);
 
-            SoundManager.playPosStatic(
+            SoundManager.playStaticPosition(
                 SoundManager.SFX_Clink,
                 new Vector3(objPos, obj.getZ()),
-                getPlayerXYZ(),
-                player1.r,
                 300
             );
 
