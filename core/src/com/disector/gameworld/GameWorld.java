@@ -67,7 +67,7 @@ public class GameWorld implements I_AppFocus{
                 float dist = getPlayerXYZ().dst(g.position.x, g.position.y, g.z);
                 if (dist < 100) {
                     float force = 200 * (1 - (dist / 100));
-                    float angle = (float) Math.atan2(player1.position.x - g.position.x, player1.position.y -g.position.y);
+                    float angle = (float) Math.atan2(player1.position.y - g.position.y, player1.position.x -g.position.x);
                     player1.velocity.x += force * (float) Math.cos(angle);
                     player1.velocity.y += force * (float) Math.sin(angle);
                     player1.zSpeed     += force;
