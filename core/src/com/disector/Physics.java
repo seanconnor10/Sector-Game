@@ -32,7 +32,7 @@ public class Physics {
     }
 
     public static boolean containsPoint(int sInd, float x, float y) {
-        if (sInd >= sectors.size || sInd < 0)
+if (sInd >= sectors.size || sInd < 0)
             return false;
         return containsPoint(sectors.get(sInd), x, y);
     }
@@ -121,7 +121,7 @@ public class Physics {
         if (w.x1 == w.x2){
             if (!allowBehind) {
                 if (Math.cos(angle) > 0.0 && rayX > w.x1) return null;
-                if (Math.cos(angle) < 0.0 && rayY < w.x1) return null;
+                if (Math.cos(angle) < 0.0 && rayX < w.x1) return null;
             }
 
             float deltaX = w.x1-rayX;
