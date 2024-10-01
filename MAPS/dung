@@ -7,6 +7,7 @@ MATERIAL (5) :: Img HEX_STONE ::
 MATERIAL (6) :: Img MARBLE :: 
 MATERIAL (7) :: Img STRIPE :: 
 MATERIAL (8) :: Img STARS :: Sky :: 
+material img rust
 SECTOR (0) :: Height 0 42 :: Mat 5 5 :: Light 0.40 0.50 :: Has 0 1 2 3 5 7 8 9 10 11 ::
 SECTOR (1) :: Height 0 42 :: Mat 5 5 :: Light 0.30 0.30 :: Has 4 6 9 ::
 SECTOR (2) :: Height 0 30 :: Mat 5 5 :: Light 0.40 0.30 :: Has 10 12 13 14 ::
