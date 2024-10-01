@@ -7,7 +7,8 @@ MATERIAL (5) :: Img HEX_STONE ::
 MATERIAL (6) :: Img MARBLE :: 
 MATERIAL (7) :: Img STRIPE :: 
 MATERIAL (8) :: Img STARS :: Sky :: 
-material img rust
+MATERIAL (9) :: Img RUST :: 
+MATERIAL (10) :: Img ARCH_STAINED_GLASS :: 
 SECTOR (0) :: Height 0 42 :: Mat 5 5 :: Light 0.40 0.50 :: Has 0 1 2 3 5 7 8 9 10 11 ::
 SECTOR (1) :: Height 0 42 :: Mat 5 5 :: Light 0.30 0.30 :: Has 4 6 9 ::
 SECTOR (2) :: Height 0 30 :: Mat 5 5 :: Light 0.40 0.30 :: Has 10 12 13 14 ::
@@ -20,15 +21,22 @@ SECTOR (8) :: Height 0 12 :: Mat 5 5 :: Light 0.20 0.20 :: Has 31 33 34 35 ::
 SECTOR (9) :: Height 0 12 :: Mat 5 5 :: Light 0.10 0.10 :: Has 34 36 37 38 ::
 SECTOR (10) :: Height 0 12 :: Mat 5 5 :: Light 0.20 0.20 :: Has 37 ::
 SECTOR (11) :: Height 0 12 :: Mat 0 0 :: Light 0.20 0.20 :: Has 37 39 40 41 42 ::
-WALL (0) :: Pos -16 32 16 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (1) :: Pos 16 32 16 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+SECTOR (12) :: Height 0 42 :: Mat 5 5 :: Light 0.40 0.50 :: Has 0 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 ::
+SECTOR (13) :: Height 15 27 :: Mat 5 5 :: Light 0.40 0.50 :: Has 60 62 63 64 ::
+SECTOR (14) :: Height -1 42 :: Mat 0 5 :: Light 0.40 0.50 :: Has 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 ::
+SECTOR (15) :: Height 0 42 :: Mat 5 5 :: Light 0.30 0.30 :: Has 46 85 86 87 ::
+SECTOR (16) :: Height 0 42 :: Mat 5 5 :: Light 0.25 0.25 :: Has 86 88 89 90 ::
+SECTOR (17) :: Height 0 42 :: Mat 5 5 :: Light 0.20 0.20 :: Has 89 91 92 93 ::
+SECTOR (18) :: Height 0 42 :: Mat 5 5 :: Light 0.10 0.10 :: Has 92 94 95 96 ::
+WALL (0) :: Pos -16 28 16 28 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 0 -> 12 :: Scale 0.2500 0.2500 :: 
+WALL (1) :: Pos 16 28 16 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (2) :: Pos 16 -32 8 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (3) :: Pos -16 -32 -16 -8 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (4) :: Pos -16 8 -16 24 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (5) :: Pos -16 -8 -8 -8 :: Mat HEX_RUST :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (6) :: Pos -8 8 -16 8 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (7) :: Pos -8 -8 -8 8 :: Mat HEX_RUST :: Light 0.50 1.00 1.00 :: Scale 0.2900 0.2500 :: 
-WALL (8) :: Pos -16 24 -16 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (8) :: Pos -16 24 -16 28 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (9) :: Pos -16 24 -8 8 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: 
 WALL (10) :: Pos 8 -32 -8 -32 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.50 0.40 1.00 :: Port 0 -> 2 :: Scale 0.2500 0.2500 :: Offset_Upper 0.8000 0.0000 :: Scale_Upper -0.2500 0.2500 :: 
 WALL (11) :: Pos -8 -32 -16 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
@@ -63,3 +71,61 @@ WALL (39) :: Pos -44 -96 -72 -96 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Sca
 WALL (40) :: Pos -72 -96 -72 -60 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (41) :: Pos -72 -60 -56 -60 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (42) :: Pos -56 -60 -56 -80 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (43) :: Pos -16 28 -20 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (44) :: Pos -48 32 -48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (45) :: Pos -48 64 -32 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (46) :: Pos 64 64 64 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 12 -> 15 :: Scale 0.2500 0.2500 :: 
+WALL (47) :: Pos 64 32 20 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (48) :: Pos -32 64 -28 68 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (49) :: Pos 48 64 64 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (50) :: Pos -16 96 -12 96 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (51) :: Pos 32 96 44 68 :: Mat HEX_STONE :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (52) :: Pos -12 96 -8 92 :: Mat MARBLE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (53) :: Pos 28 96 32 96 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (54) :: Pos -8 92 -4 92 :: Mat MARBLE :: Light 0.60 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (55) :: Pos 24 92 28 96 :: Mat MARBLE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (56) :: Pos -20 32 -48 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (57) :: Pos 20 32 16 28 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (58) :: Pos -28 68 -16 96 :: Mat HEX_STONE :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (59) :: Pos 44 68 48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (60) :: Pos -4 92 20 92 :: Mat MARBLE :: LowerMat MARBLE :: UpperMat MARBLE :: Light 0.50 0.50 0.50 :: Port 12 -> 13 :: Scale 0.5000 0.5000 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 0.2500 0.2500 :: 
+WALL (61) :: Pos 20 92 24 92 :: Mat MARBLE :: Light 0.60 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (62) :: Pos -4 92 0 96 :: Mat RUST :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (63) :: Pos 0 96 16 96 :: Mat RUST :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (64) :: Pos 16 96 20 92 :: Mat RUST :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (65) :: Pos 4 80 4 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (66) :: Pos 4 76 0 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (67) :: Pos 0 76 0 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (68) :: Pos 0 72 -8 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (69) :: Pos -8 72 -8 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (70) :: Pos -8 64 0 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (71) :: Pos 0 64 0 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (72) :: Pos 0 60 4 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (73) :: Pos 4 60 4 48 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (74) :: Pos 4 48 12 48 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (75) :: Pos 12 48 12 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (76) :: Pos 12 60 16 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (77) :: Pos 16 60 16 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (78) :: Pos 16 64 24 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (79) :: Pos 24 64 24 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (80) :: Pos 24 72 16 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (81) :: Pos 16 72 16 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (82) :: Pos 16 76 12 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (83) :: Pos 12 76 12 80 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (84) :: Pos 12 80 4 80 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (85) :: Pos 64 64 96 64 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (86) :: Pos 96 64 96 32 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Port 15 -> 16 :: Scale 0.2500 0.2500 :: 
+WALL (87) :: Pos 96 32 64 32 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (88) :: Pos 96 64 128 64 :: Mat HEX_STONE :: Light 0.25 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (89) :: Pos 128 64 128 32 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Port 16 -> 17 :: Scale 0.2500 0.2500 :: 
+WALL (90) :: Pos 128 32 96 32 :: Mat HEX_STONE :: Light 0.25 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (91) :: Pos 128 64 224 64 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (92) :: Pos 224 64 224 32 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Port 17 -> 18 :: Scale 0.2500 0.2500 :: 
+WALL (93) :: Pos 224 32 128 32 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (94) :: Pos 224 64 320 64 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (95) :: Pos 320 64 320 32 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (96) :: Pos 320 32 224 32 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+SPR_WALL :: Pos 42 64 42 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::
+SPR_WALL :: Pos 42 32 42 64 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::
+SPR_WALL :: Pos -32 64 -32 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::
+SPR_WALL :: Pos -32 32 -32 64 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::

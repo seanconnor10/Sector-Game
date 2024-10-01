@@ -75,7 +75,7 @@ public class TextFileMapLoader implements MapLoader {
                         newMaterials.add(materialBuild);
                         materialBuild = null;
                         break;
-                    case "SPR_WALl":
+                    case "SPR_WALL":
                         newWallSprites.add(wallSpritebuild);
                         wallSpritebuild = null;
                         break;
@@ -353,7 +353,7 @@ public class TextFileMapLoader implements MapLoader {
 
         world.wallSpriteObjects.clear();
         for (WallSpriteObject spr : newWallSprites) {
-            world.wallSpriteObjects.add(new WallSpriteObject(spr));
+            world.wallSpriteObjects.add(/*new WallSpriteObject(spr)*/spr);
         }
         
         Palette pall = null;
@@ -402,6 +402,12 @@ public class TextFileMapLoader implements MapLoader {
             wInd++;
         }
         file.writeString(allWallsString.toString(), true);
+
+        StringBuilder allWallSpritesString = new StringBuilder();
+        for (WallSpriteObject spr : world.wallSpriteObjects) {
+            allWallSpritesString.append(wallSpriteToText(spr, ""));
+        }
+        file.writeString(allWallSpritesString.toString(), true);
 
         return true;
     }
@@ -521,6 +527,40 @@ public class TextFileMapLoader implements MapLoader {
 
         if (m.isSky)
             str.append("Sky :: ");
+
+        str.append("\n");
+
+        return str.toString();
+    }
+
+    private String wallSpriteToText(WallSpriteObject spr, String note) {
+        StringBuilder str = new StringBuilder("SPR_WALL ");
+
+        if (note != null && !note.isEmpty()) {
+            str.append("(").append(note).append(") ");
+        }
+        str.append(":: ");
+
+        str.append("Pos ")
+            .append( form(spr.x1) ).append(" ")
+            .append( form(spr.y1) ).append(" ")
+            .append( form(spr.x2) ).append(" ")
+            .append( form(spr.y2) ).append(" ")
+            .append( form(spr.z ) ).append(" ")
+        .append(":: ");
+
+        str.append("Height ").append(" ").append( form(spr.height) ).append(" :: ");
+
+        str.append("Mat ").append( materials.get(spr.texInd).nameReference ).append(" :: ");
+
+        if (spr.BLOCK_HITSCAN)
+            str.append("BLOCK_HITSCAN :: ");
+
+        if (spr.BLOCK_MOVE)
+            str.append("BLOCK_MOVE :: ");
+
+        if (spr.BLOCK_PROJECTILE)
+            str.append("BLOCK_PROJECTILE :: ");
 
         str.append("\n");
 

@@ -41,8 +41,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
     protected final float fogG = depthFogColor.g;
     protected final float fogB = depthFogColor.b;
 
-
-    protected final Color darkColor = new Color(0x10_00_40_FF);
+    //protected final Color darkColor = new Color(0x10_00_40_FF);
 
     protected final boolean AGGRESSIVE_MIPMAPS = false;
 
