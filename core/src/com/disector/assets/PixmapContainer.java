@@ -44,13 +44,18 @@ public class PixmapContainer {
 
             if (pall != null) pall.palletize(pixmap);
 
+            //Temporary forced formatting
+            /*Pixmap formattedPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA4444);
+            formattedPixmap.drawPixmap(pixmap, 0, 0);
+            pixmap = formattedPixmap;*/
+
             pixmaps[i] = makeMipMapSeries(pixmap);
 
             mat.tex = pixmaps[i];
             pixmapsByName.put(file.nameWithoutExtension().toUpperCase(), pixmaps[i]);
 
             loadedImages.add(file.toString());
-            System.out.println("    " + i + ") " + file);
+            System.out.println("    " + i + ") " + file + pixmaps[i][0].getFormat().toString());
             i++;
         }
 

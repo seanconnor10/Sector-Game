@@ -3,7 +3,6 @@ package com.disector.renderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.disector.*;
@@ -34,7 +33,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
     private static final Pixmap TEST_SPRITE_IMG = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
     private static final Pixmap TEST_WALL_IMG = new Pixmap(Gdx.files.local("assets/img/arch.png"));
 
-    protected final Color depthFogColor = new Color(0.2f, 0.0f, 0.05f, 1f);
+    protected final Color depthFogColor = new Color(0.0f, 0.0f, 0.0f, 1f);
     protected final int fogR_int = depthFogColor.toIntBits()  & 0xFF;
     protected final int fogG_int = depthFogColor.toIntBits() >> 8 & 0xFF;
     protected final int fogB_int = depthFogColor.toIntBits() >> 16  & 0xFF;
@@ -347,18 +346,20 @@ public class SoftwareRenderer extends DimensionalRenderer {
             float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
             float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
 
-            float texX=0;
+            float texU=0;
             int pixmap_ind=0;
             {
-                texX = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
+                texU = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
-                float pixWidth = (texX_PlusOne - texX);
+                float pixWidth = (texX_PlusOne - texU);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 tex = textures[pixmap_ind];
                 texLower = tex;
                 texUpper = tex;
+
+                texU %= 1;
             }
 
             float texX_Lower=0, texX_Upper=0;
@@ -370,6 +371,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 texLower = texturesLow[pixmap_ind];
+                texX_Lower %= 1;
            
                 texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
                 texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
@@ -378,9 +380,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 texUpper = texturesHigh[pixmap_ind];
+                texX_Upper %= 1;
             }
-
-            texX %= 1;
 
             float deltaV = 1 / quadHeight;
             float v = (rasterBottom - quadBottom) / quadHeight;
@@ -392,7 +393,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     continue;
                 }
 
-                float pixX;
+                float selected_texU;
                 float yOff, yScale, light;
 		        float texHeight;
                 Pixmap pickedTex;
@@ -400,28 +401,28 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixX = texX;
+                    selected_texU = texU;
                     light = lightMiddle;
                     texHeight = texHeightMid;
                     pickedTex = tex;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
-                    pixX = texX_Lower;
+                    selected_texU = texX_Lower;
                     light = lightLower;
 		            texHeight = texHeightLow;
                     pickedTex = texLower;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixX = texX;
+                    selected_texU = texU;
                     light = lightMiddle;
 		            texHeight = texHeightMid;
                     pickedTex = tex;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
-                    pixX = texX_Upper;
+                    selected_texU = texX_Upper;
                     light = lightUpper;
 		            texHeight = texHeightUpper;
                     pickedTex = texUpper;
@@ -429,11 +430,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 float texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
 
-                int drawColor = pickedTex.getPixel((int)(pixX* tex.getWidth()), (int)(texV*texHeight));
-
-                /*float r = (drawColor >> 24 & 0xFF) / 255f;
-                float g = (drawColor >> 16 & 0xFF) / 255f;
-                float b = (drawColor >> 8  & 0xFF) / 255f;*/
+                int drawColor = pickedTex.getPixel((int)(selected_texU* pickedTex.getWidth()), (int)(texV*texHeight));
 
                 int r = drawColor >> 24 & 0xFF;
                 int g = drawColor >> 16 & 0xFF;
@@ -476,7 +473,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         //Render Through Portal
         if (isPortal) {
-            //drawSector(portalDestIndex, Math.max(leftEdgeX, spanStart), Math.min(rightEdgeX, spanEnd));
             drawSector(portalDestIndex, leftEdgeX, rightEdgeX);
             drawnPortals.pop();
         }

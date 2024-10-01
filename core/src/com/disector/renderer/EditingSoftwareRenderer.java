@@ -9,6 +9,9 @@ import com.disector.Application;
 import com.disector.Material;
 import com.disector.assets.PixmapContainer;
 
+import java.nio.ShortBuffer;
+import java.util.Arrays;
+
 public class EditingSoftwareRenderer extends SoftwareRenderer {
 
     /*
@@ -106,7 +109,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             float slope = (y2-y1) / (x2-x1);
             float yAxisIntersect = y1 - slope*x1;
             leftClipU = (float) Math.sqrt( x1*x1 + (yAxisIntersect-y1)*(yAxisIntersect-y1) ) / wallLength;
-            x1 = 0.001f; //Avoid dividing by zero
+            x1 = 0.01f; //Avoid dividing by zero
             y1 = yAxisIntersect;
         }
 
@@ -114,7 +117,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             float slope = (y2-y1) / (x2-x1);
             float yAxisIntersect = y1 - slope*x1;
             rightClipU = 1.f - (float) ( Math.sqrt( x2*x2 + (yAxisIntersect-y2)*(yAxisIntersect-y2) ) / wallLength );
-            x2 = 0.001f; //Avoid dividing by zero
+            x2 = 0.01f; //Avoid dividing by zero
             y2 = yAxisIntersect;
         }
 
@@ -131,8 +134,8 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
         float leftEdgePrecise = Math.max(0, Math.min(p2_plotX,p1_plotX) );
         float rightEdgePrecise = Math.min( Math.max(p2_plotX,p1_plotX), frameWidth-1);
 
-        int leftEdgeX = Math.max(0, Math.min((int)p2_plotX,(int)p1_plotX) );
-        int rightEdgeX = Math.min( Math.max((int)p2_plotX,(int)p1_plotX), frameWidth-1);
+        int leftEdgeX = (int) leftEdgePrecise;//Math.max(0, Math.min((int)p2_plotX,(int)p1_plotX) );
+        int rightEdgeX = (int) rightEdgePrecise; //Math.min( Math.max((int)p2_plotX,(int)p1_plotX), frameWidth-1);
 
         if (leftEdgeX > spanEnd) return; //Avoid more processing if out of span
         if (rightEdgeX < spanStart) return;
@@ -162,7 +165,8 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             textures = materials.get(w.mat).tex;
             if (textures == null)
                 throw new NullPointerException("Material Exists yet Pixmap is null");
-        } catch (Exception e) {
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
             textures = ERROR_TEXTURE;
         }
         texturesLow = textures;
@@ -170,8 +174,10 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
         if (isPortal) {
             drawnPortals.push(wInd); // !!
+
             destCeiling = sectors.get(portalDestIndex).ceilZ;
             destFloor = sectors.get(portalDestIndex).floorZ;
+
             float thisSectorCeilingHeight = secCeilZ - secFloorZ;
             if (destCeiling < secCeilZ)
                 upperWallCutoffV = (destCeiling - secFloorZ) / thisSectorCeilingHeight;
@@ -196,6 +202,18 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
         }
 
+        Pixmap floorPixels, ceilPixels;
+        boolean ceilIsSky = false;
+        try {
+            floorPixels = materials.get(currentSector.matFloor).tex[0];
+            Material ceilMat = materials.get(currentSector.matCeil);
+            ceilPixels = ceilMat.tex[0];
+            ceilIsSky = ceilMat.isSky;
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            floorPixels = ERROR_TEXTURE[0];
+            ceilPixels = ERROR_TEXTURE[0];
+        }
+
         int texHeightMid, texHeightLow, texHeightUpper;
         texHeightMid = textures[0].getHeight();
         texHeightLow = texturesLow[0].getHeight();
@@ -212,6 +230,8 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             lightUpper = w.lightUpper;
         }
 
+        float secHeight = secCeilZ - secFloorZ;
+
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;
 
@@ -224,14 +244,25 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             quadTop = p1_plotHigh + hProgress*(p2_plotHigh-p1_plotHigh);
             quadHeight = quadTop - quadBottom;
 
-            float fog;
+            float dist, fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
             {
                 float screenXProgress = (drawX-leftEdgePrecise) / (rightEdgePrecise-leftEdgePrecise);
-                fog = getFogFactor(x1 + Math.max(0, Math.min(1.0f, screenXProgress))*(x2-x1) );
+                dist = x1 + screenXProgress*(x2-x1);
+                fog = getFogFactor(dist);
             }
 
             rasterBottom = Math.max( (int) quadBottom, occlusionBottom[drawX]);
             rasterTop = Math.min( (int) quadTop, occlusionTop[drawX]);
+
+            //Fill Depth Array where appropriate
+            try {
+                Arrays.fill(
+                        depth,
+                        drawX * frameHeight + Math.min(occlusionBottom[drawX], rasterBottom),
+                        drawX * frameHeight + Math.max(occlusionTop[drawX], rasterTop),
+                        dist
+                );
+            } catch (IllegalArgumentException e) {}
 
             float u =  ((1 - hProgress)*(leftClipU/x1) + hProgress*(rightClipU/x2)) / ( (1-hProgress)*(1/x1) + hProgress*(1/x2));
             //if (u<0.01f) u = 0.01f; if (u>0.99) u = 0.99f;
@@ -243,118 +274,150 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
             float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
             float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
 
-            float texX=0;
+            float texU=0;
             int pixmap_ind=0;
             {
-                texX = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
+                texU = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
-                float pixWidth = texX_PlusOne - texX;
+                float pixWidth = (texX_PlusOne - texU);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 tex = textures[pixmap_ind];
                 texLower = tex;
                 texUpper = tex;
+
+                texU %= 1;
             }
 
             float texX_Lower=0, texX_Upper=0;
             if (isPortal){
                 texX_Lower = w.Lower_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
-                float pixWidth = texX_PlusOne - texX_Lower;
+                float pixWidth = (texX_PlusOne - texX_Lower);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 texLower = texturesLow[pixmap_ind];
+                texX_Lower %= 1;
 
                 texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
                 texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
-                pixWidth = texX_PlusOne - texX_Upper;
+                pixWidth = (texX_PlusOne - texX_Upper);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 texUpper = texturesHigh[pixmap_ind];
+                texX_Upper %= 1;
             }
 
+            float deltaV = 1 / quadHeight;
+            float v = (rasterBottom - quadBottom) / quadHeight;
+
             for (int drawY = rasterBottom; drawY < rasterTop; drawY++) { //Per Pixel draw loop
-                float v = (drawY - quadBottom) / quadHeight;
 
-                if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) )
+                if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) ) {
+                    v += deltaV;
                     continue;
+                }
 
-                float pixX;
+                float selected_texU;
                 float yOff, yScale, light;
                 float texHeight;
+                Pixmap pickedTex;
+
+                CLICK_TYPE type;
 
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixX = texX;
+                    selected_texU = texU;
                     light = lightMiddle;
                     texHeight = texHeightMid;
+                    pickedTex = tex;
+                    type = CLICK_TYPE.WALL_MAIN;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
-                    pixX = texX_Lower;
+                    selected_texU = texX_Lower;
                     light = lightLower;
                     texHeight = texHeightLow;
+                    pickedTex = texLower;
+                    type = CLICK_TYPE.WALL_LOWER;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
-                    pixX = texX;
+                    selected_texU = texU;
                     light = lightMiddle;
                     texHeight = texHeightMid;
+                    pickedTex = tex;
+                    type = CLICK_TYPE.WALL_MAIN;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
-                    pixX = texX_Upper;
+                    selected_texU = texX_Upper;
                     light = lightUpper;
                     texHeight = texHeightUpper;
-                }
-
-                float texVTemp = v * (secCeilZ - secFloorZ) / texHeight;
-
-                float tempYOff = yOff < 0 ? 1.f - Math.abs(yOff) % 1.f : yOff;
-                float texV = (tempYOff + texVTemp/yScale) % 1.0f;
-
-                Color drawColor;
-                CLICK_TYPE type;
-
-                if (!w.isPortal) {
-                    drawColor = grabColor(tex, pixX, texV);
-                    type = CLICK_TYPE.WALL_MAIN;
-                } else if (v <= lowerWallCutoffV) {
-                    drawColor = grabColor(texLower, pixX, texV);
-                    type = CLICK_TYPE.WALL_LOWER;
-                } else if (v <= upperWallCutoffV){
-                    type = CLICK_TYPE.WALL_MAIN;
-                    drawColor = grabColor(tex, pixX, texV);
-                } else {
+                    pickedTex = texUpper;
                     type = CLICK_TYPE.WALL_UPPER;
-                    drawColor = grabColor(texUpper, pixX, texV);
                 }
 
-                drawColor.lerp(depthFogColor,fog);
-                drawColor.lerp(darkColor, 1.f - light);
+                float texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
 
+                int drawColor = pickedTex.getPixel((int)(selected_texU* pickedTex.getWidth()), (int)(texV*texHeight));
+
+                int r = drawColor >> 24 & 0xFF;
+                int g = drawColor >> 16 & 0xFF;
+                int b = drawColor >> 8  & 0xFF;
+
+                r *= light;
+                g *= light;
+                b *= light;
+
+                r = (int) ( r + fog * (fogR_int - r) );
+                g = (int) ( g + fog * (fogG_int - g) );
+                b = (int) ( b + fog * (fogB_int - b) );
+
+                //Draw Highlight
                 if (wallHighLightIndex == wInd) {
-                    drawColor.lerp(highlightColorWall, highLightStrength);
+                    Color c = highlightColorWall;
+                    float f = highLightStrength;
+                    float r2 = r / 255f;
+                    float g2 = g / 255f;
+                    float b2 = b / 255f;
+                    r2 = r2 + (c.r - r2) * f;
+                    g2 = g2 + (c.g - g2) * f;
+                    b2 = b2 + (c.b - b2) * f;
+                    r = (int)(r2*255f) & 0xFF;
+                    g = (int)(g2*255f) & 0xFF;
+                    b = (int)(b2*255f) & 0xFF;
                 }
 
-                setPixel(drawX, drawY, drawColor);
+                //8BitInt RGB to 4Bit
+                short drawColor4bit = (short) (
+                        (b >> 4 & 0xF) << 12 |
+                                0xF            <<  8 |
+                                (r >> 4 & 0xF) <<  4 |
+                                (g >> 4 & 0xF)
+                );
+
+                ShortBuffer ints = buffer.getPixels().asShortBuffer();
+                ints.put(drawX + drawY*frameWidth, drawColor4bit);
 
                 ClickInfo info = getClickInfo(drawX, drawY);
                 info.index = wInd;
-                info.type = type;
+                info.type  = type;
+
+                v += deltaV;
 
             } //End Per Pixel Loop
 
             //Floor and Ceiling
             if (occlusionBottom[drawX] < quadBottom && camZ > currentSector.floorZ)
-                drawFloor(w, currentSector.matFloor, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor, currentSectorIndex);
+                drawFloor(floorPixels, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor, currentSectorIndex);
 
             if (occlusionTop[drawX] > rasterTop && camZ < currentSector.ceilZ)
-                drawCeiling(w, currentSector.matCeil, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil, currentSectorIndex);
+                drawCeiling(ceilPixels, ceilIsSky, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil, currentSectorIndex);
 
             //Update Occlusion Matrix
             updateOcclusion(isPortal, drawX, quadTop, quadBottom, quadHeight, upperWallCutoffV, lowerWallCutoffV);
@@ -363,91 +426,86 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
         //Render Through Portal
         if (isPortal) {
-            //drawSector(portalDestIndex, Math.max(leftEdgeX, spanStart), Math.min(rightEdgeX, spanEnd));
             drawSector(portalDestIndex, leftEdgeX, rightEdgeX);
             drawnPortals.pop();
         }
 
     }
 
-
-    protected void drawFloor(Wall w, int texInd, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light, int secInd) {
+    protected void drawFloor(Pixmap pix, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light, int secInd) {
         final float scaleFactor = 32.f;
         float floorXOffset = camX/scaleFactor, floorYOffset = camY/scaleFactor;
         int vOffset = (int) camVLook;
+
         if (occlusionBottom[drawX] < rasterBottom) {
             float heightOffset = (camZ - secFloorZ) / scaleFactor;
             int floorEndScreenY = Math.min(rasterBottom, occlusionTop[drawX]);
-            Pixmap tex;
-            try {
-                tex = materials.get(texInd).tex[0];
-            } catch (Exception e) {
-                //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
-                tex = ERROR_TEXTURE[0];
-            }
+            ShortBuffer shortBuffer = buffer.getPixels().asShortBuffer();
+
+            final int max_pix_ind = frameHeight * frameWidth - 1;
+
             for (int drawY = occlusionBottom[drawX] + vOffset; drawY<=floorEndScreenY + vOffset; drawY++) {
                 float floorX = heightOffset * (drawX-halfWidth) / (drawY-halfHeight);
                 float floorY = heightOffset * fov / (drawY-halfHeight);
 
-                float rotFloorX = floorX*playerSin - floorY*playerCos + floorXOffset;
-                float rotFloorY = floorX*playerCos + floorY*playerSin + floorYOffset;
+                float rotFloorX = Math.abs( floorX*playerSin - floorY*playerCos + floorXOffset );
+                float rotFloorY = Math.abs( floorX*playerCos + floorY*playerSin + floorYOffset );
 
-                if (rotFloorX<=0) rotFloorX = -rotFloorX;
-                if (rotFloorY<0) rotFloorY = -rotFloorY;
-
-                rotFloorX /= 4;
-                rotFloorY /= 4;
+                rotFloorX /= 2;
+                rotFloorY /= 2;
 
                 rotFloorX = rotFloorX%1;
                 rotFloorY = rotFloorY%1;
 
-                while(rotFloorX<0.0) rotFloorX+=1.0f;
-                while(rotFloorX>1.0f) rotFloorX-=1.0f;
-                while(rotFloorY<0.0) rotFloorY+=1.0f;
-                while(rotFloorY>1.0f) rotFloorY-=1.0f;
+                //float horizonScreenDistVert = halfHeight - drawY;
+                //float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                //float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
 
-                /* CHECKERBOARD
-                boolean checkerBoard = ( (int)(rotFloorX*8%2) == (int)(rotFloorY*8%2) );
-                Color drawColor = new Color( checkerBoard ? 0xFFD08010 : 0xFF10D080 );
-                float floorFogValue = 1.f - ((halfHeight-heightOffset-drawY)/(halfHeight-heightOffset));
-                floorFogValue = Math.min(1.f, Math.max(0.f,floorFogValue));
-                drawColor.lerp(0.1f,0f,0.2f,1f, floorFogValue);
-                buffer.drawPixel(drawX, drawY - vOffset, drawColor.toIntBits() );*/
+                int drawColor = pix.getPixel( (int)(rotFloorX*pix.getWidth()), (int)((1.f-rotFloorY)*pix.getHeight()) );
 
-                float horizonScreenDistVert = halfHeight - drawY;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
+                int r_8 = drawColor >> 24 & 0xFF;
+                int g_8 = drawColor >> 16 & 0xFF;
+                int b_8 = drawColor >> 8 & 0xFF;
 
-                Color drawColor = grabColor(tex, rotFloorX, rotFloorY);
-
-                drawColor.lerp(depthFogColor, getFogFactor(dist));
-                drawColor.lerp(darkColor, 1.0f - light);
+                r_8 *= light;
+                g_8 *= light;
+                b_8 *= light;
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(highlightColorSector, highLightStrength);
+                    Color c = highlightColorSector;
+                    float f = highLightStrength;
+                    float r2 = r_8 / 255f;
+                    float g2 = g_8 / 255f;
+                    float b2 = b_8 / 255f;
+                    r2 = r2 + (c.r - r2) * f;
+                    g2 = g2 + (c.g - g2) * f;
+                    b2 = b2 + (c.b - b2) * f;
+                    r_8 = (int)(r2*255f) & 0xFF;
+                    g_8 = (int)(g2*255f) & 0xFF;
+                    b_8 = (int)(b2*255f) & 0xFF;
                 }
 
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+                short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
+                        (b_8 >> 4 & 0xF) << 12 |
+                                0xF              <<  8 |
+                                (r_8 >> 4 & 0xF) <<  4 |
+                                (g_8 >> 4 & 0xF)
+                );
+
+                int i = /*Math.clamp( */drawX + (drawY-vOffset)*frameWidth;//, 0, -1+frameWidth*frameHeight);
+                if (i<0) i=0;
+                if (i>max_pix_ind) i = max_pix_ind;
+                shortBuffer.put(i, drawColor4bit);
 
                 ClickInfo info = getClickInfo(drawX, drawY - vOffset);
                 info.index = secInd;
-                info.type = CLICK_TYPE.FLOOR;
+                info.type  = CLICK_TYPE.CEIL;
 
             }
         }
     }
 
-    protected void drawCeiling(Wall w, int texInd, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light, int secInd) {
-        Pixmap tex;
-        boolean isSky = false;
-        try {
-            Material mat = materials.get(texInd);
-            tex = mat.tex[0];
-            isSky = drawParallax && mat.isSky;
-        } catch (Exception e) {
-            //System.out.println("SoftwareRenderer: Caught Exception When grabbing texture");
-            tex = ERROR_TEXTURE[0];
-        }
+    protected void drawCeiling(Pixmap tex, boolean isSky, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light, int secInd) {
 
         final float scaleFactor = 32.f;
 
@@ -469,6 +527,8 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
         int vOffset = (int) camVLook;
         int ceilEndScreenY = occlusionTop[drawX] + vOffset;
 
+        ShortBuffer shortBuffer = buffer.getPixels().asShortBuffer();
+
         for (int drawY = Math.max(rasterTop, occlusionBottom[drawX]) + vOffset; drawY <= ceilEndScreenY; drawY++) {
 
             if (!isSky) {
@@ -476,59 +536,79 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 float ceilX = heightOffset * (drawX - halfWidth) / (drawY - halfHeight);
                 float ceilY = heightOffset * fov / (drawY - halfHeight);
 
-                float rotX = ceilX * playerSin - ceilY * playerCos - floorXOffset;
-                float rotY = ceilX * playerCos + ceilY * playerSin - floorYOffset;
+                float rotX = Math.abs( ceilX * playerSin - ceilY * playerCos - floorXOffset );
+                float rotY = Math.abs( ceilX * playerCos + ceilY * playerSin - floorYOffset );
 
-                if (rotX <= 0) rotX = -rotX;
-                if (rotY < 0) rotY = -rotY;
-
-                rotX /= 4f;
-                rotY /= 4f;
+                rotX /= 2f;
+                rotY /= 2f;
 
                 rotX = rotX % 1;
                 rotY = rotY % 1;
 
-                while (rotX < 0.0) rotX += 1.0f;
-                while (rotX > 1.0f) rotX -= 1.0f;
-                while (rotY < 0.0) rotY += 1.0f;
-                while (rotY > 1.0f) rotY -= 1.0f;
+                //float horizonScreenDistVert = -halfHeight + drawY;
+                //float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                //float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
 
-                /*boolean checkerBoard = ( (int)(rotX*8%2) == (int)(rotY*8%2) );
-                Color drawColor = new Color( checkerBoard ? 0xFF_A0_20_50 : 0xFF_20_50_A0 );
-                float ceilFogValue = 1.0f - ( ((drawY-halfHeight) / halfHeight) );
-                ceilFogValue = (float) Math.min(1.f, Math.max(0.f,ceilFogValue));
-                drawColor.lerp(0.1f,0f,0.2f,1f, ceilFogValue);
-                buffer.drawPixel(drawX, drawY - vOffset, drawColor.toIntBits() );*/
+                int drawColor = tex.getPixel((int)(rotX*tex.getWidth()), (int)(rotY*tex.getHeight()));
 
-                float horizonScreenDistVert = -halfHeight + drawY;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
+                int r = drawColor >> 24 & 0xFF;
+                int g = drawColor >> 16 & 0xFF;
+                int b = drawColor >> 8 & 0xFF;
 
-                Color drawColor = grabColor(tex, rotX, rotY);
-
-                drawColor.lerp(0.1f, 0f, 0.2f, 1f, getFogFactor(dist));
-                drawColor.lerp(darkColor, 1.0f - light);
+                r *= light;
+                g *= light;
+                b *= light;
 
                 if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(highlightColorSector, highLightStrength);
+                    Color c = highlightColorSector;
+                    float f = highLightStrength;
+                    float r2 = r / 255f;
+                    float g2 = g / 255f;
+                    float b2 = b / 255f;
+                    r2 = r2 + (c.r - r2) * f;
+                    g2 = g2 + (c.g - g2) * f;
+                    b2 = b2 + (c.b - b2) * f;
+                    r = (int)(r2*255f) & 0xFF;
+                    g = (int)(g2*255f) & 0xFF;
+                    b = (int)(b2*255f) & 0xFF;
                 }
 
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+                short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
+                        (b >> 4 & 0xF) << 12 |
+                                0xF            <<  8 |
+                                (r >> 4 & 0xF) <<  4 |
+                                (g >> 4 & 0xF)
+                );
 
+                int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
+                shortBuffer.put(i, drawColor4bit);
 
             } else { //If isSky
-                Color drawColor = grabColor(tex, centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth, drawY/(float)tex.getHeight());
 
-                if (sectorHighlightIndex == secInd) {
-                    drawColor.lerp(highlightColorSector, highLightStrength);
-                }
+                int drawColor = tex.getPixel(
+                        (int)((centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth)*tex.getWidth()),
+                        (int)((1.f - (drawY/(float)tex.getHeight()))*tex.getHeight())
+                );
 
-                buffer.drawPixel(drawX, drawY - vOffset, Color.rgba8888(drawColor) );
+                int r = drawColor >> 24 & 0xFF;
+                int g = drawColor >> 16 & 0xFF;
+                int b = drawColor >> 8 & 0xFF;
+
+                short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
+                        (b >> 4 & 0xF) << 12 |
+                                0xF            <<  8 |
+                                (r >> 4 & 0xF) <<  4 |
+                                (g >> 4 & 0xF)
+                );
+
+                int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
+                shortBuffer.put(i, drawColor4bit);
+
+                ClickInfo info = getClickInfo(drawX, drawY - vOffset);
+                info.index = secInd;
+                info.type  = CLICK_TYPE.CEIL;
+
             }
-
-            ClickInfo info = getClickInfo(drawX, drawY - vOffset);
-            info.index = secInd;
-            info.type  = CLICK_TYPE.CEIL;
 
         }
 

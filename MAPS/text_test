@@ -1,0 +1,27 @@
+MATERIAL (0) :: Img MYWOOD :: 
+MATERIAL (1) :: Img GRATE :: 
+MATERIAL (2) :: Img SCALLOP :: 
+MATERIAL (3) :: Img STARS :: Sky :: 
+MATERIAL (4) :: Img PAINTING :: Sky :: 
+MATERIAL (5) :: Img MYTILE :: 
+MATERIAL (6) :: Img MARBLE :: 
+MATERIAL (7) :: Img INDUSTRIAL :: 
+MATERIAL (8) :: Img METAL :: 
+MATERIAL (9) :: Img GRASS :: 
+MATERIAL (10) :: Img TILE4 :: 
+MATERIAL (11) :: Img WOODDOG :: 
+MATERIAL (12) :: Img HEDGE :: 
+SECTOR (0) :: Height 0 100 :: Mat 0 0 :: Light 1.00 1.00 :: Has 0 1 2 3 4 5 6 7 8 9 10 11 ::
+SECTOR (1) :: Height 30 70 :: Mat 0 0 :: Light 1.00 1.00 :: Has 9 10 11 8 ::
+WALL (0) :: Pos -128 128 128 128 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (1) :: Pos 128 128 128 -96 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (2) :: Pos 128 -96 -128 -96 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (3) :: Pos -128 -96 -128 128 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (4) :: Pos -64 64 -64 32 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (5) :: Pos -64 32 -32 32 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: Scale 0.1000 0.1000 :: 
+WALL (6) :: Pos -32 32 -32 64 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (7) :: Pos -32 64 -64 64 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (8) :: Pos 32 64 32 32 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: 
+WALL (9) :: Pos 32 32 64 32 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Scale_Lower 0.0500 0.0500 :: Scale_Upper 0.0500 0.0500 :: 
+WALL (10) :: Pos 64 32 64 64 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: 
+WALL (11) :: Pos 64 64 32 64 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: 

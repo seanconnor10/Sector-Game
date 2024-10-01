@@ -12,7 +12,7 @@ MATERIAL (10) :: Img TILE4 ::
 MATERIAL (11) :: Img WOODDOG :: 
 MATERIAL (12) :: Img HEDGE :: 
 SECTOR (0) :: Height 0 100 :: Mat 0 0 :: Light 1.00 1.00 :: Has 0 1 2 3 ::
-WALL (0) :: Pos -160 128 192 128 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
-WALL (1) :: Pos 192 128 288 -64 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
-WALL (2) :: Pos 288 -64 -128 -160 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
-WALL (3) :: Pos -128 -160 -160 128 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (0) :: Pos -128 128 128 128 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (1) :: Pos 128 128 128 -96 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (2) :: Pos 128 -96 -128 -96 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
+WALL (3) :: Pos -128 -96 -128 128 :: Mat MYWOOD :: Light 1.00 1.00 1.00 :: 
