@@ -254,19 +254,21 @@ public class CommandExecutor {
         return app.activeMapFile.path();
     }
 
-    @ConsoleCommand(helpText = "Set Palette To Enforce on loaded Textures")
+    @ConsoleCommand(helpText = "Set Palette eo enforce on loaded Textures")
     public String palette(String loc) {
         Application.paletteLocation = loc;
         return null;
     }
 
-    @ConsoleCommand(helpText = "Call Static SndMng Init Method")
-    public String snd_init() {
-        try {
-            SoundManager.init();
-            return null;
-        } catch (Exception e) {
-            return e.toString();
+    @ConsoleCommand(helpText = "List Directorys and Files in Assets Folder")
+    public String list(String path) {
+        String fullPath = "assets/";
+        if (path != null && !path.isBlank()) fullPath += path;
+        FileHandle loc = Gdx.files.local(fullPath);
+        StringBuilder str = new StringBuilder();
+        for (FileHandle h : loc.list()) {
+            str.append(h.path().replaceFirst(fullPath, "")).append('\n');
         }
+        return str.toString();
     }
 }
