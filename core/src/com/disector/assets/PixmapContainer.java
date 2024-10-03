@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+
 import com.disector.Material;
 
 import java.util.HashSet;
@@ -55,7 +56,7 @@ public class PixmapContainer {
             pixmapsByName.put(file.nameWithoutExtension().toUpperCase(), pixmaps[i]);
 
             loadedImages.add(file.toString());
-            System.out.println("    " + i + ") " + file + pixmaps[i][0].getFormat().toString());
+            System.out.println("    " + i + ") " + pixmaps[i][0].getFormat().toString() + " " + file);
             i++;
         }
 
@@ -125,6 +126,5 @@ public class PixmapContainer {
         pixmapsByName.clear();
 
     }
-
 
 }

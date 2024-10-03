@@ -303,6 +303,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         float secHeight = secCeilZ - secFloorZ;
 
+	ShortBuffer ints = buffer.getPixels().asShortBuffer();
+
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;
 
@@ -451,7 +453,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     (g >> 4 & 0xF)
                 );
 
-                ShortBuffer ints = buffer.getPixels().asShortBuffer();
                 ints.put(drawX + drawY*frameWidth, drawColor4bit);
 
                 v += deltaV;
