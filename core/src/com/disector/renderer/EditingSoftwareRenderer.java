@@ -603,15 +603,12 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
                 int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
                 shortBuffer.put(i, drawColor4bit);
-
-                ClickInfo info = getClickInfo(drawX, drawY - vOffset);
-                info.index = secInd;
-                info.type  = CLICK_TYPE.CEIL;
-
             }
 
+            ClickInfo info = getClickInfo(drawX, drawY - vOffset);
+            info.index = secInd;
+            info.type  = CLICK_TYPE.CEIL;
         }
-
     }
 
     @Override

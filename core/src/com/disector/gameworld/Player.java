@@ -133,11 +133,16 @@ public class Player implements Movable {
 
         //Crouching
         if (crouch && height != CROUCHING_HEIGHT) {
+            float prevHeight = height;
             height = Math.max(height - CROUCH_SPEED*dt, CROUCHING_HEIGHT);
+            pos.z += (prevHeight-height);
         } else if (!crouch && height != STANDING_HEIGHT) {
             Sector cur = world.sectors.get(currentSectorIndex);
-            if (cur.ceilZ-cur.floorZ >= STANDING_HEIGHT+HEADSPACE)
-                height = Math.min(height + CROUCH_SPEED*dt, STANDING_HEIGHT);
+            if (cur.ceilZ-cur.floorZ >= STANDING_HEIGHT+HEADSPACE) {
+                float prevHeight = height;
+                height = Math.min(height + CROUCH_SPEED * dt, STANDING_HEIGHT);
+                pos.z += (prevHeight-height);
+            }
         }
 
         //Jump
