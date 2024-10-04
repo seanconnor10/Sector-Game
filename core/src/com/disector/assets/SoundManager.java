@@ -58,9 +58,9 @@ public class SoundManager {
 
     public static void playStaticPosition(Sound snd, Vector3 snd_pos, float range) {
         //if (snd == null) return;
-        float vol = Math.max(0, 1.0f - (snd_pos.dst( xyz(ear_pos) ) / range));
+        float vol = Math.max(0, Math.max(0, 1.0f - (snd_pos.dst( xyz(ear_pos) ) / range) ));
         long inst = snd.play(vol);
-        snd.setPitch( inst, (float)(0.25 + Math.random()*2));
+        snd.setPitch( inst, (float)(0.5 + Math.random()) );
         updatePan(snd, inst, snd_pos);
     }
 
@@ -73,6 +73,7 @@ public class SoundManager {
     // ------------------------------------------------------------------------------------
 
     private static void updatePan(Sound snd, long inst, Vector3 snd_pos) {
+        if (snd_pos == null) return;
         double t_x = snd_pos.x - ear_pos.x;
         double t_y = snd_pos.y - ear_pos.y;
         double temp = t_x;

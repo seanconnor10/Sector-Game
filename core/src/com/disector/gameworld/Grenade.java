@@ -1,5 +1,6 @@
 package com.disector.gameworld;
 
+import com.badlogic.gdx.math.Vector3;
 import com.disector.Physics;
 import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.renderer.sprites.FacingSprite;
@@ -23,15 +24,17 @@ class Grenade implements Movable, HasFacingSprite {
 
 	int currentSectorIndex = 0;
 
-	Vector2 position = new Vector2();
-	float z;
+	//Vector2 position = new Vector2();
+	//float z;
+
+	Vector3 pos = new Vector3();
 
 	Vector2 velocity = new Vector2();
 	float zSpeed;
 
 	@Override
 	public FacingSprite getInfo() {
-		return new FacingSprite(PIXMAP, position.x, position.y, z, IMG_W, IMG_H);
+		return new FacingSprite(PIXMAP, pos.x, pos.y, pos.z, IMG_W, IMG_H);
 	}
 
 	@Override
@@ -50,11 +53,6 @@ class Grenade implements Movable, HasFacingSprite {
 	}
 
 	@Override
-	public void setZ(float z) {
-		this.z = z;
-	}
-
-	@Override
 	public void setOnGround(boolean val) {
 		return;
 	}
@@ -64,20 +62,28 @@ class Grenade implements Movable, HasFacingSprite {
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public Vector2 snagPosition() {
 		return position;
 	}
 
 	@Override
-	public Vector2 copyPosition() {
-		return new Vector2(position);
+	public void setZ(float z) {
+		this.z = z;
 	}
 
 	@Override
+	public Vector2 copyPosition() {return new Vector2(position);}
+
+		@Override
 	public float getZ() {
 		return z;
-	}
+	}*/
+
+	@Override
+	public Vector3 pos() {return pos;}
+
+
 
 	@Override
 	public float getHeight() {

@@ -10,12 +10,17 @@ public interface Positionable {
      * and find it's currentSector
      ************************* D: ******/
 
-    Vector2 snagPosition();
-    Vector2 copyPosition();
-    float getZ();
+    //To Deprecate
+    //Vector2 snagPosition();
+    //Vector2 copyPosition();
+    //float getZ();
+    //New
+    Vector3 pos();
+    //Staying
     float getHeight();
     float getRadius();
     int getCurrentSector();
     void setCurrentSector(int sInd);
+
 
 }

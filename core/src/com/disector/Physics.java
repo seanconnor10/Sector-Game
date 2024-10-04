@@ -1,6 +1,7 @@
 package com.disector;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.PhysicsProperties;
@@ -194,9 +195,11 @@ if (sInd >= sectors.size || sInd < 0)
     public static void resolveCollision(WallInfoPack collisionInfo, Movable obj) {
         Wall w = collisionInfo.w;
 
+        Vector3 pos = obj.pos();
+
         float resolutionDistance = obj.getRadius() - collisionInfo.distToNearest;
-        float xLast = obj.snagPosition().x - obj.getVelocity().x;
-        float yLast = obj.snagPosition().y - obj.getVelocity().y;
+        float xLast = pos.x - obj.getVelocity().x;
+        float yLast = pos.y - obj.getVelocity().y;
 
         float scalar;
 
@@ -214,9 +217,8 @@ if (sInd >= sectors.size || sInd < 0)
             resolutionDistance *= -1;
          */
 
-        Vector2 objPos = obj.snagPosition();
-        objPos.x += (float) Math.cos(collisionInfo.w.normalAngle) * resolutionDistance;
-        objPos.y += (float) Math.sin(collisionInfo.w.normalAngle) * resolutionDistance;
+        pos.x += (float) Math.cos(collisionInfo.w.normalAngle) * resolutionDistance;
+        pos.y += (float) Math.sin(collisionInfo.w.normalAngle) * resolutionDistance;
     }
 
 }

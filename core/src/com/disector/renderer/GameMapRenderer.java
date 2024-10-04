@@ -70,7 +70,7 @@ public class GameMapRenderer extends MapRenderer {
     }
 
     private void drawPlayer() {
-        Vector4 pos = world.getPlayerPosition();
+        Vector4 pos = world.getPlayerEyesPosition();
         float radius = world.getPlayerRadius();
         app.shape.setColor(Color.GOLDENROD);
         circle(pos.x, pos.y, radius);

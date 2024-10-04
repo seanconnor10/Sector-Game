@@ -44,9 +44,9 @@ class ViewPanel extends Panel{
 
         if (input.isJustPressed(Input.Keys.P)) {
             Player p1 = editor.app.gameWorld.player1;
-            p1.position.set(editor.viewRenderer.camX, editor.viewRenderer.camY);
+            p1.pos.set(editor.viewRenderer.camX, editor.viewRenderer.camY, p1.pos.z);
             p1.setCurrentSector(editor.viewRenderer.camCurrentSector);
-            p1.setZ(editor.viewRenderer.camZ);
+            p1.pos.z = editor.viewRenderer.camZ;
             p1.r = editor.viewRenderer.camR;
             p1.vLook = editor.viewRenderer.camVLook;
         }

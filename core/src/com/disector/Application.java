@@ -3,7 +3,6 @@ package com.disector;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -170,8 +169,8 @@ public class Application extends ApplicationAdapter {
             success = true;
             gameWorld.refreshPlayerSectorIndex();
             float newFloorZ = sectors.get(gameWorld.getPlayerSectorIndex()).floorZ;
-            if (gameWorld.getPlayerPosition().z < newFloorZ) {
-                gameWorld.player1.setZ(newFloorZ);
+            if (gameWorld.getPlayerEyesPosition().z < newFloorZ) {
+                gameWorld.player1.pos.z = newFloorZ;
             }
             if (editor != null) {
                 editor.shouldUpdateViewRenderer = true;
@@ -272,7 +271,7 @@ public class Application extends ApplicationAdapter {
 
         gameWorld.step(deltaTime);
 
-        SoundManager.ear_pos.set(gameWorld.getPlayerPosition());
+        SoundManager.ear_pos.set(gameWorld.getPlayerEyesPosition());
         SoundManager.update(deltaTime);
 
         if (renderer.camFOV != renderer.baseFOV * gameWorld.player1.zoom) {
@@ -283,7 +282,7 @@ public class Application extends ApplicationAdapter {
             ((SoftwareRenderer) renderer).addSpriteList(gameWorld.getSpriteList());
         }
 
-        renderer.placeCamera(gameWorld.getPlayerPosition(), gameWorld.getPlayerVLook(), gameWorld.getPlayerSectorIndex());
+        renderer.placeCamera(gameWorld.getPlayerEyesPosition(), gameWorld.getPlayerVLook(), gameWorld.getPlayerSectorIndex());
         renderer.renderWorld();
         renderer.drawFrame();
 
@@ -292,14 +291,14 @@ public class Application extends ApplicationAdapter {
         }
 
         if (gameWorld.shouldDisplayMap()) {
-            gameMapRenderer.placeCamera(gameWorld.getPlayerPosition(), 0, gameWorld.getPlayerSectorIndex());
+            gameMapRenderer.placeCamera(gameWorld.getPlayerEyesPosition(), 0, gameWorld.getPlayerSectorIndex());
             gameMapRenderer.renderWorld();
             gameMapRenderer.drawFrame();
         }
 
 //        Fov Angle Experiments
 //        if (false) {
-//            Vector4 pPos = gameWorld.getPlayerPosition();
+//            Vector4 pPos = gameWorld.getPlayerEyesPosition();
 //            float angleToPointOne = 90f + (float) (-(180 / Math.PI) * (Math.atan2(100 - pPos.x, 20 - pPos.y) + pPos.w));// + pPos.w; // w is player angle
 //            float halfFrame = frameWidth / 2f;
 //            float fov = renderer.getFov();

@@ -41,7 +41,6 @@ public class GameWorld implements I_AppFocus{
         this.input = new InputChainNode(inputParent, "GameWorld");
         this.input.on();
         player1 = new Player(this, input);
-        player1.z = 100.f;
     }
 
     @Override
@@ -61,13 +60,13 @@ public class GameWorld implements I_AppFocus{
         for (Grenade g : grenades) {
             moveObj(g);
             if (g.velocity.isZero(1)) {
-                SoundManager.playStaticPosition(SoundManager.SFX_Boom, new Vector3(g.position.x, g.position.y, g.getZ()), 500);
+                SoundManager.playPosition(SoundManager.SFX_Boom, new Vector3(g.pos()), 500);
                 //Temporary Test Control
                 //Press To Toss Player around
-                float dist = getPlayerXYZ().dst(g.position.x, g.position.y, g.z);
+                float dist = player1.pos.dst(g.pos);
                 if (dist < 100) {
                     float force = 200 * (1 - (dist / 100));
-                    float angle = (float) Math.atan2(player1.position.y - g.position.y, player1.position.x -g.position.x);
+                    float angle = (float) Math.atan2(player1.pos.y - g.pos.y, player1.pos.x -g.pos.x);
                     player1.velocity.x += force * (float) Math.cos(angle);
                     player1.velocity.y += force * (float) Math.sin(angle);
                     player1.zSpeed     += force;
@@ -79,8 +78,8 @@ public class GameWorld implements I_AppFocus{
         if (input.isJustPressed(Input.Keys.G)) {
             Grenade grenade = new Grenade();
             grenade.currentSectorIndex = player1.currentSectorIndex;
-            grenade.position.set(player1.position);
-            grenade.z = player1.z - player1.CROUCHING_HEIGHT - 0.5f;
+            grenade.pos.set(player1.pos);
+            grenade.pos.z = player1.pos.z + player1.height - grenade.getHeight();
             grenade.velocity.set(
                     player1.velocity.x + (float) Math.cos(player1.r) * 300,
                     player1.velocity.y + (float) Math.sin(player1.r) * 300
@@ -92,12 +91,12 @@ public class GameWorld implements I_AppFocus{
 
     //*****************************************************
 
-    public Vector4 getPlayerPosition() {
-        return new Vector4(player1.copyPosition(), player1.z, player1.r);
+    public Vector4 getPlayerEyesPosition() {
+        return new Vector4(player1.pos.x, player1.pos.y, player1.pos.z + player1.height, player1.r);
     }
 
     public Vector3 getPlayerXYZ() {
-        return new Vector3(player1.position.x, player1.position.y, player1.z);
+        return player1.pos;
     }
 
     public float getPlayerRadius() {
@@ -116,14 +115,10 @@ public class GameWorld implements I_AppFocus{
         return shouldDisplayMap;
     }
 
-    public void setPos(Positionable obj, float x, float y) {
-        obj.snagPosition().set(x,y);
-    }
-
     public int refreshPlayerSectorIndex() {
         int sec = player1.currentSectorIndex;
-        float x = getPlayerPosition().x;
-        float y = getPlayerPosition().y;
+        float x = getPlayerEyesPosition().x;
+        float y = getPlayerEyesPosition().y;
 
         try {
             if (Physics.containsPoint(sectors.get(sec), x, y))
@@ -177,14 +172,14 @@ public class GameWorld implements I_AppFocus{
                 //startIndex argument is zero so we set to something valid if not in a sector
                 Physics.findCurrentSectorBranching(
                     0,
-                    obj.snagPosition().x,
-                    obj.snagPosition().y
+                    obj.pos().x,
+                    obj.pos().y
                 )
             );
         }
 
         PhysicsProperties props = obj.getProps();
-        Vector2 objPos = obj.snagPosition(); //Snag grabs a reference to the Vector so we can change it
+        Vector3 objPos = obj.pos(); //Snag grabs a reference to the Vector so we can change it
         Vector2 velocity = obj.getVelocity();
 
         objPos.x += velocity.x * dt;
@@ -249,36 +244,32 @@ public class GameWorld implements I_AppFocus{
             velocity.set(Physics.bounceVector(velocity, closestCollision.w, props));
             if (velocity.isZero(1)) velocity.set(Vector2.Zero);
 
-            SoundManager.playStaticPosition(
-                SoundManager.SFX_Clink,
-                new Vector3(objPos, obj.getZ()),
-                300
-            );
+            SoundManager.playStaticPosition(SoundManager.SFX_Clink, objPos, 300);
 
             collisionsProcessed++;
 
         }
 
-        obj.setOnGround(obj.getZ() < teeterHeight+0.5f);
+        obj.setOnGround(objPos.z < teeterHeight+0.5f);
 
         //Grav
-        if (obj.getZ() > teeterHeight) obj.setZSpeed(obj.getZSpeed() - 200.f*dt);
+        if (objPos.z > teeterHeight) obj.setZSpeed(obj.getZSpeed() - 200.f*dt);
         if (obj.getZSpeed() < -300.0f) obj.setZSpeed(-300.0f);
         //Enact motion
-        obj.setZ( obj.getZ() + obj.getZSpeed()*dt );
+        objPos.z =  objPos.z + obj.getZSpeed()*dt;
         //Hit Floor
-        if (obj.getZ()<teeterHeight) {
-            obj.setZ(teeterHeight);
+        if (objPos.z<teeterHeight) {
+            objPos.z = teeterHeight;
             if (obj.getZSpeed() < 0) obj.setZSpeed(0);
         }
         //HitCeiling
-        if (obj.getZ()+obj.getHeight()>lowestCeilHeight) {
-            obj.setZ(lowestCeilHeight-obj.getHeight());
+        if (objPos.z+obj.getHeight()>lowestCeilHeight) {
+            objPos.z = lowestCeilHeight-obj.getHeight();
             if (obj.getZSpeed() > 0) obj.setZSpeed(0);
         }
 
         //Enact friction
-        if (props.zFriction != 0.f && obj.getZ() == teeterHeight) {
+        if (props.zFriction != 0.f && objPos.z == teeterHeight) {
             velocity.scl(1.f - props.zFriction*dt);
         }
 
@@ -286,19 +277,20 @@ public class GameWorld implements I_AppFocus{
 
     public boolean heightCheck(Sector s, Positionable obj, float stepUpAllowance) {
         //Return whether the obj can fit the sector height-wise
-        return obj.getZ()+obj.getHeight() < s.ceilZ && obj.getZ() >= s.floorZ-stepUpAllowance;
+        return obj.pos().z+obj.getHeight() < s.ceilZ && obj.pos().z >= s.floorZ-stepUpAllowance;
     }
 
     private Array<WallInfoPack> findCollisions(Sector sector, Positionable obj) {
         Array<WallInfoPack> collisions = new Array<>();
-        Vector2 objPos = obj.copyPosition();
+        Vector3 objPos = obj.pos();
         //For every wall in sector, check collision by bounding box
         //If collided, check collision accurately
         //and if still colliding, add to list of collisions
         for (int wInd : sector.walls.toArray()) {
             Wall w = walls.get(wInd);
-            if (Physics.boundingBoxCheck(w, obj.copyPosition(), obj.getRadius())) {
-                WallInfoPack info = new WallInfoPack(w, wInd, objPos);
+            Vector2 xy = new Vector2(objPos.x, objPos.y);
+            if (Physics.boundingBoxCheck(w, xy, obj.getRadius())) {
+                WallInfoPack info = new WallInfoPack(w, wInd, xy);
                 if (info.distToNearest < obj.getRadius() - 0.01f) {
                     collisions.add(info);
                 }

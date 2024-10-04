@@ -33,8 +33,10 @@ public class Player implements Movable {
     0.5f, 0.9f, 0.5f, 0.0f, 300.0f
     );
 
-    public Vector2 position = new Vector2(0.f, 0.f);
-    public float z, r;
+    //public Vector2 position = new Vector2(0.f, 0.f);
+    public Vector3 pos = new Vector3();
+    //public float z
+    public float r;
     public float vLook; // 'Angle' of vertical view direction
     float height = STANDING_HEIGHT;
 
@@ -52,8 +54,8 @@ public class Player implements Movable {
         this.input = input;
     }
 
-    public Vector2 movementInput(float dt) {
-        Vector2 startingPosition = copyPosition();
+    public Vector3 movementInput(float dt) {
+        Vector3 startingPosition = new Vector3(pos);
 
         //Record needed button presses
         boolean forwardDown   = input.getActionInfo("FORWARD")   .isDown;
@@ -147,7 +149,7 @@ public class Player implements Movable {
     }
 
     //Positionable Implementations //////////////
-    @Override
+    /*@Override
     public Vector2 copyPosition() {
         return new Vector2(position);
     }
@@ -155,7 +157,7 @@ public class Player implements Movable {
     @Override
     public float getZ() {
         return z - height;
-    }
+    }*/
 
     @Override
     public int getCurrentSector() {
@@ -177,9 +179,17 @@ public class Player implements Movable {
         return RADIUS;
     }
 
+    /*@Override
+    public Vector2 snagPosition() {
+        return position;
+    }*/
+
+    @Override
+    public Vector3 pos() {
+        return pos;
+    }
+
     //Movable Implementations ////////////////
-
-
     @Override
     public Vector2 getVelocity() {
         return velocity;
@@ -190,20 +200,17 @@ public class Player implements Movable {
         return zSpeed;
     }
 
-    @Override
-    public Vector2 snagPosition() {
-        return position;
-    }
+
 
     @Override
     public void setZSpeed(float zSpeed) {
         this.zSpeed = zSpeed;
     }
 
-    @Override
+    /*@Override
     public void setZ(float z) {
         this.z = z + height;
-    }
+    }*/
 
     @Override
     public void setOnGround(boolean val) {

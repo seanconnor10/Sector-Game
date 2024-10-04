@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import com.disector.Application;
@@ -66,7 +65,7 @@ class NewEditorMapRenderer {
 
             //Draw Player1 Position
             shape.setColor(Color.TEAL);
-            Vector4 playerPos = app.gameWorld.getPlayerPosition();
+            Vector4 playerPos = app.gameWorld.getPlayerEyesPosition();
             drawCircle(playerPos.x, playerPos.y, app.gameWorld.getPlayerRadius());
 
             //Draw Editor-ViewRenderer Camera Position

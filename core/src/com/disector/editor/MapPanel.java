@@ -70,10 +70,9 @@ class MapPanel extends Panel {
         }
 
         if (input.isJustPressed(Input.Keys.P)) {
-            editor.app.gameWorld.player1.snagPosition().set(
-                    editor.mapPanel.getMouseWorldX(),
-                    editor.mapPanel.getMouseWorldY()
-            );
+            editor.app.gameWorld.player1.pos.x = editor.mapPanel.getMouseWorldX();
+            editor.app.gameWorld.player1.pos.y = editor.mapPanel.getMouseWorldY();
+
             return;
         }
 
