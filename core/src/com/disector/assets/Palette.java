@@ -67,7 +67,7 @@ public class Palette {
             }
         }
 
-        return closest;
+        return new Color(closest.r, closest.g, closest.b, in.a);
     }
 
     public void setToNearest(Color in) {

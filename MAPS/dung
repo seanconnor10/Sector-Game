@@ -9,7 +9,8 @@ MATERIAL (7) :: Img STRIPE ::
 MATERIAL (8) :: Img STARS :: Sky :: 
 MATERIAL (9) :: Img RUST :: 
 MATERIAL (10) :: Img ARCH_STAINED_GLASS :: 
-material img marble_wall
+MATERIAL (11) :: Img MARBLE_WALL :: 
+MATERIAL (12) :: Img SKULL_GATE :: 
 SECTOR (0) :: Height 0 42 :: Mat 5 5 :: Light 0.40 0.50 :: Has 0 1 2 3 5 7 8 9 10 11 ::
 SECTOR (1) :: Height 0 42 :: Mat 5 5 :: Light 0.30 0.30 :: Has 4 6 9 ::
 SECTOR (2) :: Height 0 30 :: Mat 5 5 :: Light 0.40 0.30 :: Has 10 12 13 14 ::
@@ -29,6 +30,7 @@ SECTOR (15) :: Height 0 42 :: Mat 5 5 :: Light 0.30 0.30 :: Has 46 85 86 87 ::
 SECTOR (16) :: Height 0 42 :: Mat 5 5 :: Light 0.25 0.25 :: Has 86 88 89 90 ::
 SECTOR (17) :: Height 0 42 :: Mat 5 5 :: Light 0.20 0.20 :: Has 89 91 92 93 ::
 SECTOR (18) :: Height 0 42 :: Mat 5 5 :: Light 0.10 0.10 :: Has 92 94 95 96 ::
+SECTOR (19) :: Height 0 42 :: Mat 5 5 :: Light 0.40 0.50 :: Has 44 97 98 99 100 101 102 103 ::
 WALL (0) :: Pos -16 28 16 28 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 0 -> 12 :: Scale 0.2500 0.2500 :: 
 WALL (1) :: Pos 16 28 16 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (2) :: Pos 16 -32 8 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
@@ -73,7 +75,7 @@ WALL (40) :: Pos -72 -96 -72 -60 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scal
 WALL (41) :: Pos -72 -60 -56 -60 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (42) :: Pos -56 -60 -56 -80 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (43) :: Pos -16 28 -20 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (44) :: Pos -48 32 -48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (44) :: Pos -48 32 -48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 12 -> 19 :: Scale 0.2500 0.2500 :: 
 WALL (45) :: Pos -48 64 -32 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (46) :: Pos 64 64 64 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 12 -> 15 :: Scale 0.2500 0.2500 :: 
 WALL (47) :: Pos 64 32 20 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
@@ -126,7 +128,14 @@ WALL (93) :: Pos 224 32 128 32 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale
 WALL (94) :: Pos 224 64 320 64 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (95) :: Pos 320 64 320 32 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (96) :: Pos 320 32 224 32 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-SPR_WALL :: Pos 42 64 42 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::
-SPR_WALL :: Pos 42 32 42 64 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::
-SPR_WALL :: Pos -32 64 -32 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::
-SPR_WALL :: Pos -32 32 -32 64 0 :: Height  42 :: Mat ARCH_STAINED_GLASS ::
+WALL (97) :: Pos -48 32 -56 24 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (98) :: Pos -56 24 -72 24 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (99) :: Pos -72 24 -80 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (100) :: Pos -80 32 -80 64 :: Mat SKULL_GATE :: Light 0.80 1.00 1.00 :: Offset 0.0000 1.0000 :: Scale 0.2500 -0.3300 :: 
+WALL (101) :: Pos -80 64 -72 72 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (102) :: Pos -72 72 -56 72 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (103) :: Pos -56 72 -48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+SPR_WALL :: Pos 42 64 42 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS :: 
+SPR_WALL :: Pos 42 32 42 64 0 :: Height  42 :: Mat ARCH_STAINED_GLASS :: 
+SPR_WALL :: Pos -32 64 -32 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS :: 
+SPR_WALL :: Pos -32 32 -32 64 0 :: Height  42 :: Mat ARCH_STAINED_GLASS :: 
