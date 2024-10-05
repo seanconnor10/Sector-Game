@@ -41,7 +41,6 @@ public class Palette {
         colors = cols.toArray(Color.class);
     }
 
-
     public void palletize(Pixmap pix) {
         int w = pix.getWidth();
         int h = pix.getHeight();
@@ -74,6 +73,7 @@ public class Palette {
         Color closest = null;
         float smallestDistance = 3;
         float thisDist = 3;
+        float a = in.a;
 
         for (Color c : colors) {
             thisDist = Math.abs(in.r - c.r) + Math.abs(in.g - c.g) + Math.abs(in.b - c.b);
@@ -84,6 +84,7 @@ public class Palette {
         }
 
         in.set(closest);
+        in.a = a;
     }
 
 

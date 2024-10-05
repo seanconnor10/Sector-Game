@@ -43,15 +43,15 @@ WALL (14) :: Pos 224 256 160 192 :: Mat HEDGE :: Light 1.00 1.00 1.00 ::
 WALL (15) :: Pos 160 192 32 192 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
 WALL (16) :: Pos 32 192 32 96 :: Mat HEDGE :: Light 1.00 1.00 1.00 :: 
 WALL (17) :: Pos -96 448 -96 384 :: Mat HEDGE :: LowerMat HEX_RUST :: UpperMat HEX_STONE :: Light 1.00 0.70 0.70 :: Port 4 -> 1 :: 
-WALL (18) :: Pos -96 320 -32 320 :: Mat HEDGE :: LowerMat HEX_STONE :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: 
-WALL (19) :: Pos 96 320 96 384 :: Mat HEDGE :: LowerMat HEX_STONE :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: 
+WALL (18) :: Pos -96 320 -32 320 :: Mat HEDGE :: LowerMat RUST :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Scale_Lower 1.0000 0.7000 :: 
+WALL (19) :: Pos 96 320 96 384 :: Mat HEDGE :: LowerMat RUST :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Scale_Lower 1.0000 0.7000 :: 
 WALL (20) :: Pos 96 448 0 448 :: Mat HEDGE :: LowerMat HEX_RUST :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 4 -> 1 :: 
-WALL (21) :: Pos -32 320 32 320 :: Mat HEDGE :: LowerMat HEX_STONE :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 5 -> 3 :: 
-WALL (22) :: Pos 32 320 96 320 :: Mat HEDGE :: LowerMat HEX_STONE :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: 
+WALL (21) :: Pos -32 320 32 320 :: Mat HEDGE :: LowerMat RUST :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 5 -> 3 :: Offset_Lower 0.0000 -0.0050 :: Scale_Lower 1.0000 0.7000 :: 
+WALL (22) :: Pos 32 320 96 320 :: Mat HEDGE :: LowerMat RUST :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Scale_Lower 1.0000 0.7000 :: 
 WALL (23) :: Pos -32 320 -32 288 :: Mat HEDGE :: LowerMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 3 -> 1 :: 
 WALL (24) :: Pos -32 288 32 288 :: Mat HEDGE :: LowerMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 3 -> 1 :: 
 WALL (25) :: Pos 32 288 32 320 :: Mat HEDGE :: LowerMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 3 -> 1 :: 
-WALL (26) :: Pos -96 384 -96 320 :: Mat HEDGE :: LowerMat HEX_STONE :: UpperMat HEX_STONE :: Light 1.00 0.70 0.70 :: Port 2 -> 1 :: 
+WALL (26) :: Pos -96 384 -96 320 :: Mat HEDGE :: LowerMat RUST :: UpperMat HEX_STONE :: Light 1.00 0.70 0.70 :: Port 2 -> 1 :: Scale_Lower 1.0000 0.7000 :: 
 WALL (27) :: Pos 0 448 -96 448 :: Mat HEDGE :: LowerMat HEX_RUST :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 4 -> 1 :: 
 WALL (28) :: Pos 96 384 96 448 :: Mat HEDGE :: LowerMat HEX_RUST :: UpperMat HEX_STONE :: Light 1.00 1.00 1.00 :: Port 4 -> 1 :: 
 WALL (29) :: Pos -96 384 -80 384 :: Mat HEDGE :: LowerMat HEX_RUST :: Light 1.00 1.00 1.00 :: Port 4 -> 2 :: 
