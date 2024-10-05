@@ -1,7 +1,6 @@
 package com.disector.gameworld;
 
 import com.badlogic.gdx.math.Vector3;
-import com.disector.Physics;
 import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.renderer.sprites.FacingSprite;
 import com.disector.gameworld.components.Movable;
@@ -19,13 +18,10 @@ class Grenade implements Movable, HasFacingSprite {
 	private static final int IMG_W = 10, IMG_H = 10;
 
 	private static final PhysicsProperties PHYS_PROPS = new PhysicsProperties(
-	0.7f, 0.8f, 0.7f, 1.5f, 50.0f
+	0.7f, 0.8f, 0.7f, 1.5f, 50.0f, 0.25f
 	);
 
 	int currentSectorIndex = 0;
-
-	//Vector2 position = new Vector2();
-	//float z;
 
 	Vector3 pos = new Vector3();
 

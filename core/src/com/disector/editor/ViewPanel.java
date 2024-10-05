@@ -48,7 +48,7 @@ class ViewPanel extends Panel{
             p1.setCurrentSector(editor.viewRenderer.camCurrentSector);
             p1.pos.z = editor.viewRenderer.camZ;
             p1.r = editor.viewRenderer.camR;
-            p1.vLook = editor.viewRenderer.camVLook;
+            //p1.vLook = editor.viewRenderer.camVLook;
         }
 
         if (editor.state == null && input.isJustPressed(Input.Keys.F)) {

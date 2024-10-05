@@ -19,9 +19,9 @@ public class Player implements Movable {
 
     final float MAX_SPEED = 150.f, ACCEL = 10.0f;
     final float MAX_SPEED_SLOW = 60.f;
-    final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.5f;
-    final float TURN_SPEED = 3.0f, VLOOK_SPEED = 200.0f;
-    final float VLOOK_CLAMP = 300.f;
+    final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.1f;
+    final float TURN_SPEED = 3.0f, VLOOK_SPEED = 30.0f;
+    final float VLOOK_ANGLE_CLAMP = 60f;
 
     final float CROUCH_SPEED = 100;
     final float HEADSPACE = 3;
@@ -30,14 +30,12 @@ public class Player implements Movable {
     final float RADIUS = 5.f;
 
     final PhysicsProperties phys_props = new PhysicsProperties(
-    0.5f, 0.9f, 0.5f, 0.0f, 300.0f
+    0.5f, 0.9f, 0.5f, 0.0f, 300.0f, 1f
     );
 
-    //public Vector2 position = new Vector2(0.f, 0.f);
     public Vector3 pos = new Vector3();
-    //public float z
     public float r;
-    public float vLook; // 'Angle' of vertical view direction
+    public float v_angle; // Actual angle of vertical look
     float height = STANDING_HEIGHT;
 
     Vector2 velocity = new Vector2(0.f, 0.f);
@@ -48,15 +46,12 @@ public class Player implements Movable {
     int currentSectorIndex;
     boolean onGround;
 
-
     Player(GameWorld world, InputChainInterface input) {
         this.world = world;
         this.input = input;
     }
 
-    public Vector3 movementInput(float dt) {
-        Vector3 startingPosition = new Vector3(pos);
-
+    public void movementInput(float dt) {
         //Record needed button presses
         boolean forwardDown   = input.getActionInfo("FORWARD")   .isDown;
         boolean leftDown      = input.getActionInfo("LEFT")      .isDown;
@@ -69,10 +64,8 @@ public class Player implements Movable {
 
         boolean crouch        = input.isDown(Input.Keys.CONTROL_LEFT);
 
-        float prevZoom = zoom;
-        zoom = Gdx.input.isButtonPressed(Input.Buttons.RIGHT) ? 3 : 1;
-        vLook *= zoom/prevZoom;
-
+        //float prevZoom = zoom;
+        zoom = Gdx.input.isButtonPressed(Input.Buttons.RIGHT) ? 4 : 1;
 
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);
@@ -123,13 +116,13 @@ public class Player implements Movable {
         //Rotate player + look up and down
         if (Gdx.input.isCursorCatched()) {
             r -= InputRecorder.mouseDeltaX * MOUSE_SENS_X;
-            vLook -= InputRecorder.mouseDeltaY * MOUSE_SENS_Y;
+            v_angle -= InputRecorder.mouseDeltaY * MOUSE_SENS_Y;
         }
         if (turnLeftDown) r += TURN_SPEED*dt;
         if (turnRightDown) r -= TURN_SPEED*dt;
-        if (lookUpDown) vLook += VLOOK_SPEED*dt;
-        if (lookDownDown) vLook -= VLOOK_SPEED*dt;
-        vLook = Math.min( Math.max(vLook, -VLOOK_CLAMP), VLOOK_CLAMP );
+        if (lookUpDown) v_angle += VLOOK_SPEED*dt;
+        if (lookDownDown) v_angle -= VLOOK_SPEED*dt;
+        v_angle = Math.min( Math.max(v_angle, -VLOOK_ANGLE_CLAMP), VLOOK_ANGLE_CLAMP );
 
         //Crouching
         if (crouch && height != CROUCHING_HEIGHT) {
@@ -149,20 +142,7 @@ public class Player implements Movable {
         if (onGround && input.isJustPressed(Input.Keys.SPACE))
             zSpeed = 100.0f;
 
-        //Return starting position for collision function to use
-        return startingPosition;
     }
-
-    //Positionable Implementations //////////////
-    /*@Override
-    public Vector2 copyPosition() {
-        return new Vector2(position);
-    }
-
-    @Override
-    public float getZ() {
-        return z - height;
-    }*/
 
     @Override
     public int getCurrentSector() {
@@ -184,11 +164,6 @@ public class Player implements Movable {
         return RADIUS;
     }
 
-    /*@Override
-    public Vector2 snagPosition() {
-        return position;
-    }*/
-
     @Override
     public Vector3 pos() {
         return pos;
@@ -205,17 +180,10 @@ public class Player implements Movable {
         return zSpeed;
     }
 
-
-
     @Override
     public void setZSpeed(float zSpeed) {
         this.zSpeed = zSpeed;
     }
-
-    /*@Override
-    public void setZ(float z) {
-        this.z = z + height;
-    }*/
 
     @Override
     public void setOnGround(boolean val) {

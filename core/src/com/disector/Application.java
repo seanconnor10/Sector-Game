@@ -282,7 +282,8 @@ public class Application extends ApplicationAdapter {
             ((SoftwareRenderer) renderer).addSpriteList(gameWorld.getSpriteList());
         }
 
-        renderer.placeCamera(gameWorld.getPlayerEyesPosition(), gameWorld.getPlayerVLook(), gameWorld.getPlayerSectorIndex());
+        float vLook = (float) Math.tan(Math.toRadians(gameWorld.getPlayerVAngle())) * renderer.camFOV;
+        renderer.placeCamera(gameWorld.getPlayerEyesPosition(), vLook, gameWorld.getPlayerSectorIndex());
         renderer.renderWorld();
         renderer.drawFrame();
 
