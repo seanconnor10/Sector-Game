@@ -81,7 +81,8 @@ public class GameWorld implements I_AppFocus{
             grenade.currentSectorIndex = player1.currentSectorIndex;
             grenade.pos.set(player1.pos);
             grenade.pos.z = player1.pos.z + player1.height - grenade.getHeight();
-            float vAngleFactor = (float) Math.pow( Math.sin(Math.toRadians(player1.v_angle)), 3);
+            float vSign = Math.signum(player1.v_angle);
+            float vAngleFactor = (float) Math.pow( Math.sin(Math.toRadians(player1.v_angle)), 2) * vSign;
             final float FORCE = 300;
             float xyForceFactor = FORCE * (1.f - Math.abs(vAngleFactor));
             grenade.velocity.set(
