@@ -70,24 +70,37 @@ class ViewPanel extends Panel{
         editor.viewRenderer.sectorHighlightIndex = -1;
         editor.shouldUpdateViewRenderer = true;
 
-        recentViewClick = new ActiveSelection.Surface(info.index, info.type);
-
-        switch (info.type) {
-        case WALL_MAIN:
-        case WALL_UPPER:
-        case WALL_LOWER:
-            editor.viewRenderer.highLightStrength = 0.75f;
-            editor.viewRenderer.wallHighLightIndex = info.index;
-            editor.propertiesPanel.wallPropertiesWindow.setWall(info.index);
-            break;
-        case FLOOR:
-        case CEIL:
-            editor.viewRenderer.highLightStrength = 0.75f;
-            editor.viewRenderer.sectorHighlightIndex = info.index;
-            editor.propertiesPanel.sectorPropertiesWindow.setSector(info.index);
-            break;
-        default:
-            break;
+        if (input.isDown(Input.Keys.SHIFT_LEFT)) {
+            boolean isWall =
+                info.type == EditingSoftwareRenderer.CLICK_TYPE.WALL_MAIN  ||
+                info.type == EditingSoftwareRenderer.CLICK_TYPE.WALL_LOWER ||
+                info.type == EditingSoftwareRenderer.CLICK_TYPE.WALL_UPPER;
+            if (isWall) editor.selection.toggleWallInSelection(info.index);
+        } else if (input.isDown(Input.Keys.CONTROL_LEFT)) {
+            boolean isWall =
+                    info.type == EditingSoftwareRenderer.CLICK_TYPE.WALL_MAIN  ||
+                            info.type == EditingSoftwareRenderer.CLICK_TYPE.WALL_LOWER ||
+                            info.type == EditingSoftwareRenderer.CLICK_TYPE.WALL_UPPER;
+            if (isWall) editor.selection.toggleWallInSelection(info.index);
+        } else {
+            recentViewClick = new ActiveSelection.Surface(info.index, info.type);
+            switch (info.type) {
+                case WALL_MAIN:
+                case WALL_UPPER:
+                case WALL_LOWER:
+                    editor.viewRenderer.highLightStrength = 0.75f;
+                    editor.viewRenderer.wallHighLightIndex = info.index;
+                    editor.propertiesPanel.wallPropertiesWindow.setWall(info.index);
+                    break;
+                case FLOOR:
+                case CEIL:
+                    editor.viewRenderer.highLightStrength = 0.75f;
+                    editor.viewRenderer.sectorHighlightIndex = info.index;
+                    editor.propertiesPanel.sectorPropertiesWindow.setSector(info.index);
+                    break;
+                default:
+                    break;
+            }
         }
 
     }

@@ -48,6 +48,7 @@ class MapPanel extends Panel {
 
         if (editor.state == null) {
             editor.selection.addHighlightedWallToSelection();
+            editor.shouldUpdateViewRenderer = true;
         }
 
     }

@@ -8,6 +8,7 @@ import com.disector.Sector;
 import com.disector.Application;
 import com.disector.Material;
 import com.disector.assets.PixmapContainer;
+import com.disector.editor.Editor;
 
 import java.nio.ShortBuffer;
 import java.util.Arrays;
@@ -19,27 +20,29 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
      * which Wall or Sector Floor/Ceil was clicked On
      */
 
-    private final Color highlightColorSector = new Color(0x10_D0_40_FF);
-    private final Color highlightColorWall = new Color(0xD0_10_40_FF);
+    private final Color highlightColorSector = new Color(Color.GOLDENROD);
+    private final Color highlightColorWall = new Color(Color.TEAL);
+
+    private final Color wallSelectedColor = new Color(Color.PINK);
 
     public int wallHighLightIndex = -1;
     public int sectorHighlightIndex = -1;
     public float highLightStrength = 0;
 
+    private final Editor editor;
 
     public enum CLICK_TYPE {FLOOR, CEIL, WALL_MAIN, WALL_UPPER, WALL_LOWER}
 
     public class ClickInfo {
         public int index = -1;
         public CLICK_TYPE type;
-
     };
-
 
     public ClickInfo[] clickInfo = new ClickInfo[frameWidth*frameHeight];
 
-    public EditingSoftwareRenderer(Application app) {
+    public EditingSoftwareRenderer(Application app, Editor editor) {
         super(app);
+        this.editor = editor;
     }
 
 
@@ -232,6 +235,8 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
         float secHeight = secCeilZ - secFloorZ;
 
+        boolean wallSelected = editor.selection.getWalls().contains(w, true);
+
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;
 
@@ -382,6 +387,19 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                 if (wallHighLightIndex == wInd) {
                     Color c = highlightColorWall;
                     float f = highLightStrength;
+                    float r2 = r / 255f;
+                    float g2 = g / 255f;
+                    float b2 = b / 255f;
+                    r2 = r2 + (c.r - r2) * f;
+                    g2 = g2 + (c.g - g2) * f;
+                    b2 = b2 + (c.b - b2) * f;
+                    r = (int)(r2*255f) & 0xFF;
+                    g = (int)(g2*255f) & 0xFF;
+                    b = (int)(b2*255f) & 0xFF;
+                }
+                if (wallSelected) {
+                    Color c = wallSelectedColor;
+                    final float f = 0.75f;
                     float r2 = r / 255f;
                     float g2 = g / 255f;
                     float b2 = b / 255f;

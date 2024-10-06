@@ -18,7 +18,7 @@ public class STATE_SplittingWall extends EditorState {
 
     @Override
     void step() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+        if (editor.focusedPanel == panel && !Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             shouldFinish = true;
         }
     }

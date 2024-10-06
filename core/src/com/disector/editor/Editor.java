@@ -53,7 +53,7 @@ public class Editor implements I_AppFocus {
     final EditorMessageLog messageLog = new EditorMessageLog();
     Panel logPanel;
 
-    final ActiveSelection selection;
+    public final ActiveSelection selection;
 
     EditorState state;
     float mouseX, mouseY;
@@ -76,11 +76,24 @@ public class Editor implements I_AppFocus {
         this.input = new InputChainNode(input, "Editor") {
             @Override
             public boolean keyDown(int keycode) {
-                if (keycode == Input.Keys.ESCAPE) {
-                    selection.clear();
-                    return true;
-                }
-                return super.keyDown(keycode);
+               switch(keycode) {
+               case Input.Keys.ESCAPE:
+                   selection.clear();
+                   return true;
+               case Input.Keys.C:
+                   try {
+                       selection.copiedWall = new Wall(walls.get(viewRenderer.wallHighLightIndex));
+                       messageLog.log("Wall " + viewRenderer.wallHighLightIndex + " copied");
+                   } catch (ArrayIndexOutOfBoundsException ignored){}
+                   return true;
+               case Input.Keys.V:
+                   pasteWallProperties();
+                   messageLog.log("Wall info copied");
+                   return true;
+               default:
+                   break;
+               }
+               return super.keyDown(keycode);
             }
         };
 
@@ -94,7 +107,7 @@ public class Editor implements I_AppFocus {
         panels = new Panel[] { mapPanel, viewPanel, menuPanel, propertiesPanel };
 
         this.mapRenderer = new NewEditorMapRenderer(app, this, mapPanel.rect);
-        this.viewRenderer = new EditingSoftwareRenderer(app);
+        this.viewRenderer = new EditingSoftwareRenderer(app, this);
         this.viewRenderer.placeCamera(100, 30, -(float)Math.PI/4f);
         this.viewRenderer.camZ = 20;
         this.selection = new ActiveSelection(sectors, walls, this);
@@ -730,6 +743,7 @@ public class Editor implements I_AppFocus {
 
     public void onMapLoad() {
         propertiesPanel.stage.onMapLoad();
+        shouldUpdateViewRenderer = true;
     }
 
     private boolean wallsConnectOneWay(Wall a, Wall b) {
@@ -803,6 +817,18 @@ public class Editor implements I_AppFocus {
         sectors.add(newSector);
 
         selection.clearWalls();
+
+        shouldUpdateViewRenderer = true;
+    }
+
+    private void pasteWallProperties() {
+        Wall src = selection.copiedWall;
+        if (src == null) return;
+        for (Wall dst : selection.selectedWalls) {
+            dst.copyTexProps(src);
+        }
+        shouldUpdateViewRenderer = true;
+        selection.clear();
     }
 
 }

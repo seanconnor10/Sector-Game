@@ -52,25 +52,29 @@ public class Wall {
         this.type = w.type;
         this.linkA = w.linkA;
         this.linkB = w.linkB;
-        this.mat = w.mat;
-        this.matUpper = w.matUpper;
-        this.matLower = w.matLower;
-        this.light = w.light;
-        this.lightUpper = w.lightUpper;
-        this.lightLower = w.lightLower;
-        this.xOffset = w.xOffset;
-        this.yOffset = w.yOffset;
-        this.xScale = w.xScale;
-        this.yScale = w.yScale;
-        this.Upper_xOffset = w.Upper_xOffset;
-        this.Upper_yOffset = w.Upper_yOffset;
-        this.Upper_xScale = w.Upper_xScale;
-        this.Upper_yScale = w.Upper_yScale;
-        this.Lower_xOffset = w.Lower_xOffset;
-        this.Lower_yOffset = w.Lower_yOffset;
-        this.Lower_xScale = w.Lower_xScale;
-        this.Lower_yScale = w.Lower_yScale;
+        this.copyTexProps(w);
         setNormalAngle();
+    }
+    
+    public void copyTexProps(Wall src) {
+        this.mat = src.mat;
+        this.matUpper = src.matUpper;
+        this.matLower = src.matLower;
+        this.light = src.light;
+        this.lightUpper = src.lightUpper;
+        this.lightLower = src.lightLower;
+        this.xOffset = src.xOffset;
+        this.yOffset = src.yOffset;
+        this.xScale = src.xScale;
+        this.yScale = src.yScale;
+        this.Upper_xOffset = src.Upper_xOffset;
+        this.Upper_yOffset = src.Upper_yOffset;
+        this.Upper_xScale = src.Upper_xScale;
+        this.Upper_yScale = src.Upper_yScale;
+        this.Lower_xOffset = src.Lower_xOffset;
+        this.Lower_yOffset = src.Lower_yOffset;
+        this.Lower_xScale = src.Lower_xScale;
+        this.Lower_yScale = src.Lower_yScale;
     }
 
     public float length() {

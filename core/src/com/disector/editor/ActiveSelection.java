@@ -4,27 +4,28 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.IntSet;
 import com.disector.Physics;
 import com.disector.Sector;
 import com.disector.Wall;
 import com.disector.WallInfoPack;
 import com.disector.renderer.EditingSoftwareRenderer;
 
-class ActiveSelection {
+public class ActiveSelection {
     final Editor editor;
     final Array<Wall> allWalls;
     final Array<Sector> allSectors;
 
-    final IntArray sectorIndices;
-    final Array<Sector> selectedSectors;
-    final IntArray wallIndices;
-    final Array<Wall> selectedWalls;
+   final IntArray sectorIndices;
+   final Array<Sector> selectedSectors;
+   final IntArray wallIndices;
+   final Array<Wall> selectedWalls;
 
     int highlightedSectorIndex;
     Sector highlightedSector;
     int highlightedWallIndex;
     Wall highlightedWall;
+
+    Wall copiedWall;
 
     ActiveSelection(Array<Sector> sectors, Array<Wall> walls, Editor editor) {
         selectedSectors = new Array<>();
@@ -61,11 +62,11 @@ class ActiveSelection {
         selectedSectors.clear();
     }
 
-    Array<Wall> getWalls() {
+    public Array<Wall> getWalls() {
         return new Array<Wall>(selectedWalls);
     }
 
-    Array<Sector> getSectors() {
+    public Array<Sector> getSectors() {
         return new Array<Sector>(selectedSectors);
     }
 
@@ -139,11 +140,30 @@ class ActiveSelection {
     }
 
     void addHighlightedWallToSelection() {
-
         if (highlightedWallIndex == -1 || wallIndices.contains(highlightedWallIndex))
             return;
 
         wallIndices.add(highlightedWallIndex);
         selectedWalls.add(editor.walls.get(highlightedWallIndex));
+    }
+
+    void addWallToSelection(int ind) {
+        if (ind <0 || ind>=allWalls.size || wallIndices.contains(ind))
+            return;
+
+        wallIndices.add(ind);
+        selectedWalls.add(editor.walls.get(ind));
+    }
+
+    void toggleWallInSelection(int ind) {
+        if (ind <0 || ind>=allWalls.size) return;
+        boolean already_on = wallIndices.contains(ind);
+        if (already_on) {
+            wallIndices.removeValue(ind);
+            selectedWalls.removeValue(editor.walls.get(ind), true);
+        } else {
+            wallIndices.add(ind);
+            selectedWalls.add(editor.walls.get(ind));
+        }
     }
 }
