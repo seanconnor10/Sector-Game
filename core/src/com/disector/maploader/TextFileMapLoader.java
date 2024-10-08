@@ -458,11 +458,12 @@ public class TextFileMapLoader implements MapLoader {
         str.append(":: ");
 
         //Materials saved by name reference
-        str.append("Mat ").append( materials.get(w.mat).nameReference ).append(" :: ");
-        if (w.matLower != 0) {
+        if (w.mat != -1 )
+            str.append("Mat ").append( materials.get(w.mat).nameReference ).append(" :: ");
+        if (w.matLower != -1) {
             str.append("LowerMat ").append( materials.get(w.matLower).nameReference ).append(" :: ");
         }
-        if (w.matUpper != 0) {
+        if (w.matUpper != -1) {
             str.append("UpperMat ").append( materials.get(w.matUpper).nameReference ).append(" :: ");
         }
 
