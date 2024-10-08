@@ -45,150 +45,150 @@ SECTOR (28) :: Height -20 57 :: Mat 6 5 :: Light 0.40 0.40 :: Has 123 125 127 12
 SECTOR (29) :: Height -25 57 :: Mat 6 5 :: Light 0.30 0.30 :: Has 122 126 128 129 ::
 SECTOR (30) :: Height -30 77 :: Mat 6 5 :: Light 0.50 0.50 :: Has 119 130 131 132 133 134 136 137 138 139 140 141 142 143 ::
 SECTOR (31) :: Height -15 77 :: Mat 6 5 :: Light 0.50 0.50 :: Has 135 137 138 139 ::
-WALL (0) :: Pos -16 28 16 28 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 0 -> 12 :: Scale 0.2500 0.2500 :: 
-WALL (1) :: Pos 16 28 16 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (2) :: Pos 16 -32 8 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (3) :: Pos -16 -32 -16 -8 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (4) :: Pos -16 8 -16 24 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (5) :: Pos -16 -8 -8 -8 :: Mat HEX_RUST :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (6) :: Pos -8 8 -16 8 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (7) :: Pos -8 -8 -8 8 :: Mat HEX_RUST :: Light 0.50 1.00 1.00 :: Scale 0.2900 0.2500 :: 
-WALL (8) :: Pos -16 24 -16 28 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (9) :: Pos -16 24 -8 8 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: 
-WALL (10) :: Pos 8 -32 -8 -32 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.50 0.40 1.00 :: Port 0 -> 2 :: Scale 0.2500 0.2500 :: Offset_Upper 0.8000 0.0000 :: Scale_Upper -0.2500 0.2500 :: 
-WALL (11) :: Pos -8 -32 -16 -32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (12) :: Pos 8 -32 8 -40 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (13) :: Pos 8 -40 -8 -40 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.50 0.20 1.00 :: Port 2 -> 3 :: Scale 0.2500 0.2500 :: Scale_Upper 0.2500 0.2500 :: 
-WALL (14) :: Pos -8 -40 -8 -32 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (15) :: Pos 8 -40 16 -40 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (16) :: Pos 16 -40 16 -56 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (17) :: Pos 16 -64 0 -64 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (18) :: Pos -16 -64 -16 -56 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (19) :: Pos -16 -40 -8 -40 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (20) :: Pos -16 -56 -16 -40 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (21) :: Pos 16 -56 16 -64 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (22) :: Pos -8 -40 -16 -56 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 4 -> 3 :: 
-WALL (23) :: Pos 8 -40 16 -56 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 3 -> 5 :: 
-WALL (24) :: Pos -13 -64 -16 -64 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (25) :: Pos 0 -64 -13 -64 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.30 1.00 :: Port 3 -> 6 :: Scale 0.2500 0.2500 :: Offset_Upper 0.4000 0.0000 :: Scale_Upper 0.2500 0.2500 :: 
-WALL (26) :: Pos 0 -64 0 -76 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (27) :: Pos 0 -76 -13 -76 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Port 6 -> 7 :: Scale 0.2500 0.2500 :: 
-WALL (28) :: Pos -13 -76 -13 -64 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (29) :: Pos 0 -76 0 -96 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (30) :: Pos 0 -96 -13 -96 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (31) :: Pos -13 -96 -13 -80 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Port 7 -> 8 :: Scale 0.2500 0.2500 :: 
-WALL (32) :: Pos -13 -80 -13 -76 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (33) :: Pos -13 -96 -32 -96 :: Mat HEX_STONE :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (34) :: Pos -32 -96 -32 -80 :: Mat HEX_STONE :: Light 0.00 1.00 1.00 :: Port 8 -> 9 :: Scale 0.2500 0.2500 :: 
-WALL (35) :: Pos -32 -80 -13 -80 :: Mat HEX_STONE :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (36) :: Pos -32 -96 -44 -96 :: Mat HEX_STONE :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (37) :: Pos -44 -96 -56 -80 :: Mat HEX_STONE :: Light 0.00 1.00 1.00 :: Port 9 -> 11 :: Scale 0.2500 0.2500 :: 
-WALL (38) :: Pos -56 -80 -32 -80 :: Mat HEX_STONE :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (39) :: Pos -44 -96 -72 -96 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (40) :: Pos -72 -96 -72 -60 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (41) :: Pos -72 -60 -56 -60 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (42) :: Pos -56 -60 -56 -80 :: Mat HEX_RUST :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (43) :: Pos -16 28 -20 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (44) :: Pos -48 32 -48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 12 -> 19 :: Scale 0.2500 0.2500 :: 
-WALL (45) :: Pos -48 64 -32 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (46) :: Pos 64 64 64 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Port 12 -> 15 :: Scale 0.2500 0.2500 :: 
-WALL (47) :: Pos 64 32 20 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (48) :: Pos -32 64 -28 68 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (49) :: Pos 48 64 64 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (50) :: Pos -16 96 -12 96 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (51) :: Pos 32 96 44 68 :: Mat HEX_STONE :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (52) :: Pos -12 96 -8 92 :: Mat MARBLE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (53) :: Pos 28 96 32 96 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (54) :: Pos -8 92 -4 92 :: Mat MARBLE :: Light 0.60 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (55) :: Pos 24 92 28 96 :: Mat MARBLE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (56) :: Pos -20 32 -48 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (57) :: Pos 20 32 16 28 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (58) :: Pos -28 68 -16 96 :: Mat HEX_STONE :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (59) :: Pos 44 68 48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (0) :: Pos -16 28 16 28 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Port 0 -> 12 :: Scale 0.2500 0.2500 :: 
+WALL (1) :: Pos 16 28 16 -32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (2) :: Pos 16 -32 8 -32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (3) :: Pos -16 -32 -16 -8 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (4) :: Pos -16 8 -16 24 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (5) :: Pos -16 -8 -8 -8 :: Mat HEX_RUST :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (6) :: Pos -8 8 -16 8 :: Mat HEX_RUST :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (7) :: Pos -8 -8 -8 8 :: Mat HEX_RUST :: LowerMat DIRT :: UpperMat DIRT :: Light 0.50 1.00 1.00 :: Scale 0.2900 0.2500 :: 
+WALL (8) :: Pos -16 24 -16 28 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (9) :: Pos -16 24 -8 8 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: 
+WALL (10) :: Pos 8 -32 -8 -32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.50 0.40 1.00 :: Port 0 -> 2 :: Scale 0.2500 0.2500 :: Offset_Upper 0.8000 0.0000 :: Scale_Upper -0.2500 0.2500 :: 
+WALL (11) :: Pos -8 -32 -16 -32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (12) :: Pos 8 -32 8 -40 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (13) :: Pos 8 -40 -8 -40 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.50 0.20 1.00 :: Port 2 -> 3 :: Scale 0.2500 0.2500 :: Scale_Upper 0.2500 0.2500 :: 
+WALL (14) :: Pos -8 -40 -8 -32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (15) :: Pos 8 -40 16 -40 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (16) :: Pos 16 -40 16 -56 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (17) :: Pos 16 -64 0 -64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (18) :: Pos -16 -64 -16 -56 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (19) :: Pos -16 -40 -8 -40 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (20) :: Pos -16 -56 -16 -40 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (21) :: Pos 16 -56 16 -64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (22) :: Pos -8 -40 -16 -56 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 4 -> 3 :: 
+WALL (23) :: Pos 8 -40 16 -56 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 3 -> 5 :: 
+WALL (24) :: Pos -13 -64 -16 -64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (25) :: Pos 0 -64 -13 -64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.30 1.00 :: Port 3 -> 6 :: Scale 0.2500 0.2500 :: Offset_Upper 0.4000 0.0000 :: Scale_Upper 0.2500 0.2500 :: 
+WALL (26) :: Pos 0 -64 0 -76 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (27) :: Pos 0 -76 -13 -76 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Port 6 -> 7 :: Scale 0.2500 0.2500 :: 
+WALL (28) :: Pos -13 -76 -13 -64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (29) :: Pos 0 -76 0 -96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (30) :: Pos 0 -96 -13 -96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (31) :: Pos -13 -96 -13 -80 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Port 7 -> 8 :: Scale 0.2500 0.2500 :: 
+WALL (32) :: Pos -13 -80 -13 -76 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (33) :: Pos -13 -96 -32 -96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (34) :: Pos -32 -96 -32 -80 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.00 1.00 1.00 :: Port 8 -> 9 :: Scale 0.2500 0.2500 :: 
+WALL (35) :: Pos -32 -80 -13 -80 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (36) :: Pos -32 -96 -44 -96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (37) :: Pos -44 -96 -56 -80 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.00 1.00 1.00 :: Port 9 -> 11 :: Scale 0.2500 0.2500 :: 
+WALL (38) :: Pos -56 -80 -32 -80 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.00 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (39) :: Pos -44 -96 -72 -96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (40) :: Pos -72 -96 -72 -60 :: Mat HEX_RUST :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (41) :: Pos -72 -60 -56 -60 :: Mat HEX_RUST :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (42) :: Pos -56 -60 -56 -80 :: Mat HEX_RUST :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (43) :: Pos -16 28 -20 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (44) :: Pos -48 32 -48 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Port 12 -> 19 :: Scale 0.2500 0.2500 :: 
+WALL (45) :: Pos -48 64 -32 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (46) :: Pos 64 64 64 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Port 12 -> 15 :: Scale 0.2500 0.2500 :: 
+WALL (47) :: Pos 64 32 20 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (48) :: Pos -32 64 -28 68 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (49) :: Pos 48 64 64 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (50) :: Pos -16 96 -12 96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (51) :: Pos 32 96 44 68 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (52) :: Pos -12 96 -8 92 :: Mat MARBLE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (53) :: Pos 28 96 32 96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (54) :: Pos -8 92 -4 92 :: Mat MARBLE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.60 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (55) :: Pos 24 92 28 96 :: Mat MARBLE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (56) :: Pos -20 32 -48 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (57) :: Pos 20 32 16 28 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (58) :: Pos -28 68 -16 96 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (59) :: Pos 44 68 48 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 WALL (60) :: Pos -4 92 20 92 :: Mat MARBLE :: LowerMat MARBLE :: UpperMat MARBLE :: Light 0.50 0.50 0.50 :: Port 12 -> 13 :: Scale 0.5000 0.5000 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 0.2500 0.2500 :: 
-WALL (61) :: Pos 20 92 24 92 :: Mat MARBLE :: Light 0.60 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (62) :: Pos -4 92 0 96 :: Mat RUST :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (63) :: Pos 0 96 16 96 :: Mat RUST :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (64) :: Pos 16 96 20 92 :: Mat RUST :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (65) :: Pos 4 80 4 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (66) :: Pos 4 76 0 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (67) :: Pos 0 76 0 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (68) :: Pos 0 72 -8 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (69) :: Pos -8 72 -8 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (70) :: Pos -8 64 0 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (71) :: Pos 0 64 0 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (72) :: Pos 0 60 4 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (73) :: Pos 4 60 4 48 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (74) :: Pos 4 48 12 48 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (75) :: Pos 12 48 12 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (76) :: Pos 12 60 16 60 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (77) :: Pos 16 60 16 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (78) :: Pos 16 64 24 64 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (79) :: Pos 24 64 24 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (80) :: Pos 24 72 16 72 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (81) :: Pos 16 72 16 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (82) :: Pos 16 76 12 76 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (83) :: Pos 12 76 12 80 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (84) :: Pos 12 80 4 80 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
-WALL (85) :: Pos 64 64 96 64 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (86) :: Pos 96 64 96 32 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Port 15 -> 16 :: Scale 0.2500 0.2500 :: 
-WALL (87) :: Pos 96 32 64 32 :: Mat HEX_STONE :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (88) :: Pos 96 64 128 64 :: Mat HEX_STONE :: Light 0.25 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (89) :: Pos 128 64 128 32 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Port 16 -> 17 :: Scale 0.2500 0.2500 :: 
-WALL (90) :: Pos 128 32 96 32 :: Mat HEX_STONE :: Light 0.25 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (91) :: Pos 128 64 224 64 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (92) :: Pos 224 64 224 32 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Port 17 -> 18 :: Scale 0.2500 0.2500 :: 
-WALL (93) :: Pos 224 32 128 32 :: Mat HEX_STONE :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (94) :: Pos 224 64 320 64 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (95) :: Pos 320 64 320 32 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (96) :: Pos 320 32 224 32 :: Mat HEX_STONE :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (97) :: Pos -48 32 -56 24 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (98) :: Pos -56 24 -72 24 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (99) :: Pos -72 24 -80 32 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (100) :: Pos -80 32 -80 64 :: Mat SKULL_GATE :: Light 0.80 1.00 1.00 :: Offset 0.0000 1.0000 :: Scale 0.2500 -0.3300 :: 
-WALL (101) :: Pos -80 64 -72 72 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (102) :: Pos -72 72 -56 72 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.40 0.30 1.00 :: Port 19 -> 23 :: Scale 0.2500 0.2500 :: 
-WALL (103) :: Pos -56 72 -48 64 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (104) :: Pos -72 72 -72 88 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (105) :: Pos -72 88 -88 88 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (106) :: Pos -88 88 -88 120 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (61) :: Pos 20 92 24 92 :: Mat MARBLE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.60 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (62) :: Pos -4 92 0 96 :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (63) :: Pos 0 96 16 96 :: LowerMat DIRT :: UpperMat DIRT :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (64) :: Pos 16 96 20 92 :: LowerMat DIRT :: UpperMat DIRT :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (65) :: Pos 4 80 4 76 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (66) :: Pos 4 76 0 76 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (67) :: Pos 0 76 0 72 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (68) :: Pos 0 72 -8 72 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (69) :: Pos -8 72 -8 64 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (70) :: Pos -8 64 0 64 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (71) :: Pos 0 64 0 60 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (72) :: Pos 0 60 4 60 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (73) :: Pos 4 60 4 48 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (74) :: Pos 4 48 12 48 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (75) :: Pos 12 48 12 60 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (76) :: Pos 12 60 16 60 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (77) :: Pos 16 60 16 64 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (78) :: Pos 16 64 24 64 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (79) :: Pos 24 64 24 72 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (80) :: Pos 24 72 16 72 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (81) :: Pos 16 72 16 76 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (82) :: Pos 16 76 12 76 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (83) :: Pos 12 76 12 80 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (84) :: Pos 12 80 4 80 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 14 -> 12 :: 
+WALL (85) :: Pos 64 64 96 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (86) :: Pos 96 64 96 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Port 15 -> 16 :: Scale 0.2500 0.2500 :: 
+WALL (87) :: Pos 96 32 64 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.30 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (88) :: Pos 96 64 128 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.25 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (89) :: Pos 128 64 128 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Port 16 -> 17 :: Scale 0.2500 0.2500 :: 
+WALL (90) :: Pos 128 32 96 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.25 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (91) :: Pos 128 64 224 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (92) :: Pos 224 64 224 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Port 17 -> 18 :: Scale 0.2500 0.2500 :: 
+WALL (93) :: Pos 224 32 128 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.20 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (94) :: Pos 224 64 320 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (95) :: Pos 320 64 320 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (96) :: Pos 320 32 224 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.10 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (97) :: Pos -48 32 -56 24 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (98) :: Pos -56 24 -72 24 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (99) :: Pos -72 24 -80 32 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (100) :: Pos -80 32 -80 64 :: Mat SKULL_GATE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.80 1.00 1.00 :: Offset 0.0000 1.0000 :: Scale 0.2500 -0.3300 :: 
+WALL (101) :: Pos -80 64 -72 72 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (102) :: Pos -72 72 -56 72 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.40 0.30 1.00 :: Port 19 -> 23 :: Scale 0.2500 0.2500 :: 
+WALL (103) :: Pos -56 72 -48 64 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (104) :: Pos -72 72 -72 88 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (105) :: Pos -72 88 -88 88 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (106) :: Pos -88 88 -88 120 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
 WALL (107) :: Pos -88 120 -40 120 :: Mat HEX_STONE :: LowerMat HEX_STONE :: UpperMat HEX_STONE :: Light 0.60 0.60 0.50 :: Port 21 -> 24 :: Scale 0.2500 0.2500 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (108) :: Pos -40 120 -40 88 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (109) :: Pos -40 88 -56 88 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (110) :: Pos -56 88 -56 72 :: Mat HEX_STONE :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (111) :: Pos -72 88 -56 88 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Port 23 -> 21 :: Scale 0.2500 0.2500 :: Scale_Upper 0.2500 0.2500 :: 
-WALL (112) :: Pos -88 120 -88 136 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (108) :: Pos -40 120 -40 88 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (109) :: Pos -40 88 -56 88 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (110) :: Pos -56 88 -56 72 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat DIRT :: Light 0.40 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (111) :: Pos -72 88 -56 88 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Port 23 -> 21 :: Scale 0.2500 0.2500 :: Scale_Upper 0.2500 0.2500 :: 
+WALL (112) :: Pos -88 120 -88 136 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
 WALL (113) :: Pos -88 136 -40 136 :: Mat HEX_STONE :: LowerMat MARBLE :: UpperMat HEX_STONE :: Light 0.60 0.60 0.50 :: Port 24 -> 25 :: Scale 0.2500 0.2500 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (114) :: Pos -40 136 -40 120 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (115) :: Pos -88 136 -88 152 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (114) :: Pos -40 136 -40 120 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.60 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (115) :: Pos -88 136 -88 152 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
 WALL (116) :: Pos -88 152 -40 152 :: Mat HEX_STONE :: LowerMat MARBLE :: UpperMat HEX_STONE :: Light 0.60 0.60 0.50 :: Port 25 -> 27 :: Scale 0.2500 0.2500 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (117) :: Pos -40 152 -40 136 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (118) :: Pos -88 152 -88 168 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (119) :: Pos -88 224 -40 224 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Port 26 -> 30 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (120) :: Pos -40 224 -40 200 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (121) :: Pos -88 200 -88 224 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (122) :: Pos -88 184 -88 200 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (123) :: Pos -88 168 -88 184 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (124) :: Pos -40 168 -40 152 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (125) :: Pos -40 184 -40 168 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (126) :: Pos -40 200 -40 184 :: Mat HEX_STONE :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (117) :: Pos -40 152 -40 136 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (118) :: Pos -88 152 -88 168 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (119) :: Pos -88 224 -40 224 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Port 26 -> 30 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (120) :: Pos -40 224 -40 200 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (121) :: Pos -88 200 -88 224 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (122) :: Pos -88 184 -88 200 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (123) :: Pos -88 168 -88 184 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (124) :: Pos -40 168 -40 152 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (125) :: Pos -40 184 -40 168 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (126) :: Pos -40 200 -40 184 :: Mat HEX_STONE :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.30 0.60 1.00 :: Scale 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
 WALL (127) :: Pos -88 168 -40 168 :: Mat HEX_STONE :: LowerMat MARBLE :: UpperMat HEX_STONE :: Light 0.60 0.60 0.50 :: Port 27 -> 28 :: Scale 0.2500 0.2500 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
 WALL (128) :: Pos -88 184 -40 184 :: Mat HEX_STONE :: LowerMat MARBLE :: UpperMat HEX_STONE :: Light 0.60 0.60 0.50 :: Port 28 -> 29 :: Scale 0.2500 0.2500 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
 WALL (129) :: Pos -88 200 -40 200 :: Mat HEX_STONE :: LowerMat MARBLE :: UpperMat HEX_STONE :: Light 0.60 0.60 0.50 :: Port 29 -> 26 :: Scale 0.2500 0.2500 :: Scale_Lower 0.2500 0.2500 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (130) :: Pos -88 224 -128 288 :: Mat CLAY_WALL :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (131) :: Pos -128 288 -128 416 :: Mat CLAY_WALL :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (132) :: Pos -128 416 -104 416 :: Mat CLAY_WALL :: UpperMat HEX_STONE :: Light 0.70 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (133) :: Pos 24 416 24 288 :: Mat CLAY_WALL :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (134) :: Pos 24 288 -40 224 :: Mat CLAY_WALL :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (135) :: Pos -104 416 0 416 :: Mat CLAY_WALL :: UpperMat HEX_STONE :: Light 0.70 0.60 1.00 :: Offset 0.0000 0.3160 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (136) :: Pos 0 416 24 416 :: Mat CLAY_WALL :: UpperMat HEX_STONE :: Light 0.70 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
-WALL (137) :: Pos -104 416 -80 392 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 31 -> 30 :: 
-WALL (138) :: Pos -80 392 -24 392 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 31 -> 30 :: 
-WALL (139) :: Pos -24 392 0 416 :: Mat DIRT :: Light 1.00 1.00 1.00 :: Port 31 -> 30 :: 
-WALL (140) :: Pos -96 368 -96 352 :: Mat MARBLE_WALL :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (141) :: Pos -96 352 -80 352 :: Mat MARBLE_WALL :: Light 0.90 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (142) :: Pos -80 352 -80 368 :: Mat MARBLE_WALL :: Light 0.70 1.00 1.00 :: Scale 0.2500 0.2500 :: 
-WALL (143) :: Pos -80 368 -96 368 :: Mat MARBLE_WALL :: Light 0.70 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (130) :: Pos -88 224 -128 288 :: Mat CLAY_WALL :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (131) :: Pos -128 288 -128 416 :: Mat CLAY_WALL :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (132) :: Pos -128 416 -104 416 :: Mat CLAY_WALL :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.70 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (133) :: Pos 24 416 24 288 :: Mat CLAY_WALL :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.50 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (134) :: Pos 24 288 -40 224 :: Mat CLAY_WALL :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.40 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (135) :: Pos -104 416 0 416 :: Mat CLAY_WALL :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.70 0.60 1.00 :: Offset 0.0000 0.3160 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (136) :: Pos 0 416 24 416 :: Mat CLAY_WALL :: LowerMat DIRT :: UpperMat HEX_STONE :: Light 0.70 0.60 1.00 :: Scale 0.2000 0.2000 :: Scale_Upper 2.5000 0.2500 :: 
+WALL (137) :: Pos -104 416 -80 392 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 31 -> 30 :: 
+WALL (138) :: Pos -80 392 -24 392 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 31 -> 30 :: 
+WALL (139) :: Pos -24 392 0 416 :: Mat DIRT :: LowerMat DIRT :: UpperMat DIRT :: Light 1.00 1.00 1.00 :: Port 31 -> 30 :: 
+WALL (140) :: Pos -96 368 -96 352 :: Mat MARBLE_WALL :: LowerMat DIRT :: UpperMat DIRT :: Light 0.50 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (141) :: Pos -96 352 -80 352 :: Mat MARBLE_WALL :: LowerMat DIRT :: UpperMat DIRT :: Light 0.90 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (142) :: Pos -80 352 -80 368 :: Mat MARBLE_WALL :: LowerMat DIRT :: UpperMat DIRT :: Light 0.70 1.00 1.00 :: Scale 0.2500 0.2500 :: 
+WALL (143) :: Pos -80 368 -96 368 :: Mat MARBLE_WALL :: LowerMat DIRT :: UpperMat DIRT :: Light 0.70 1.00 1.00 :: Scale 0.2500 0.2500 :: 
 SPR_WALL :: Pos 42 64 42 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS :: 
 SPR_WALL :: Pos 42 32 42 64 0 :: Height  42 :: Mat ARCH_STAINED_GLASS :: 
 SPR_WALL :: Pos -32 64 -32 32 0 :: Height  42 :: Mat ARCH_STAINED_GLASS :: 
