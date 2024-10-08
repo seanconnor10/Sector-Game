@@ -17,7 +17,7 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    final float MAX_SPEED = 150.f, ACCEL = 10.0f;
+    final float MAX_SPEED = 150.f, ACCEL = 100.0f;
     final float MAX_SPEED_SLOW = 60.f;
     final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.1f;
     final float TURN_SPEED = 3.0f, VLOOK_SPEED = 30.0f;
@@ -63,9 +63,9 @@ public class Player implements Movable {
         boolean lookDownDown  = input.getActionInfo("LOOK_DOWN") .isDown;
 
         boolean crouch        = input.isDown(Input.Keys.CONTROL_LEFT);
-
-        //float prevZoom = zoom;
         zoom = Gdx.input.isButtonPressed(Input.Buttons.RIGHT) ? 4 : 1;
+
+        float dtSQRT = (float)Math.sqrt(dt);
 
         //Find input vector
         Vector2 inputVector = new Vector2(0.f, 0.f);
@@ -83,22 +83,21 @@ public class Player implements Movable {
         inputVector.rotateRad(r);
 
         //Update velocity with input vector
-        float top_speed =
-            (height == STANDING_HEIGHT && !input.isDown(Input.Keys.SHIFT_LEFT)) ?
-            MAX_SPEED : MAX_SPEED_SLOW;
-        if (velocity.len() < top_speed) {
-          velocity.add( new Vector2(inputVector).scl(ACCEL) );
-        //float currentSpeed = velocity.len();
-        //if (currentSpeed > MAX_SPEED) velocity.setLength(MAX_SPEED);
+        float top_speed = (height == STANDING_HEIGHT && !input.isDown(Input.Keys.SHIFT_LEFT)) ? MAX_SPEED : MAX_SPEED_SLOW;
+        Vector2 impulse = new Vector2(inputVector).scl(ACCEL * dtSQRT);
+        Vector2 newVel = new Vector2(velocity).add(impulse);
+        if (velocity.len() < top_speed || newVel.len2()<velocity.len2()) {
+            velocity.add(impulse);
         }
 
         //Friction
         float friction;
-        if (!onGround)
+        if (!onGround) {
             friction = 0.01f;
-        else if (inputVector.isZero(0.05f))
+        }
+        else if (inputVector.isZero(0.05f)) {
             friction = 0.7f;
-        else {
+        } else {
             float speedAngle = (float) Math.atan2(velocity.x, velocity.y);
             float velAngle = (float) Math.atan2(inputVector.x, inputVector.y) ;
             if (speedAngle>Math.PI) speedAngle -= (float) Math.PI*2;
@@ -111,7 +110,7 @@ public class Player implements Movable {
             float lerp = (float) ( Math.abs(angleDifference)/Math.PI );
             friction = 0.4f + lerp*0.3f;
         }
-        velocity.scl( 1f - friction*(float)Math.sqrt(dt));
+        velocity.scl(1f - friction * dtSQRT);
 
         //Rotate player + look up and down
         if (Gdx.input.isCursorCatched()) {

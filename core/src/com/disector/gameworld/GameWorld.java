@@ -58,6 +58,11 @@ public class GameWorld implements I_AppFocus{
         player1.movementInput(dt);
         moveObj(player1);
 
+        if (input.isJustPressed(Input.Keys.E)) {
+            Vector2 impulse = new Vector2( (float)Math.cos(player1.r) * 800, (float) Math.sin(player1.r) * 800);
+            player1.velocity.add(impulse);
+        }
+
         for (Grenade g : grenades) {
             moveObj(g);
             if (g.velocity.isZero(1)) {
@@ -66,7 +71,7 @@ public class GameWorld implements I_AppFocus{
                 //Press To Toss Player around
                 float dist = player1.pos.dst(g.pos);
                 if (dist < 100) {
-                    float force = 200 * (1 - (dist / 100));
+                    float force = 400 * (1 - (dist / 100));
                     float angle = (float) Math.atan2(player1.pos.y - g.pos.y, player1.pos.x -g.pos.x);
                     player1.velocity.x += force * (float) Math.cos(angle);
                     player1.velocity.y += force * (float) Math.sin(angle);
