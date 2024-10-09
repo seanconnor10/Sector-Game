@@ -33,7 +33,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
     private static final Pixmap TEST_SPRITE_IMG = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
     private static final Pixmap TEST_WALL_IMG = new Pixmap(Gdx.files.local("assets/img/arch.png"));
 
-    protected final Color depthFogColor = new Color(0.0f, 0.0f, 0.0f, 1f);
+    protected final Color depthFogColor = new Color(0.08f, 0.0f, 0.1f, 1f);
     protected final int fogR_int = depthFogColor.toIntBits()  & 0xFF;
     protected final int fogG_int = depthFogColor.toIntBits() >> 8 & 0xFF;
     protected final int fogB_int = depthFogColor.toIntBits() >> 16  & 0xFF;
@@ -504,9 +504,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotFloorX = rotFloorX%1;
                 rotFloorY = rotFloorY%1;
 
-                //float horizonScreenDistVert = halfHeight - drawY;
-                //float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                //float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
+                float horizonScreenDistVert = halfHeight - drawY;
+                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
+		float fog = getFogFactor(dist);
 
                 int drawColor = pix.getPixel( (int)(rotFloorX*pix.getWidth()), (int)((1.f-rotFloorY)*pix.getHeight()) );
 
@@ -517,6 +518,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 r_8 *= light;
                 g_8 *= light;
                 b_8 *= light;
+
+		r_8 = (int) ( r_8 + fog * (fogR_int - r_8) );
+                g_8 = (int) ( g_8 + fog * (fogG_int - g_8) );
+                b_8 = (int) ( b_8 + fog * (fogB_int - b_8) );
 
                 short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
                     (b_8 >> 4 & 0xF) << 12 |
@@ -574,9 +579,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotX = rotX % 1;
                 rotY = rotY % 1;
 
-                //float horizonScreenDistVert = -halfHeight + drawY;
-                //float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                //float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
+                float horizonScreenDistVert = -halfHeight + drawY;
+                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
+		float fog = getFogFactor(dist);
 
                 int drawColor = tex.getPixel((int)(rotX*tex.getWidth()), (int)(rotY*tex.getHeight()));
 
@@ -587,6 +593,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 r *= light;
                 g *= light;
                 b *= light;
+
+		r = (int) ( r + fog * (fogR_int - r) );
+                g = (int) ( g + fog * (fogG_int - g) );
+                b = (int) ( b + fog * (fogB_int - b) );
 
                 short drawColor4bit = (short) (//Convert from RGBA8888 to RGBA4444
                     (b >> 4 & 0xF) << 12 |
@@ -847,7 +857,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     protected float getFogFactor(float dist) {
         if (!drawFog) return 0f;
-        final float fogDistance = 1200;
+        final float fogDistance = 600;
         return Math.max(0, Math.min(fogDistance, dist) ) / fogDistance;
     }
 

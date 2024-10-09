@@ -1,4 +1,5 @@
 ~~ TODO ~~ ------------------------------------------
+MAKE FLOOR AND CEIL DRAW horizontal scanlines to reduce dist/fog calculations
 BUTTON TO ALIGN TEXTURE TO ADJACENT WALL (APPLY TO ALL SELECTED WALLS IN A CHAIN)
 MOVING VERTICES GLITCHES
 QUICK EDITOR UNDO BY AUTOSAVING
