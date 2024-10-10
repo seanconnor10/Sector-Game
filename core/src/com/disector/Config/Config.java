@@ -15,6 +15,7 @@ public class Config {
     public int frameWidth = 320;
     public int frameHeight = 180;
     public String palette = null;
+    public String startMap = null;
 
     public Config(FileHandle file) {
         try {

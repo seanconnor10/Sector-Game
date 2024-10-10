@@ -30,7 +30,10 @@ import com.disector.renderer.SoftwareRenderer;
 import com.disector.maploader.MapLoader;
 import com.disector.maploader.TextFileMapLoader;
 
+import java.util.Arrays;
+
 public class Application extends ApplicationAdapter {
+    public static String[] CLI_ARGS;
     public static Config config;
 
     private boolean printFPS;
@@ -68,9 +71,15 @@ public class Application extends ApplicationAdapter {
     public InputChainNode consoleInput;
     public InputChainInterface appInput; //Now a reference to the individual InputChainNode of each AppFocus
 
+    public Application(String[] args) {
+        CLI_ARGS = args;
+    }
+
     @Override
     public void create () {
         System.out.println("Setting things up...");
+
+        Arrays.stream(CLI_ARGS).forEach(System.out::println);
 
         long timeStamp = TimeUtils.millis();
 
@@ -86,14 +95,12 @@ public class Application extends ApplicationAdapter {
         shape.setColor(Color.WHITE);
 
         textures = new PixmapContainer();
-        //textures.loadFolder("");
 
         InputRecorder.repopulateKeyCodeMap();
         Gdx.input.setInputProcessor(mainInput);
         Gdx.input.setCursorCatched(true);
 
         console = new Console( new CommandExecutor(this), mainInput);
-
         consoleInput = console.getInputAdapter();
 
         createTestMap();
@@ -108,6 +115,11 @@ public class Application extends ApplicationAdapter {
         swapFocus(focus);
 
         System.out.println("Engine Booted in " + TimeUtils.timeSinceMillis(timeStamp) + "ms");
+
+        if (config.startMap != null) {
+            loadMap(config.startMap);
+        }
+
     }
 
     @Override

@@ -11,6 +11,8 @@ public class DesktopLauncher {
 		config.setWindowedMode(800, 450);
 		config.setTitle("diSector");
 		config.useVsync(false);
-		new Lwjgl3Application(new Application(), config);
+
+		new Lwjgl3Application(new Application(arg), config);
+
 	}
 }
