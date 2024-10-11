@@ -55,6 +55,7 @@ public class Application extends ApplicationAdapter {
     public final Array<Wall> walls = new Array<>();
     public final Array<Sector> sectors = new Array<>();
     public final Array<Material> materials = new Array<>();
+    public static Array<Material> materialStaticReference;
 
     public PixmapContainer textures;
 
@@ -111,6 +112,8 @@ public class Application extends ApplicationAdapter {
         if (gameWorld==null) gameWorld = new GameWorld(this, mainInput);
         if (renderer==null) renderer = new SoftwareRenderer(this);
         if (gameMapRenderer==null) gameMapRenderer = new GameMapRenderer(this, gameWorld);
+
+        materialStaticReference = materials;
 
         swapFocus(focus);
 

@@ -30,8 +30,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
     //private HashSet<Integer> transformedSectors = new HashSet<>();
 
     protected Array<Sprite> sprites = new Array<>();
-    private static final Pixmap TEST_SPRITE_IMG = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
-    private static final Pixmap TEST_WALL_IMG = new Pixmap(Gdx.files.local("assets/img/arch.png"));
+    //private static final Pixmap TEST_SPRITE_IMG = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
+    //private static final Pixmap TEST_WALL_IMG = new Pixmap(Gdx.files.local("assets/img/arch.png"));
 
     protected final Color depthFogColor = new Color(0.08f, 0.0f, 0.1f, 1f);
     protected final int fogR_int = depthFogColor.toIntBits()  & 0xFF;
@@ -92,18 +92,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     public void clearSprites() {
         sprites.clear();
-        try {
-            sprites.add(new FacingSprite(TEST_SPRITE_IMG, 64, 340, 20, 16, 48));
-
-            sprites.add(new WallSprite(TEST_WALL_IMG, -96, 320, 20, -64, 320, 54));
-            sprites.add(new WallSprite(TEST_WALL_IMG, -64, 320, 20, -32, 320, 54));
-
-            sprites.add(new WallSprite(TEST_WALL_IMG, 32, 320, 20, 64, 320, 54));
-            sprites.add(new WallSprite(TEST_WALL_IMG, 64, 320, 20, 96, 320, 54));
-
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
@@ -539,7 +527,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 g_8 *= light;
                 b_8 *= light;
 
-		r_8 = (int) ( r_8 + fog * (fogR_int - r_8) );
+		        r_8 = (int) ( r_8 + fog * (fogR_int - r_8) );
                 g_8 = (int) ( g_8 + fog * (fogG_int - g_8) );
                 b_8 = (int) ( b_8 + fog * (fogB_int - b_8) );
 
@@ -669,6 +657,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float playerCos = (float) Math.cos(-camR) , playerSin = (float) Math.sin(-camR);
         float tempvar;
         for (Sprite spr : sprites) {
+            if (spr == null) {
+                continue;
+            }
+
             spr.x -= camX;
             spr.y -= camY;
 

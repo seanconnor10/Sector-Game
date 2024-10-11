@@ -28,6 +28,14 @@ public class Grenade implements Movable, HasFacingSprite {
 	public Vector2 velocity = new Vector2();
 	public float zSpeed;
 
+	public boolean damagedToExplosion;
+	public float timeTillExplosion = 0.75f;
+
+	public boolean countDown(float dt) {
+		timeTillExplosion -= dt;
+		return timeTillExplosion < 0;
+	}
+
 	@Override
 	public FacingSprite getInfo() {
 		return new FacingSprite(PIXMAP, pos.x, pos.y, pos.z, IMG_W, IMG_H);

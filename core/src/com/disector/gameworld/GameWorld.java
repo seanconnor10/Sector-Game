@@ -10,16 +10,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.disector.*;
 import com.disector.assets.SoundManager;
+import com.disector.gameworld.components.GetSpriteInterface;
 import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.gameworld.components.Positionable;
 import com.disector.gameworld.objects.Grenade;
+import com.disector.gameworld.objects.LampMan;
 import com.disector.gameworld.objects.PaintSplotch;
 import com.disector.gameworld.objects.WallSpriteObject;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.sprites.Sprite;
-import com.disector.renderer.sprites.WallSprite;
 
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
@@ -35,9 +36,18 @@ public class GameWorld implements I_AppFocus{
     private boolean shouldDisplayMap;
 
     public Player player1;
+
+    public final Array<WallSpriteObject> wallSpriteObjects = new Array<>();
     public final Array<Grenade> grenades = new Array<>();
     public final Array<PaintSplotch> paintSplotches = new Array<>();
-    public final Array<WallSpriteObject> wallSpriteObjects = new Array<>();
+    public final Array<LampMan> lampMen = new Array<>();
+
+    public final Array<?>[] gameObjectArrays = {
+            wallSpriteObjects,
+            grenades,
+            paintSplotches,
+            lampMen
+    };
 
     public GameWorld(Application app, InputChainInterface inputParent) {
         this.app = app;
@@ -69,9 +79,10 @@ public class GameWorld implements I_AppFocus{
 
         for (Grenade g : grenades) {
             moveObj(g);
-            if (g.velocity.isZero(1)) {
+            if ( g.velocity.isZero(1) || (g.damagedToExplosion && g.countDown(dt)) ) {
                 //Detonate when done moving
                 SoundManager.playPosition(SoundManager.SFX_Boom, new Vector3(g.pos()), 500);
+
                 float dist = player1.pos.dst(g.pos);
                 if (dist < 100) {
                     float force = 400 * (1 - (dist / 100));
@@ -80,8 +91,44 @@ public class GameWorld implements I_AppFocus{
                     player1.velocity.y += force * (float) Math.sin(angle);
                     player1.zSpeed     += force;
                 }
+
+                for (LampMan l : lampMen) {
+                    dist = l.pos.dst(g.pos);
+                    if (dist < 100) {
+                        float force = 400 * (1 - (dist / 100));
+                        float angle = (float) Math.atan2(l.pos.y - g.pos.y, l.pos.x -g.pos.x);
+                        l.velocity.x += force * (float) Math.cos(angle);
+                        l.velocity.y += force * (float) Math.sin(angle);
+                        l.zSpeed     += force;
+                    }
+                }
+
                 grenades.removeValue(g, true);
+
+                for (int i=0; i<grenades.size; i++) {
+                    Grenade otherGrenade = grenades.get(i);
+                    dist = otherGrenade.pos.dst(g.pos);
+                    if (dist < 100) {
+                        float force = 400 * (1 - (dist / 100));
+                        float angle = (float) Math.atan2(otherGrenade.pos.y - g.pos.y, otherGrenade.pos.x -g.pos.x);
+                        otherGrenade.velocity.x += force * (float) Math.cos(angle);
+                        otherGrenade.velocity.y += force * (float) Math.sin(angle);
+                        otherGrenade.zSpeed     += force;
+                        otherGrenade.damagedToExplosion = true;
+                        otherGrenade.timeTillExplosion = 3f - 3f*Math.max(0,100f - dist)/100git ;
+                    }
+                }
             }
+        }
+
+        for (LampMan lamp : lampMen) {
+            float angleToPlayer = (float) Math.atan2(player1.pos.y - lamp.pos().y, player1.pos.x - lamp.pos().x);
+            final int FORCE = 100;
+            lamp.getVelocity().add(
+                    (float) Math.cos(angleToPlayer) * FORCE * dt,
+                    (float) Math.sin(angleToPlayer) * FORCE * dt
+            );
+            moveObj(lamp);
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -117,8 +164,8 @@ public class GameWorld implements I_AppFocus{
                         hitscan.wall().normalAngle
                 ));
             }*/
-
         }
+
     }
 
     //*****************************************************
@@ -170,25 +217,21 @@ public class GameWorld implements I_AppFocus{
     }
 
     public Sprite[] getSpriteList() {
-        int size = grenades.size + wallSpriteObjects.size + paintSplotches.size;
+        int size = 0;
+        for (Array<?> arr : gameObjectArrays) {
+            size += arr.size;
+        }
+
         Sprite[] sprites = new Sprite[size];
 
         int i=0;
-        for (Grenade g : grenades) {
-            sprites[i] = g.getInfo();
-            i++;
-        }
-        for (WallSpriteObject w : wallSpriteObjects) {
-            sprites[i] = new WallSprite(
-                app.materials.get(w.texInd).tex[0],
-                w.x1, w.y1, w.z,
-                w.x2, w.y2, w.height
-            );
-            i++;
-        }
-        for (PaintSplotch p : paintSplotches) {
-            sprites[i] = p.getInfo();
-            i++;
+        for (Array<?> arr :gameObjectArrays) {
+            for (Object o : arr) {
+                //if (o instanceof GetSpriteInterface) { //Unnecessary until a GameObject class has no getSprite interface
+                    sprites[i] = ((GetSpriteInterface) o).getInfo();
+                    i++;
+                //}
+            }
         }
 
         return sprites;
@@ -349,9 +392,12 @@ public class GameWorld implements I_AppFocus{
     // // ****************************************************
 
     public void mapLoad() {
-        grenades.clear();
-        paintSplotches.clear();
-        wallSpriteObjects.clear();
+        for (Array<?> arr : gameObjectArrays) {
+            arr.clear();
+        }
+
+        lampMen.add(new LampMan());
+
     }
 
 }

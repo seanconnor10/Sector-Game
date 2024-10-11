@@ -1,6 +1,11 @@
 package com.disector.gameworld.objects;
 
-public class WallSpriteObject {
+import com.badlogic.gdx.graphics.Pixmap;
+import com.disector.Application;
+import com.disector.gameworld.components.HasWallSprite;
+import com.disector.renderer.sprites.WallSprite;
+
+public class WallSpriteObject implements HasWallSprite {
     public float x1, y1, x2 = 100, y2;
     public float z, height = 64;
     public int texInd;
@@ -33,5 +38,17 @@ public class WallSpriteObject {
         this.BLOCK_HITSCAN = cpysrc.BLOCK_HITSCAN;
         this.BLOCK_PROJECTILE = cpysrc.BLOCK_PROJECTILE;
         this.BLOCK_MOVE = cpysrc.BLOCK_MOVE;
+    }
+
+    @Override
+    public WallSprite getInfo() {
+        Pixmap img = null;
+        try {
+            img = Application.materialStaticReference.get(texInd).tex[0];
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            System.out.println("No Valid Material for Wall Sprite Object");
+            return null;
+        }
+        return new WallSprite(img, x1,y1,z,x2,y2,height);
     }
 }

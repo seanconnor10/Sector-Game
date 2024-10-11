@@ -13,11 +13,13 @@ import java.util.Map;
 public class SoundManager {
     public static Sound SFX_Clink;
     public static Sound SFX_Boom;
+    public static Sound SFX_LampSpeech;
 
     public static Vector4 ear_pos = new Vector4();
 
     private static Map<Sound, Float> lengths = new HashMap<>();
     private static Array<PositionableSound> active_positionables = new Array<>();
+    private static Array<PositionableSound> active_looping_positionables = new Array<>();
 
     private static class PositionableSound {
         private Sound snd; //Reference to sound obj
@@ -27,12 +29,12 @@ public class SoundManager {
         private float ageSeconds;
         private float lifeSpan;
 
-        private PositionableSound(Sound snd, Vector3 pos, float range) {
+        private PositionableSound(Sound snd, Vector3 pos, float range, boolean loop) {
             this.snd = snd;
             this.pos = pos;
             this.range = range;
             this.lifeSpan = lengths.get(snd);
-            this.inst = snd.play();
+            this.inst = loop ? snd.loop() : snd.play();
         }
     }
 
@@ -41,6 +43,7 @@ public class SoundManager {
 
         SFX_Clink = initWav("glass_clink.wav", 2);
         SFX_Boom = initWav("boom.wav", 5);
+        SFX_LampSpeech = initWav("lamp.wav", 10);
     }
 
     public static void update(float dt) {
@@ -54,6 +57,11 @@ public class SoundManager {
             }
             updatePan(sound.snd, sound.inst, sound.pos);
         }
+
+        for (int i=0; i<active_looping_positionables.size; i++) {
+            PositionableSound sound = active_looping_positionables.get(i);
+            updatePan(sound.snd, sound.inst, sound.pos);
+        }
     }
 
     public static void playStaticPosition(Sound snd, Vector3 snd_pos, float range) {
@@ -65,9 +73,20 @@ public class SoundManager {
     }
 
     public static void playPosition(Sound snd, Vector3 pos, float range) {
-        PositionableSound newSound = new PositionableSound(snd, pos, range);
+        PositionableSound newSound = new PositionableSound(snd, pos, range, false);
         active_positionables.add(newSound);
         updatePan(newSound.snd, newSound.inst, newSound.pos);
+    }
+
+    public static PositionableSound loopPosition(Sound snd, Vector3 pos, float range) {
+        PositionableSound newSound = new PositionableSound(snd, pos, range, true);
+        active_looping_positionables.add(newSound);
+        updatePan(newSound.snd, newSound.inst, newSound.pos);
+        return newSound;
+    }
+
+    public static void killLoopingPositionable(PositionableSound reference) {
+        active_looping_positionables.removeValue(reference, true);
     }
 
     // ------------------------------------------------------------------------------------
