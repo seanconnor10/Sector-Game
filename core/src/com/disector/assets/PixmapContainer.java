@@ -25,6 +25,9 @@ public class PixmapContainer {
         //Loads the texture and adds reference to this PixmapContainer
         long timeStamp = TimeUtils.millis();
         System.out.println("Loading Textures from Materials Array");
+	if (pall != null) {
+	    System.out.println("  Palettizing Images to " + pall.colors.length + " colors");
+	}
 
         clear();
         pixmaps = new Pixmap[blankMaterials.size][MIPMAP_COUNT];
@@ -43,12 +46,16 @@ public class PixmapContainer {
 
             Pixmap pixmap = new Pixmap(file);
 
+	    Pixmap.Format origFormat = pixmap.getFormat();
+
             if (pall != null) pall.palletize(pixmap);
 
             //Temporary forced formatting
-            /*Pixmap formattedPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA4444);
-            formattedPixmap.drawPixmap(pixmap, 0, 0);
-            pixmap = formattedPixmap;*/
+            //Pixmap formattedPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Pixmap.Format.RGBA4444);
+            //formattedPixmap.drawPixmap(pixmap, 0, 0);
+            //pixmap = formattedPixmap;
+
+	    Pixmap.Format newFormat = pixmap.getFormat();
 
             pixmaps[i] = makeMipMapSeries(pixmap);
 
@@ -56,11 +63,12 @@ public class PixmapContainer {
             pixmapsByName.put(file.nameWithoutExtension().toUpperCase(), pixmaps[i]);
 
             loadedImages.add(file.toString());
-            System.out.println("    " + i + ") " + pixmaps[i][0].getFormat().toString() + " " + file);
+	    String formatString = origFormat.toString().equals(newFormat.toString()) ? origFormat.toString() + " (No Change) " : origFormat.toString() + " to " + newFormat.toString() + " ";
+            System.out.println("    " + i + ") "  + formatString + file);
             i++;
         }
 
-        System.out.println("    Done in " + TimeUtils.timeSinceMillis(timeStamp) + "ms" );
+        System.out.println("  Done in " + TimeUtils.timeSinceMillis(timeStamp) + "ms" );
 
     }
 

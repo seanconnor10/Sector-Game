@@ -289,7 +289,7 @@ public class GameWorld implements I_AppFocus{
                 paintSplotches.add(new PaintSplotch(
                         objPos.x,
                         objPos.y,
-                        objPos.z + obj.getHeight()/2wdas,
+                        objPos.z + obj.getHeight()/2,
                         closestCollision.w.normalAngle
                 ));
             }
