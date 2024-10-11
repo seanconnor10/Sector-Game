@@ -303,7 +303,27 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         float secHeight = secCeilZ - secFloorZ;
 
-	ShortBuffer ints = buffer.getPixels().asShortBuffer();
+	    ShortBuffer ints = buffer.getPixels().asShortBuffer();
+
+        float[] floorDistances = null;
+        if (camZ > secFloorZ) {
+            floorDistances = new float[frameHeight];
+            for (int i = 0; i < floorDistances.length; i++) {
+                float horizonScreenDistVert = halfHeight - i - camVLook;
+                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                floorDistances[i] = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
+            }
+        }
+
+        float[] ceilDistances = null;
+        if (camZ < secCeilZ) {
+            ceilDistances= new float[frameHeight];
+            for (int i=0;i<ceilDistances.length;i++) {
+                float horizonScreenDistVert = -halfHeight + i +camVLook;
+                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                ceilDistances[i] = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
+            }
+        }
 
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;
@@ -461,10 +481,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
             //Floor and Ceiling
             if (occlusionBottom[drawX] < quadBottom && camZ > currentSector.floorZ)
-                drawFloor(floorPixels, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor);
+                drawFloor(floorPixels, floorDistances, drawX, fov, rasterBottom, secFloorZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightFloor);
 
             if (occlusionTop[drawX] > rasterTop && camZ < currentSector.ceilZ)
-                drawCeiling(ceilPixels, ceilIsSky, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil);
+                drawCeiling(ceilPixels, ceilDistances, ceilIsSky, drawX, fov, rasterTop, secCeilZ, playerSin, playerCos, fullBright ? 1.f : currentSector.lightCeil);
 
             //Update Occlusion Matrix
             updateOcclusion(isPortal, drawX, quadTop, quadBottom, quadHeight, upperWallCutoffV, lowerWallCutoffV);
@@ -479,7 +499,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     }
 
-    protected void drawFloor(Pixmap pix, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light) {
+    protected void drawFloor(Pixmap pix, float[] floorDistances, int drawX, float fov, int rasterBottom, float secFloorZ, float playerSin, float playerCos, float light) {
         final float scaleFactor = 32.f;
         float floorXOffset = camX/scaleFactor, floorYOffset = camY/scaleFactor;
         int vOffset = (int) camVLook;
@@ -504,10 +524,10 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotFloorX = rotFloorX%1;
                 rotFloorY = rotFloorY%1;
 
-                float horizonScreenDistVert = halfHeight - drawY;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
-		float fog = getFogFactor(dist);
+                //float horizonScreenDistVert = halfHeight - drawY;
+                //float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
+                //float dist = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
+		        float fog = getFogFactor(floorDistances[ Math.max(0, Math.min(drawY - vOffset, frameHeight-1))]);
 
                 int drawColor = pix.getPixel( (int)(rotFloorX*pix.getWidth()), (int)((1.f-rotFloorY)*pix.getHeight()) );
 
@@ -539,7 +559,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         }
     }
 
-    protected void drawCeiling(Pixmap tex, boolean isSky, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light) {
+    protected void drawCeiling(Pixmap tex, float[] ceilDistances, boolean isSky, int drawX, float fov, int rasterTop, float secCeilZ, float playerSin, float playerCos, float light) {
 
         final float scaleFactor = 32.f;
 
@@ -579,10 +599,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 rotX = rotX % 1;
                 rotY = rotY % 1;
 
-                float horizonScreenDistVert = -halfHeight + drawY;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                float dist = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
-		float fog = getFogFactor(dist);
+		        float fog = getFogFactor(ceilDistances[ Math.max(0, Math.min(drawY - vOffset, frameHeight-1))]);
 
                 int drawColor = tex.getPixel((int)(rotX*tex.getWidth()), (int)(rotY*tex.getHeight()));
 
