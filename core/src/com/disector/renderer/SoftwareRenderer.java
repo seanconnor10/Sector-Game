@@ -131,8 +131,28 @@ public class SoftwareRenderer extends DimensionalRenderer {
             (WallInfoPack o1, WallInfoPack o2) -> Float.compare(o1.distToNearest, o2.distToNearest)
         );
 
+        float[] floorDistances = null;
+        if (camZ > sec.floorZ) {
+            floorDistances = new float[frameHeight];
+            for (int i = 0; i < floorDistances.length; i++) {
+                float horizonScreenDistVert = halfHeight - i - camVLook;
+                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / camFOV);
+                floorDistances[i] = (camZ - sec.floorZ) / (float) Math.sin(angleOfScreenRow);
+            }
+        }
+
+        float[] ceilDistances = null;
+        if (camZ < sec.ceilZ) {
+            ceilDistances= new float[frameHeight];
+            for (int i=0;i<ceilDistances.length;i++) {
+                float horizonScreenDistVert = -halfHeight + i +camVLook;
+                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / camFOV);
+                ceilDistances[i] = (sec.ceilZ - camZ) / (float) Math.sin(angleOfScreenRow);
+            }
+        }
+
         for (WallInfoPack wallInfo : wallsToDraw) {
-            drawWall(wallInfo.wInd, secInd, spanStart, spanEnd);
+            drawWall(wallInfo.wInd, secInd, spanStart, spanEnd, floorDistances, ceilDistances);
             if (spanFilled(spanStart, spanEnd)) return;// true;
         }
 
@@ -144,7 +164,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
         return;// false;
     }
 
-    protected void drawWall(int wInd, int currentSectorIndex, int spanStart, int spanEnd) {
+    protected void drawWall(int wInd, int currentSectorIndex, int spanStart, int spanEnd, float[] floorDistances, float[] ceilDistances) {
         Wall w = walls.get(wInd);
         boolean isPortal = w.isPortal;
 
@@ -304,26 +324,6 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float secHeight = secCeilZ - secFloorZ;
 
 	    ShortBuffer ints = buffer.getPixels().asShortBuffer();
-
-        float[] floorDistances = null;
-        if (camZ > secFloorZ) {
-            floorDistances = new float[frameHeight];
-            for (int i = 0; i < floorDistances.length; i++) {
-                float horizonScreenDistVert = halfHeight - i - camVLook;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                floorDistances[i] = (camZ - secFloorZ) / (float) Math.sin(angleOfScreenRow);
-            }
-        }
-
-        float[] ceilDistances = null;
-        if (camZ < secCeilZ) {
-            ceilDistances= new float[frameHeight];
-            for (int i=0;i<ceilDistances.length;i++) {
-                float horizonScreenDistVert = -halfHeight + i +camVLook;
-                float angleOfScreenRow = (float) Math.atan(horizonScreenDistVert / fov);
-                ceilDistances[i] = (secCeilZ - camZ) / (float) Math.sin(angleOfScreenRow);
-            }
-        }
 
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;

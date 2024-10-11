@@ -7,10 +7,18 @@ import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.gameworld.components.Positionable;
 
+import java.util.Arrays;
+
 public class Physics {
 
     public static Array<Wall> walls;
     public static Array<Sector> sectors;
+
+    public record RayCastReturnData (
+        Wall wall,
+        float x, float y, float z,
+        int secInd
+    ){}
 
     public static boolean containsPoint(Sector sec, float x, float y) {
         /*
@@ -36,6 +44,39 @@ public class Physics {
 if (sInd >= sectors.size || sInd < 0)
             return false;
         return containsPoint(sectors.get(sInd), x, y);
+    }
+
+    public static RayCastReturnData raycast(Vector3 emit, int startSectorIndex, float angle, float vertAngle) {
+        Sector sec = sectors.get(startSectorIndex);
+        Wall[] secWalls = Arrays.stream(sec.walls.toArray()).mapToObj(walls::get).toArray(Wall[]::new);
+        for (Wall w : secWalls) {
+            Vector2 hit = rayWallIntersection(w, angle, emit.x, emit.y, false);
+            if (hit != null) {
+                float hitZ = emit.z + ( hit.dst(emit.x, emit.y) * (float) Math.tan(vertAngle) );
+
+                if (hitZ > sec.ceilZ) {
+                    return null; //hit Ceiling Actually
+                } else if (hitZ < sec.floorZ) {
+                    return null; //hit Floor
+                } else {
+                    if (w.isPortal) {
+                        Sector otherSector = sectors.get(w.linkA);
+                        if (sec == otherSector) {
+                            otherSector = sectors.get(w.linkB);
+                        }
+                        if (hitZ > otherSector.floorZ && hitZ < otherSector.ceilZ) {
+                            return null; //GO THROUGH PORTAL
+                        } else {
+                            //HIT WALL
+                        }
+                    } else {
+                        return new RayCastReturnData(w, hit.x, hit.y, hitZ, startSectorIndex);
+                    }
+                }
+
+            }
+        }
+        return null;
     }
 
     public static int findCurrentSectorBranching(int startIndex, float x, float y) {

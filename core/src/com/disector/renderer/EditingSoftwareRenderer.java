@@ -76,7 +76,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
     // --------------------------------------------------------------------------------------
 
     @Override
-    protected void drawWall(int wInd, int currentSectorIndex, int spanStart, int spanEnd) {
+    protected void drawWall(int wInd, int currentSectorIndex, int spanStart, int spanEnd, float[] floorDistances, float[] ceilDistances) {
         Wall w = walls.get(wInd);
         boolean isPortal = w.isPortal;
 

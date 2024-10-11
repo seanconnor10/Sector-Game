@@ -34,8 +34,8 @@ public class Player implements Movable {
     );
 
     public Vector3 pos = new Vector3();
-    public float r;
-    public float v_angle; // Actual angle of vertical look
+    public float r; //(IN RADIANS!)
+    public float v_angle; // Actual angle of vertical look (IN DEGREES!)
     float height = STANDING_HEIGHT;
 
     Vector2 velocity = new Vector2(0.f, 0.f);

@@ -1,4 +1,4 @@
-package com.disector.gameworld;
+package com.disector.gameworld.objects;
 
 public class WallSpriteObject {
     public float x1, y1, x2 = 100, y2;

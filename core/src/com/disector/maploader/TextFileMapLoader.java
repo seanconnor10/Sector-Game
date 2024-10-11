@@ -11,7 +11,7 @@ import com.disector.Material;
 import com.disector.assets.Palette;
 import com.disector.assets.PixmapContainer;
 import com.disector.gameworld.GameWorld;
-import com.disector.gameworld.WallSpriteObject;
+import com.disector.gameworld.objects.WallSpriteObject;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;

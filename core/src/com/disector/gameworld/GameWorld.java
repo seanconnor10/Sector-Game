@@ -13,6 +13,9 @@ import com.disector.assets.SoundManager;
 import com.disector.gameworld.components.Movable;
 import com.disector.gameworld.components.PhysicsProperties;
 import com.disector.gameworld.components.Positionable;
+import com.disector.gameworld.objects.Grenade;
+import com.disector.gameworld.objects.PaintSplotch;
+import com.disector.gameworld.objects.WallSpriteObject;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.sprites.Sprite;
@@ -33,6 +36,7 @@ public class GameWorld implements I_AppFocus{
 
     public Player player1;
     public final Array<Grenade> grenades = new Array<>();
+    public final Array<PaintSplotch> paintSplotches = new Array<>();
     public final Array<WallSpriteObject> wallSpriteObjects = new Array<>();
 
     public GameWorld(Application app, InputChainInterface inputParent) {
@@ -66,9 +70,8 @@ public class GameWorld implements I_AppFocus{
         for (Grenade g : grenades) {
             moveObj(g);
             if (g.velocity.isZero(1)) {
+                //Detonate when done moving
                 SoundManager.playPosition(SoundManager.SFX_Boom, new Vector3(g.pos()), 500);
-                //Temporary Test Control
-                //Press To Toss Player around
                 float dist = player1.pos.dst(g.pos);
                 if (dist < 100) {
                     float force = 400 * (1 - (dist / 100));
@@ -82,6 +85,7 @@ public class GameWorld implements I_AppFocus{
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            //MAKE GRENADE
             Grenade grenade = new Grenade();
             grenade.currentSectorIndex = player1.currentSectorIndex;
             grenade.pos.set(player1.pos);
@@ -96,6 +100,24 @@ public class GameWorld implements I_AppFocus{
             );
             grenade.zSpeed = vAngleFactor * FORCE;
             grenades.add(grenade);
+
+            //PAINT SPLOTCH ON WALL
+            /*Physics.RayCastReturnData hitscan = Physics.raycast(
+                    getPlayerEyesXYZ(),
+                    player1.currentSectorIndex,
+                    player1.r,
+                    (float) Math.toRadians(player1.v_angle)
+            );
+            if (hitscan != null) {
+                System.out.println("SPLAT! " + hitscan.z());
+                paintSplotches.add(new PaintSplotch(
+                        hitscan.x(),
+                        hitscan.y(),
+                        hitscan.z(),
+                        hitscan.wall().normalAngle
+                ));
+            }*/
+
         }
     }
 
@@ -103,6 +125,10 @@ public class GameWorld implements I_AppFocus{
 
     public Vector4 getPlayerEyesPosition() {
         return new Vector4(player1.pos.x, player1.pos.y, player1.pos.z + player1.height, player1.r);
+    }
+
+    public Vector3 getPlayerEyesXYZ() {
+        return new Vector3(player1.pos.x, player1.pos.y, player1.pos.z + player1.height);
     }
 
     public Vector3 getPlayerXYZ() {
@@ -144,7 +170,7 @@ public class GameWorld implements I_AppFocus{
     }
 
     public Sprite[] getSpriteList() {
-        int size = grenades.size + wallSpriteObjects.size;
+        int size = grenades.size + wallSpriteObjects.size + paintSplotches.size;
         Sprite[] sprites = new Sprite[size];
 
         int i=0;
@@ -158,6 +184,10 @@ public class GameWorld implements I_AppFocus{
                 w.x1, w.y1, w.z,
                 w.x2, w.y2, w.height
             );
+            i++;
+        }
+        for (PaintSplotch p : paintSplotches) {
+            sprites[i] = p.getInfo();
             i++;
         }
 
@@ -254,10 +284,17 @@ public class GameWorld implements I_AppFocus{
             velocity.set(Physics.bounceVector(velocity, closestCollision.w, props));
             if (velocity.isZero(1)) velocity.set(Vector2.Zero);
 
-            SoundManager.playStaticPosition(SoundManager.SFX_Clink, objPos, 300);
+            if (obj instanceof Grenade) {
+                SoundManager.playStaticPosition(SoundManager.SFX_Clink, objPos, 300);
+                paintSplotches.add(new PaintSplotch(
+                        objPos.x,
+                        objPos.y,
+                        objPos.z + obj.getHeight()/2wdas,
+                        closestCollision.w.normalAngle
+                ));
+            }
 
             collisionsProcessed++;
-
         }
 
         obj.setOnGround(objPos.z < teeterHeight+0.5f);
@@ -313,6 +350,7 @@ public class GameWorld implements I_AppFocus{
 
     public void mapLoad() {
         grenades.clear();
+        paintSplotches.clear();
         wallSpriteObjects.clear();
     }
 
