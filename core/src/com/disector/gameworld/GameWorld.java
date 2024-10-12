@@ -41,12 +41,14 @@ public class GameWorld implements I_AppFocus{
     public final Array<Grenade> grenades = new Array<>();
     public final Array<PaintSplotch> paintSplotches = new Array<>();
     public final Array<LampMan> lampMen = new Array<>();
+    public final Array<CameraScreen> cameraScreens = new Array<>();
 
     public final Array<?>[] gameObjectArrays = {
             wallSpriteObjects,
             grenades,
             paintSplotches,
-            lampMen
+            lampMen,
+            cameraScreens
     };
 
     public GameWorld(Application app, InputChainInterface inputParent) {
@@ -75,6 +77,16 @@ public class GameWorld implements I_AppFocus{
         if (input.isJustPressed(Input.Keys.E)) {
             Vector2 impulse = new Vector2( (float)Math.cos(player1.r) * 800, (float) Math.sin(player1.r) * 800);
             player1.velocity.add(impulse);
+        }
+
+        for (CameraScreen cs : cameraScreens) {
+            LampMan l;
+            try {
+                l = lampMen.get(0);
+            } catch (IndexOutOfBoundsException | NullPointerException e ) {
+                break;
+            }
+            cs.refreshImage(lampMen.get(0).pos, (float) Math.atan2(l.velocity.y, l.velocity.x));
         }
 
         for (Grenade g : grenades) {
@@ -115,8 +127,9 @@ public class GameWorld implements I_AppFocus{
                         otherGrenade.velocity.y += force * (float) Math.sin(angle);
                         otherGrenade.zSpeed     += force;
                         otherGrenade.damagedToExplosion = true;
-                        otherGrenade.timeTillExplosion = 3f - 3f*Math.max(0,100f - dist)/100git ;
-                    }
+			float newTime = 3f - 3f*Math.max(0,100f - dist)/100;
+                        otherGrenade.timeTillExplosion = Math.min(newTime, otherGrenade.timeTillExplosion);
+		    }
                 }
             }
         }
@@ -397,7 +410,7 @@ public class GameWorld implements I_AppFocus{
         }
 
         lampMen.add(new LampMan());
-
+        cameraScreens.add(new CameraScreen(app));
     }
 
 }

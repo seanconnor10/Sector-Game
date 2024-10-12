@@ -12,9 +12,9 @@ import com.disector.renderer.sprites.FacingSprite;
 
 public class LampMan implements Movable, HasFacingSprite {
     private static Pixmap PIXMAP = new Pixmap(Gdx.files.local("assets/img/lamp.png"));
-    private static final float RADIUS = 6f, HEIGHT = 20f;
+    private static final float RADIUS = 6f, HEIGHT = 32f;
     private static final PhysicsProperties PHYS_PROPS = new PhysicsProperties(
-            0.7f, 0.8f, 0.7f, 1.5f, 50.0f, 1.0f
+            0.9f, 0.8f, 0.7f, 0.5f, 10.0f, 1.0f
     );
 
     public int currentSectorIndex = 0;
