@@ -179,8 +179,9 @@ public class Application extends ApplicationAdapter {
         TextFileMapLoader mapLoader = new TextFileMapLoader(this);
         boolean success = false;
         try {
-            gameWorld.mapLoad();
+            gameWorld.beforeMapLoad();
             mapLoader.load(filePath);
+            gameWorld.afterMapLoad();
             success = true;
             gameWorld.refreshPlayerSectorIndex();
             float newFloorZ = sectors.get(gameWorld.getPlayerSectorIndex()).floorZ;

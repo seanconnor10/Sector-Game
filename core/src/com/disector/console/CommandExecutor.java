@@ -5,6 +5,7 @@ import com.disector.AppFocusTarget;
 import com.disector.Application;
 import com.badlogic.gdx.Gdx;
 import com.disector.assets.SoundManager;
+import com.disector.gameworld.objects.LampMan;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -270,5 +271,11 @@ public class CommandExecutor {
             str.append(h.path().replaceFirst(fullPath, "")).append('\n');
         }
         return str.toString();
+    }
+
+    @ConsoleCommand(helpText =" help him please")
+    public String lamp() {
+        app.gameWorld.lampMen.add(new LampMan());
+        return null;
     }
 }

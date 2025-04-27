@@ -333,6 +333,8 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
                 CLICK_TYPE type;
 
+                float texV;
+
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
@@ -341,6 +343,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                     texHeight = texHeightMid;
                     pickedTex = tex;
                     type = CLICK_TYPE.WALL_MAIN;
+                    texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
@@ -349,6 +352,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                     texHeight = texHeightLow;
                     pickedTex = texLower;
                     type = CLICK_TYPE.WALL_LOWER;
+                    texV = ( yOff + ((destFloor/secHeight)-v) *secHeight/texHeight/yScale ) % 1;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
@@ -357,6 +361,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                     texHeight = texHeightMid;
                     pickedTex = tex;
                     type = CLICK_TYPE.WALL_MAIN;
+                    texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
@@ -365,9 +370,10 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
                     texHeight = texHeightUpper;
                     pickedTex = texUpper;
                     type = CLICK_TYPE.WALL_UPPER;
+                    texV = ( yOff + (v-(destCeiling/secHeight))*secHeight/texHeight/yScale ) % 1;
                 }
 
-                float texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
+                //float texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
 
                 int drawColor = pickedTex.getPixel((int)(selected_texU* pickedTex.getWidth()), (int)(texV*texHeight));
 

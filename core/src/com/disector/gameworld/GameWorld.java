@@ -2,6 +2,7 @@ package com.disector.gameworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.Vector4;
@@ -35,6 +36,8 @@ public class GameWorld implements I_AppFocus{
     private float dt;
     private boolean shouldDisplayMap;
 
+    // GAME OBJECTS ------------
+
     public Player player1;
 
     public final Array<WallSpriteObject> wallSpriteObjects = new Array<>();
@@ -51,6 +54,27 @@ public class GameWorld implements I_AppFocus{
             cameraScreens
     };
 
+    // Sector Actions -----------
+
+    static class Elevator {
+        private int sectorIndex;
+        private float floorLow;
+        private float floorHigh;
+        private float position = 0f;
+        private float speed = 50f;
+        private boolean goingDown = false;
+
+        public Elevator(int sectorIndex, int floorLow, int floorHigh) {
+            this.sectorIndex = sectorIndex;
+            this.floorLow = floorLow;
+            this.floorHigh = floorHigh;
+        }
+    }
+
+    final Array<Elevator> elevators = new Array<>();
+
+    // ---------------------------
+
     public GameWorld(Application app, InputChainInterface inputParent) {
         this.app = app;
         this.walls = app.walls;
@@ -58,6 +82,7 @@ public class GameWorld implements I_AppFocus{
         this.input = new InputChainNode(inputParent, "GameWorld");
         this.input.on();
         player1 = new Player(this, input);
+
     }
 
     @Override
@@ -142,6 +167,24 @@ public class GameWorld implements I_AppFocus{
                     (float) Math.sin(angleToPlayer) * FORCE * dt
             );
             moveObj(lamp);
+        }
+
+        for (Elevator e : elevators) {
+            Sector s = sectors.get(e.sectorIndex);
+            if (!e.goingDown && s.floorZ < e.floorHigh) {
+                s.floorZ += e.speed*dt;
+                if (s.floorZ >= e.floorHigh) {
+                    s.floorZ = e.floorHigh;
+                    e.goingDown = true;
+                }
+            } else if (e.goingDown && s.floorZ > e.floorLow) {
+                s.floorZ -= e.speed*dt;
+                if (s.floorZ <= e.floorLow) {
+                    s.floorZ = e.floorLow;
+                    e.goingDown = false;
+                }
+            }
+            s.ceilZ = s.floorZ + 48;
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -404,13 +447,20 @@ public class GameWorld implements I_AppFocus{
 
     // // ****************************************************
 
-    public void mapLoad() {
+    public void beforeMapLoad() {
         for (Array<?> arr : gameObjectArrays) {
             arr.clear();
         }
+        //lampMen.add(new LampMan());
+        //cameraScreens.add(new CameraScreen(app));
+    }
 
-        lampMen.add(new LampMan());
-        cameraScreens.add(new CameraScreen(app));
+    public void afterMapLoad() {
+        //Temporary Elevator
+        elevators.clear();
+        if (sectors.size >= 8) {
+            elevators.add(new Elevator(7, -64, 128));
+        }
     }
 
 }

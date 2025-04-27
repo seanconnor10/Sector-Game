@@ -407,6 +407,8 @@ public class SoftwareRenderer extends DimensionalRenderer {
 		        float texHeight;
                 Pixmap pickedTex;
 
+                float texV;
+
                 if (!isPortal) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
@@ -414,6 +416,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     light = lightMiddle;
                     texHeight = texHeightMid;
                     pickedTex = tex;
+                    texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
@@ -421,6 +424,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     light = lightLower;
 		            texHeight = texHeightLow;
                     pickedTex = texLower;
+                    texV = ( yOff + ((destFloor/secHeight)-v) *secHeight/texHeight/yScale ) % 1;
                 } else if (v<upperWallCutoffV) {
                     yOff = w.yOffset;
                     yScale = w.yScale;
@@ -428,6 +432,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     light = lightMiddle;
 		            texHeight = texHeightMid;
                     pickedTex = tex;
+                    texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
@@ -435,9 +440,11 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     light = lightUpper;
 		            texHeight = texHeightUpper;
                     pickedTex = texUpper;
+                    texV = ( yOff + (v-(destCeiling/secHeight))*secHeight/texHeight/yScale ) % 1;
                 }
 
-                float texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
+                //Before Texture Pegging Alteration
+                //float texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
 
                 int drawColor = pickedTex.getPixel((int)(selected_texU* pickedTex.getWidth()), (int)(texV*texHeight));
 
@@ -866,7 +873,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
     protected float getFogFactor(float dist) {
         if (!drawFog) return 0f;
-        final float fogDistance = 600;
+        final float fogDistance = 900;
         return Math.max(0, Math.min(fogDistance, dist) ) / fogDistance;
     }
 
