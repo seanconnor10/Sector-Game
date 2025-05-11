@@ -1,0 +1,70 @@
+MATERIAL (0) :: Img TILE3 :: 
+MATERIAL (1) :: Img EMBLEM_TRIM :: 
+MATERIAL (2) :: Img GRASS :: 
+MATERIAL (3) :: Img TILE :: 
+MATERIAL (4) :: Img MARBLE :: 
+MATERIAL (5) :: Img HOUSE :: 
+MATERIAL (6) :: Img WOOD2 :: 
+MATERIAL (7) :: Img GRATE :: 
+MATERIAL (8) :: Img STARS :: Sky :: 
+SECTOR (0) :: Height 0 100 :: Mat 3 8 :: Light 1.00 1.00 :: Has 0 1 2 3 4 5 6 7 16 17 18 19 20 21 45 46 ::
+SECTOR (1) :: Height -16 100 :: Mat 6 8 :: Light 1.00 1.00 :: Has 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 ::
+SECTOR (2) :: Height -32 100 :: Mat 2 8 :: Light 1.00 1.00 :: Has 8 9 10 11 12 13 14 15 ::
+SECTOR (3) :: Height 0 100 :: Mat 6 8 :: Light 1.00 1.00 :: Has 20 22 23 24 41 46 47 48 ::
+SECTOR (4) :: Height 0 100 :: Mat 6 8 :: Light 1.00 1.00 :: Has 23 25 26 27 28 29 40 41 43 44 ::
+SECTOR (5) :: Height -10 100 :: Mat 6 8 :: Light 1.00 1.00 :: Has 27 30 31 32 39 40 ::
+SECTOR (6) :: Height -20 100 :: Mat 6 8 :: Light 1.00 1.00 :: Has 31 33 34 35 49 50 ::
+SECTOR (7) :: Height 73.05030059814453 121.05030059814453 :: Mat 6 6 :: Light 1.00 1.00 :: Has 34 36 37 38 ::
+SECTOR (8) :: Height 0 100 :: Mat 3 3 :: Light 1.00 1.00 :: Has 43 44 42 39 ::
+SECTOR (9) :: Height 0 100 :: Mat 3 8 :: Light 1.00 1.00 :: Has 47 48 45 42 ::
+WALL (0) :: Pos -256 256 -64 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (1) :: Pos 384 256 384 -256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (2) :: Pos 384 -256 -256 -256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (3) :: Pos -256 -256 -256 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (4) :: Pos -192 192 -192 -192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (5) :: Pos -192 -192 320 -192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (6) :: Pos 320 -192 320 192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (7) :: Pos 320 192 128 192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (8) :: Pos -128 128 -128 -128 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (9) :: Pos -128 -128 256 -128 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (10) :: Pos 256 -128 256 128 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (11) :: Pos 256 128 160 128 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (12) :: Pos -32 128 -128 128 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (13) :: Pos 160 128 96 96 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (14) :: Pos 32 96 -32 128 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (15) :: Pos 96 96 32 96 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: 
+WALL (16) :: Pos 0 192 -192 192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (17) :: Pos 128 192 96 168 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (18) :: Pos 32 168 0 192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (19) :: Pos 96 168 32 168 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: 
+WALL (20) :: Pos -64 256 32 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 0 -> 3 :: Scale 0.2500 0.1900 :: 
+WALL (21) :: Pos 224 256 384 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (22) :: Pos -64 256 -64 320 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (23) :: Pos -64 320 32 320 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 3 -> 4 :: Scale 0.2500 0.1900 :: 
+WALL (24) :: Pos 224 320 224 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (25) :: Pos -64 320 -128 384 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (26) :: Pos -128 384 -128 416 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (27) :: Pos -128 416 32 416 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 4 -> 5 :: Scale 0.2500 0.1900 :: 
+WALL (28) :: Pos 288 416 288 384 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (29) :: Pos 288 384 224 320 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (30) :: Pos -128 416 -128 448 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (31) :: Pos -128 448 288 448 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 5 -> 6 :: Scale 0.2500 0.1900 :: 
+WALL (32) :: Pos 288 448 288 416 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (33) :: Pos -128 448 -96 480 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (34) :: Pos -32 480 192 480 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 6 -> 7 :: Scale 0.2500 0.1900 :: 
+WALL (35) :: Pos 192 480 256 480 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (36) :: Pos -32 480 -32 544 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (37) :: Pos -32 544 192 544 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (38) :: Pos 192 544 192 480 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (39) :: Pos 32 416 128 416 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 8 -> 5 :: Scale 0.2500 0.1900 :: 
+WALL (40) :: Pos 128 416 288 416 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 4 -> 5 :: Scale 0.2500 0.1900 :: 
+WALL (41) :: Pos 128 320 224 320 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 3 -> 4 :: Scale 0.2500 0.1900 :: 
+WALL (42) :: Pos 32 320 128 320 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 9 -> 8 :: Scale 0.2500 0.1900 :: 
+WALL (43) :: Pos 128 416 128 320 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 8 -> 4 :: 
+WALL (44) :: Pos 32 320 32 416 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 8 -> 4 :: 
+WALL (45) :: Pos 32 256 128 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 0 -> 9 :: Scale 0.2500 0.1900 :: 
+WALL (46) :: Pos 128 256 224 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 0 -> 3 :: Scale 0.2500 0.1900 :: 
+WALL (47) :: Pos 128 320 128 256 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 9 -> 3 :: 
+WALL (48) :: Pos 32 256 32 320 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 9 -> 3 :: 
+WALL (49) :: Pos -96 480 -32 480 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
+WALL (50) :: Pos 256 480 288 448 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: 
