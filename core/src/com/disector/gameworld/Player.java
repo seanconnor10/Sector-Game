@@ -17,7 +17,7 @@ public class Player implements Movable {
     
     private final InputChainInterface input;
 
-    final float MAX_SPEED = 150.f, ACCEL = 100.0f;
+    final float MAX_SPEED = 150.f, ACCEL = 200.0f;
     final float MAX_SPEED_SLOW = 60.f;
     final float MOUSE_SENS_X = 0.002f, MOUSE_SENS_Y = 0.1f;
     final float TURN_SPEED = 3.0f, VLOOK_SPEED = 30.0f;
@@ -96,7 +96,7 @@ public class Player implements Movable {
             friction = 0.01f;
         }
         else if (inputVector.isZero(0.05f)) {
-            friction = 0.7f;
+            friction = 0.8f;
         } else {
             float speedAngle = (float) Math.atan2(velocity.x, velocity.y);
             float velAngle = (float) Math.atan2(inputVector.x, inputVector.y) ;
@@ -108,7 +108,7 @@ public class Player implements Movable {
             while(angleDifference>Math.PI) angleDifference -= (float) Math.PI*2;
             while(angleDifference<-Math.PI) angleDifference += (float) Math.PI*2;
             float lerp = (float) ( Math.abs(angleDifference)/Math.PI );
-            friction = 0.4f + lerp*0.3f;
+            friction = 0.5f + lerp*0.3f;
         }
         velocity.scl(1f - friction * dtSQRT);
 
