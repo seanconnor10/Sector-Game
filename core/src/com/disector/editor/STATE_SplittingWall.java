@@ -9,7 +9,7 @@ import com.disector.WallInfoPack;
 import com.disector.editor.actions.EditAction;
 
 public class STATE_SplittingWall extends EditorState {
-    public STATE_SplittingWall(Editor editor, Panel panel) {
+    public STATE_SplittingWall(Editor1 editor, Panel panel) {
         super(editor, panel);
         visibleName = "Splitting Walls";
         editor.messageLog.log("  Left Click to Perform Split");

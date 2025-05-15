@@ -16,7 +16,7 @@ class Button {
     boolean pressed;
     boolean active = true;
 
-    Button(Editor editor, Panel panel, String text) {
+    Button(Editor1 editor, Panel panel, String text) {
         this.panel = panel;
         this.rect = new Rectangle();
         this.text = text;

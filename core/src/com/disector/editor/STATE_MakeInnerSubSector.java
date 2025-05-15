@@ -9,7 +9,7 @@ import com.disector.editor.actions.EditAction;
 
 public class STATE_MakeInnerSubSector extends EditorState {
 
-    public STATE_MakeInnerSubSector(Editor editor, Panel panel) {
+    public STATE_MakeInnerSubSector(Editor1 editor, Panel panel) {
         super(editor, panel);
         visibleName = "Making Walls Sub-sector";
     }

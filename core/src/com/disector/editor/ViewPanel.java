@@ -10,7 +10,7 @@ import com.disector.renderer.EditingSoftwareRenderer;
 class ViewPanel extends Panel{
     ActiveSelection.Surface recentViewClick = null;
 
-    public ViewPanel(Editor editor) {
+    public ViewPanel(Editor1 editor) {
         super(editor);
 
         this.input = new InputChainNode(editor.input, "View-Panel-Input") {

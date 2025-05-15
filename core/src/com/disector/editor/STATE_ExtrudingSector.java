@@ -20,7 +20,7 @@ class STATE_ExtrudingSector extends EditorState {
     Array<Wall> createdWalls = new Array<>();
     IntArray createdWallIndices = new IntArray();
 
-    public STATE_ExtrudingSector(Editor editor, Panel panel) {
+    public STATE_ExtrudingSector(Editor1 editor, Panel panel) {
         super(editor, panel);
         visibleName = "Extruding Wall as Portal";
         ignoreEditorClick = true;

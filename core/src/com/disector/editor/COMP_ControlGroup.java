@@ -20,7 +20,7 @@ public class COMP_ControlGroup extends Table implements UpdatableComponent {
     com.badlogic.gdx.scenes.scene2d.ui.Button plusButton;
     TextField textField;
 
-    public COMP_ControlGroup(String name, Skin skin, Editor editor) {
+    public COMP_ControlGroup(String name, Skin skin, Editor1 editor) {
         super();
 
         final com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle minusStyle = skin.get("minimize", com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle.class);

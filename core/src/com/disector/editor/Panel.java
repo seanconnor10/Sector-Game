@@ -3,12 +3,11 @@ package com.disector.editor;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.disector.inputrecorder.InputChainInterface;
-import com.disector.inputrecorder.InputChainNode;
 
 import java.util.function.Function;
 
 class Panel {
-    Editor editor;
+    Editor1 editor;
     Rectangle rect;
 
     /**
@@ -24,7 +23,7 @@ class Panel {
 
     final Array<Button> buttons = new Array<>();
 
-    public Panel(Editor editor) {
+    public Panel(Editor1 editor) {
         this.editor = editor;
         this.rect = new Rectangle();
     }

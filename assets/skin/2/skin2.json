@@ -9,9 +9,9 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 }
 com.badlogic.gdx.graphics.Color: {
 	color: {
-		r: 1
+		r: 0.8980392
 		g: 1
-		b: 1
+		b: 0.8352941
 		a: 1
 	}
 	selection: {
@@ -262,6 +262,27 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 		name: white
 		color: selection
 	}
+	pink: {
+		name: white
+		color: {
+			r: 1
+			g: 0.7529412
+			b: 0.9254902
+			a: 1
+		}
+	}
+	solid-color: {
+		name: white
+		color: color
+	}
+	split_pane_bar-c: {
+		name: split_pane_bar
+		color: color
+	}
+	headerless_window_c: {
+		name: headerless_window
+		color: color
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
@@ -430,10 +451,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
 	default-horizontal: {
-		handle: split_pane_bar
+		handle: white
 	}
 	default-vertical: {
-		handle: splitpane-vertical-c
+		handle: white
+	}
+	c-horizontal: {
+		handle: split_pane_bar-c
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {

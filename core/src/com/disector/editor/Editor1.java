@@ -18,7 +18,7 @@ import com.disector.renderer.EditingSoftwareRenderer;
 
 import java.util.Stack;
 
-public class Editor implements I_AppFocus {
+public class Editor1 implements I_AppFocus, EditorInterface {
     static BitmapFont font = new BitmapFont( Gdx.files.local("assets/font/fira.fnt") );
 
     final Application app;
@@ -65,7 +65,7 @@ public class Editor implements I_AppFocus {
     private float animationCycle = 0f;
     float animationFactor = 0f;
 
-    public Editor(Application app, InputChainInterface input) {
+    public Editor1(Application app, InputChainInterface input) {
         this.app = app;
         this.walls = app.walls;
         this.sectors = app.sectors;
@@ -117,6 +117,9 @@ public class Editor implements I_AppFocus {
         for (Panel panel : panels)
             panel.rearrangeButtons();
     }
+
+    @Override
+    public ActiveSelection getSelection() {return selection;}
 
     @Override
     public InputChainInterface getInputReference() {

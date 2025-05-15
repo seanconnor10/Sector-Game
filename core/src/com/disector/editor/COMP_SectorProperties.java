@@ -12,19 +12,19 @@ public class COMP_SectorProperties extends COMP_UpdateableWindow {
     private int secIndex = -1;
     private Sector sec = null;
 
-    public COMP_SectorProperties(String title, Skin skin, String styleName,Editor editor) {
+    public COMP_SectorProperties(String title, Skin skin, String styleName, Editor1 editor) {
         super(title, skin, styleName, editor);
         setSector(0);
         setup();
     }
 
-    public COMP_SectorProperties(String title, WindowStyle style,Editor editor) {
+    public COMP_SectorProperties(String title, WindowStyle style, Editor1 editor) {
         super(title, style, editor);
         setSector(0);
         setup();
     }
 
-    public COMP_SectorProperties(String title, Skin skin,Editor editor) {
+    public COMP_SectorProperties(String title, Skin skin, Editor1 editor) {
         super(title, skin, editor);
         setSector(0);
         setup();

@@ -273,9 +273,15 @@ public class CommandExecutor {
         return str.toString();
     }
 
-    @ConsoleCommand(helpText =" help him please")
+    @ConsoleCommand(helpText ="help him please")
     public String lamp() {
         app.gameWorld.lampMen.add(new LampMan());
+        return null;
+    }
+
+    @ConsoleCommand(helpText="Change type of Ediotr")
+    public String swap_editor() {
+        app.swapEditor();
         return null;
     }
 }

@@ -8,13 +8,13 @@ import com.disector.editor.actions.EditAction;
 abstract class EditorState {
     String visibleName = "MISSING STATE NAME";
 
-    final Editor editor;
+    final Editor1 editor;
     final Panel panel;
 
     boolean ignoreEditorClick;
     boolean shouldFinish;
 
-    EditorState(Editor editor, Panel panel) {
+    EditorState(Editor1 editor, Panel panel) {
         this.editor = editor;
         this.panel = panel;
     }

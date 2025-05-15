@@ -23,7 +23,7 @@ class STATE_TextureAlign extends EditorState{
     
     Surface target;
 
-    STATE_TextureAlign(Editor editor, Panel panel, Surface target) {
+    STATE_TextureAlign(Editor1 editor, Panel panel, Surface target) {
         super(editor, panel);
         if (target == null || target.type == CLICK_TYPE.FLOOR || target.type == CLICK_TYPE.CEIL) {
             shouldFinish = true;

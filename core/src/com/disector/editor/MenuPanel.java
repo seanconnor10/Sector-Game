@@ -6,7 +6,7 @@ import com.disector.inputrecorder.InputChainNode;
 import com.disector.maploader.TextFileMapLoader;
 
 class MenuPanel extends Panel {
-    public MenuPanel(Editor editor) {
+    public MenuPanel(Editor1 editor) {
         super(editor);
         this.input = new InputChainNode(editor.input, "Menu-Panel-Input");
 

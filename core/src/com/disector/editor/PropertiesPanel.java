@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import com.disector.Sector;
 import com.disector.inputrecorder.InputChainStage;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputRecorder;
@@ -35,7 +34,7 @@ class PropertiesPanel extends Panel {
     Skin guiSkin;
     InputChainStage stage;
 
-    PropertiesPanel(Editor editor) {
+    PropertiesPanel(Editor1 editor) {
         super(editor);
         this.input = new InputChainNode(editor.input, "Props-Panel-Input");
         frame = new FrameBuffer(pixelFormat, 1, 1, false);

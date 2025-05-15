@@ -18,8 +18,9 @@ import com.disector.assets.PixmapContainer;
 import com.disector.assets.SoundManager;
 import com.disector.console.CommandExecutor;
 import com.disector.console.Console;
-import com.disector.editor.Editor;
-import com.disector.editor2.Editor2;
+import com.disector.editor.EditorInterface;
+import com.disector.editor.Editor1;
+import com.disector.editor.Editor2;
 import com.disector.gameworld.GameWorld;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
@@ -44,7 +45,7 @@ public class Application extends ApplicationAdapter {
 
     private DimensionalRenderer renderer;
     private GameMapRenderer gameMapRenderer;
-    private Editor2 editor;
+    private EditorInterface editor;
     public FileHandle activeMapFile;
 
     private Console console;
@@ -372,10 +373,10 @@ public class Application extends ApplicationAdapter {
             boolean consoleOn = console.toggle();
             if (consoleOn) {
                 consoleInput.on();
-                appInput.off();
+                if (appInput != null) appInput.off();
             } else {
                 consoleInput.off();;
-                appInput.on();
+                if (appInput != null) appInput.on();
             }
         }
 
@@ -448,4 +449,12 @@ public class Application extends ApplicationAdapter {
             renderer.setFov(fov);
     }
 
+    public void swapEditor() {
+        if (editor == null) return;
+        if (editor instanceof Editor1) {
+            editor = new Editor2(this, mainInput);
+        } else {
+            editor = new Editor1(this, mainInput);
+        }
+    }
 }

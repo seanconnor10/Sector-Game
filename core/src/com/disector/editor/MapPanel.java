@@ -7,7 +7,7 @@ import com.disector.inputrecorder.InputRecorder;
 
 class MapPanel extends Panel {
 
-    public MapPanel(Editor editor) {
+    public MapPanel(Editor1 editor) {
         super(editor);
         this.input = new InputChainNode(editor.input, "Map-Panel-Input") {
             @Override

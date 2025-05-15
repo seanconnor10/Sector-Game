@@ -8,7 +8,8 @@ import com.disector.Sector;
 import com.disector.Application;
 import com.disector.Material;
 import com.disector.assets.PixmapContainer;
-import com.disector.editor.Editor;
+import com.disector.editor.ActiveSelection;
+import com.disector.editor.EditorInterface;
 
 import java.nio.ShortBuffer;
 import java.util.Arrays;
@@ -29,7 +30,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
     public int sectorHighlightIndex = -1;
     public float highLightStrength = 0;
 
-    private final Editor editor;
+    private final EditorInterface editor;
 
     public enum CLICK_TYPE {FLOOR, CEIL, WALL_MAIN, WALL_UPPER, WALL_LOWER}
 
@@ -40,7 +41,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
     public ClickInfo[] clickInfo = new ClickInfo[frameWidth*frameHeight];
 
-    public EditingSoftwareRenderer(Application app, Editor editor) {
+    public EditingSoftwareRenderer(Application app, EditorInterface editor) {
         super(app);
         this.editor = editor;
     }
@@ -235,7 +236,7 @@ public class EditingSoftwareRenderer extends SoftwareRenderer {
 
         float secHeight = secCeilZ - secFloorZ;
 
-        boolean wallSelected = editor.selection.getWalls().contains(w, true);
+        boolean wallSelected = editor.getSelection().getWalls().contains(w, true);
 
         for (int drawX = leftEdgeX; drawX <= rightEdgeX; drawX++) { //Per draw column loop
             if (occlusionTop[drawX] -1 <= occlusionBottom[drawX] ) continue;

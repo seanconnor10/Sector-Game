@@ -51,6 +51,10 @@ public abstract class DimensionalRenderer extends Renderer{
         return new TextureRegion(new Texture((buffer)), buffer.getWidth(), buffer.getHeight());
     }
 
+    public Texture copyPixelsAsTexture() {
+        return new Texture(buffer);
+    }
+
 
     public Pixmap getBufferReference() {
         return buffer;

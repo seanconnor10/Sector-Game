@@ -11,7 +11,7 @@ import com.disector.WallInfoPack;
 import com.disector.renderer.EditingSoftwareRenderer;
 
 public class ActiveSelection {
-    final Editor editor;
+    final EditorInterface editor;
     final Array<Wall> allWalls;
     final Array<Sector> allSectors;
 
@@ -27,7 +27,7 @@ public class ActiveSelection {
 
     Wall copiedWall;
 
-    ActiveSelection(Array<Sector> sectors, Array<Wall> walls, Editor editor) {
+    ActiveSelection(Array<Sector> sectors, Array<Wall> walls, EditorInterface editor) {
         selectedSectors = new Array<>();
         selectedWalls = new Array<>();
         sectorIndices = new IntArray();
@@ -144,7 +144,7 @@ public class ActiveSelection {
             return;
 
         wallIndices.add(highlightedWallIndex);
-        selectedWalls.add(editor.walls.get(highlightedWallIndex));
+        selectedWalls.add(allWalls.get(highlightedWallIndex));
     }
 
     void addWallToSelection(int ind) {
@@ -152,7 +152,7 @@ public class ActiveSelection {
             return;
 
         wallIndices.add(ind);
-        selectedWalls.add(editor.walls.get(ind));
+        selectedWalls.add(allWalls.get(ind));
     }
 
     void toggleWallInSelection(int ind) {
@@ -160,10 +160,10 @@ public class ActiveSelection {
         boolean already_on = wallIndices.contains(ind);
         if (already_on) {
             wallIndices.removeValue(ind);
-            selectedWalls.removeValue(editor.walls.get(ind), true);
+            selectedWalls.removeValue(allWalls.get(ind), true);
         } else {
             wallIndices.add(ind);
-            selectedWalls.add(editor.walls.get(ind));
+            selectedWalls.add(allWalls.get(ind));
         }
     }
 }

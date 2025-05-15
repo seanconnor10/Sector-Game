@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 class NewEditorMapRenderer {
     private final Application app;
-    private final Editor editor;
+    private final Editor1 editor;
 
     private final ShapeRenderer shape = new ShapeRenderer();
     FrameBuffer frame;
@@ -31,7 +31,7 @@ class NewEditorMapRenderer {
 
     float halfWidth, halfHeight;
 
-    NewEditorMapRenderer(Application app, Editor editor, Rectangle startDimensions) {
+    NewEditorMapRenderer(Application app, Editor1 editor, Rectangle startDimensions) {
         this.app = app;
         this.editor = editor;
         frame = new FrameBuffer(app.pixelFormat, 1, 1, false);

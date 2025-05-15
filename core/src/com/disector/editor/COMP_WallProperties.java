@@ -11,19 +11,19 @@ public class COMP_WallProperties extends COMP_UpdateableWindow {
     private int wallIndex = -1;
     private Wall wall = null;
 
-    public COMP_WallProperties(String title, Skin skin, String styleName,Editor editor) {
+    public COMP_WallProperties(String title, Skin skin, String styleName, Editor1 editor) {
         super(title, skin, styleName, editor);
         setWall(0);
         setup();
     }
 
-    public COMP_WallProperties(String title, WindowStyle style,Editor editor) {
+    public COMP_WallProperties(String title, WindowStyle style, Editor1 editor) {
         super(title, style, editor);
         setWall(0);
         setup();
     }
 
-    public COMP_WallProperties(String title, Skin skin,Editor editor) {
+    public COMP_WallProperties(String title, Skin skin, Editor1 editor) {
         super(title, skin, editor);
         setWall(0);
         setup();

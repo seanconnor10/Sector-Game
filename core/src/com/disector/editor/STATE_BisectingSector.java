@@ -38,7 +38,7 @@ class STATE_BisectingSector extends EditorState {
         (8/29/24)
      */
 
-    STATE_BisectingSector(Editor editor, Panel panel) {
+    STATE_BisectingSector(Editor1 editor, Panel panel) {
         super(editor, panel);
         ignoreEditorClick = true;
         visibleName = "Sector Bisection";

@@ -18,7 +18,7 @@ class STATE_CreatingSector extends EditorState {
     IntArray createdWallIndices = new IntArray();
     float firstWallX, firstWallY;
 
-    public STATE_CreatingSector(Editor editor, Panel panel) {
+    public STATE_CreatingSector(Editor1 editor, Panel panel) {
         super(editor, panel);
         ignoreEditorClick = true;
         visibleName = "Creating Walls";

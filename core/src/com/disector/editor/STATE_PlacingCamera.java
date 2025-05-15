@@ -6,7 +6,7 @@ class STATE_PlacingCamera extends EditorState{
     float cameraStartX, cameraStartY, cameraStartR;
     int cameraX, cameraY;
 
-    public STATE_PlacingCamera(Editor editor, Panel panel) {
+    public STATE_PlacingCamera(Editor1 editor, Panel panel) {
         super(editor, panel);
         ignoreEditorClick = true;
         visibleName = "Placing Render Camera";
