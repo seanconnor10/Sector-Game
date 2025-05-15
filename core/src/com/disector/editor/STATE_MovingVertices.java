@@ -12,6 +12,8 @@ public class STATE_MovingVertices extends EditorState {
     ArrayList<Wall> grabbedPointOnes = new ArrayList<>();
     ArrayList<Wall> grabbedPointTwos = new ArrayList<>();
 
+
+
     public STATE_MovingVertices(Editor editor, Panel panel) {
         super(editor, panel);
         visibleName = "Moving Vertices";
