@@ -19,6 +19,7 @@ import com.disector.assets.SoundManager;
 import com.disector.console.CommandExecutor;
 import com.disector.console.Console;
 import com.disector.editor.Editor;
+import com.disector.editor2.Editor2;
 import com.disector.gameworld.GameWorld;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
@@ -43,7 +44,7 @@ public class Application extends ApplicationAdapter {
 
     private DimensionalRenderer renderer;
     private GameMapRenderer gameMapRenderer;
-    private Editor editor;
+    private Editor2 editor;
     public FileHandle activeMapFile;
 
     private Console console;
@@ -189,8 +190,8 @@ public class Application extends ApplicationAdapter {
                 gameWorld.player1.pos.z = newFloorZ;
             }
             if (editor != null) {
-                editor.shouldUpdateViewRenderer = true;
-                editor.onMapLoad();
+                //editor.shouldUpdateViewRenderer = true;
+                //editor.onMapLoad();
             }
             activeMapFile = Gdx.files.local(filePath);
         } catch (Exception e) {
@@ -209,7 +210,7 @@ public class Application extends ApplicationAdapter {
         MapLoader mapLoader = new OldTextFormatMapLoader(this);
         try {
             mapLoader.load(filePath);
-            if (editor != null) editor.shouldUpdateViewRenderer = true;
+            //if (editor != null) editor.shouldUpdateViewRenderer = true;
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -267,7 +268,7 @@ public class Application extends ApplicationAdapter {
                     System.out.println("Must instance GameWorld before Editor.");
                     break;
                 }
-                if (editor==null) editor = new Editor(this, mainInput);
+                if (editor==null) editor = new Editor2(this, mainInput);
                 appInput = editor.getInputReference();
                 break;
             default:

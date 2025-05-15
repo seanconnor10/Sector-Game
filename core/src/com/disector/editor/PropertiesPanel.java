@@ -75,8 +75,8 @@ class PropertiesPanel extends Panel {
 
     private void setupStage() {
         guiSkin = new Skin(
-                Gdx.files.local("assets/skin/clean-crispy-ui.json"),
-                new TextureAtlas( Gdx.files.local("assets/skin/clean-crispy-ui.atlas") )
+                Gdx.files.local("assets/skin/1/clean-crispy-ui.json"),
+                new TextureAtlas( Gdx.files.local("assets/skin/1/clean-crispy-ui.atlas") )
         );
 
         stage = new InputChainStage(new ScreenViewport(), new SpriteBatch(), input);
