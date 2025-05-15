@@ -456,5 +456,8 @@ public class Application extends ApplicationAdapter {
         } else {
             editor = new Editor1(this, mainInput);
         }
+        if (focus == AppFocusTarget.EDITOR) {
+            appInput = editor.getInputReference();
+        }
     }
 }
