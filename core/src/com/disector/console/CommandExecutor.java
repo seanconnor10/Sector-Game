@@ -1,5 +1,6 @@
 package com.disector.console;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.disector.AppFocusTarget;
 import com.disector.Application;
@@ -284,4 +285,11 @@ public class CommandExecutor {
         app.swapEditor();
         return null;
     }
+
+    @ConsoleCommand(helpText="Stop All Looping Sounds")
+    public String snd_kill_loops() {
+        SoundManager.killLoops();
+        return null;
+    }
+
 }

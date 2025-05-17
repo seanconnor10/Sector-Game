@@ -1,13 +1,14 @@
 package com.disector.editor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector4;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 
@@ -17,6 +18,7 @@ import com.disector.*;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputChainStage;
+import com.disector.inputrecorder.InputRecorder;
 import com.disector.renderer.EditingSoftwareRenderer;
 
 public class Editor2 implements EditorInterface {
@@ -38,7 +40,12 @@ public class Editor2 implements EditorInterface {
     public EditingSoftwareRenderer viewRenderer;
     Table viewPanel;
 
-    public Editor2(Application app,InputChainInterface inputParent) {
+    public EditorMode mode = EditorMode.NORMAL;
+    public enum EditorMode {
+        NORMAL, VIEW_MOVEMENT;
+    }
+
+    public Editor2(Application app, InputChainInterface inputParent) {
         this.app = app;
         this.walls = app.walls;
         this.sectors = app.sectors;
@@ -50,27 +57,59 @@ public class Editor2 implements EditorInterface {
         this.activeSelection = new ActiveSelection(app.sectors, app.walls, this);
 
         this.viewRenderer = new EditingSoftwareRenderer(app, this);
-        this.viewRenderer.placeCamera(100, 30, -(float)Math.PI/4f);
+        this.viewRenderer.placeCamera(100, 30, -(float) Math.PI / 4f);
         this.viewRenderer.camZ = 30f;
-        viewRenderer.resizeFrame(300, 200);
+        viewRenderer.resizeFrame(400, 225);
 
         setupStage();
     }
 
     @Override
     public void step(float deltaTime) {
+        Rectangle viewRect = getViewPanelRect();
 
+        if (mode == EditorMode.VIEW_MOVEMENT) {
+            //shouldUpdateViewRenderer = true;
+            viewRenderer.camR -= InputRecorder.mouseDeltaX / 250;
+            viewRenderer.camVLook -= InputRecorder.mouseDeltaY / 2;
+            Gdx.input.setCursorPosition( (int) (viewRect.x + viewRect.width / 2), Gdx.graphics.getHeight() - (int) (viewRect.y + viewRect.height / 2) );
+            if (!Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
+                mode = EditorMode.NORMAL;
+            }
+        }
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.MIDDLE)) {
+            if (mouseIn(viewRect)) {
+                mode = EditorMode.VIEW_MOVEMENT;
+                System.out.println("VIEW MOVE START");
+            }
+        }
+
+        if(mouseIn(viewRect)) {
+            moveViewWithKeyBoard(deltaTime);
+        }
     }
 
     @Override
     public void draw() {
-        int viewX, viewY, viewW, viewH;
-        viewX = (int) viewPanel.getOriginX()+50;
-        viewY = (int) viewPanel.getOriginY()+50;
-        viewW = (int) viewPanel.getWidth();
-        viewH = (int) viewPanel.getHeight();
-
+        //Let software renderer draw to buffer
         viewRenderer.renderWorld();
+
+        //Space of view rectangle on screen
+        Rectangle viewRect = getViewPanelRect();
+
+        //If proportions of panel are different than the view's,
+        //determine what portion of the buffer to draw without stretching it
+        float panelAspectRatio = (float) viewRect.width / (float) viewRect.height;
+        float viewAspectRatio = (float) viewRenderer.getWidth() / (float) viewRenderer.getHeight();
+        float regionW, regionH;
+        if (panelAspectRatio < viewAspectRatio) {
+            regionW = panelAspectRatio / viewAspectRatio;
+            regionH = 1.f;
+        } else {
+            regionW = 1.f;
+            regionH =  viewAspectRatio / panelAspectRatio;
+        }
 
         Texture viewTex = viewRenderer.copyPixelsAsTexture();
 
@@ -78,7 +117,7 @@ public class Editor2 implements EditorInterface {
         ScreenUtils.clear(Color.GRAY);
         stage.act();
         stage.draw();
-        batch.draw(viewTex, viewX, viewY, viewW, viewH, 0, 0, viewTex.getWidth(), viewTex.getHeight(), false, true);
+        batch.draw(viewTex, viewRect.x, viewRect.y, viewRect.width, viewRect.height,(int)(((1.f - regionW)*viewTex.getWidth())/2f), (int)(((1.f -regionH)*viewTex.getHeight())/2f), (int)(viewTex.getWidth()*regionW), (int)(viewTex.getHeight()*regionH), false, true);
         batch.end();
 
         viewTex.dispose();
@@ -105,7 +144,7 @@ public class Editor2 implements EditorInterface {
 
         skin = new Skin(
                 Gdx.files.local("assets/skin/2/skin2.json"),
-                new TextureAtlas( Gdx.files.local("assets/skin/2/skin2.atlas") )
+                new TextureAtlas(Gdx.files.local("assets/skin/2/skin2.atlas"))
         );
 
         Table mainContainer = new Table(skin);
@@ -176,5 +215,96 @@ public class Editor2 implements EditorInterface {
         mainContainer.add(lowerSection).bottom().left().height(50).expandX();
 
         viewPanel = main1;
+    }
+
+    private Rectangle getViewPanelRect() {
+        return new Rectangle(
+                viewPanel.getX() + viewPanel.getParent().getParent().getX(),
+                viewPanel.getY() + viewPanel.getParent().getParent().getParent().getY(),
+                viewPanel.getWidth(),
+                viewPanel.getHeight()
+        );
+    }
+
+    private boolean mouseIn(Rectangle rect) {
+        int x = Gdx.input.getX();
+        int y = Gdx.input.getY();
+        return x > rect.x && x < rect.x+rect.width && y > rect.y && y < rect.y+rect.height;
+    }
+
+    private void moveViewWithKeyBoard(float dt) {
+        boolean shift = input.isDown(Input.Keys.SHIFT_LEFT);
+
+        //Looking
+        if (input.isDown(Input.Keys.UP)) {
+            viewRenderer.camVLook += 200 * dt;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.DOWN)) {
+            viewRenderer.camVLook -= 200 * dt;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.LEFT)) {
+            viewRenderer.camR += 2*dt;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.RIGHT)) {
+            viewRenderer.camR -= 2*dt;
+            //shouldUpdateViewRenderer = true;
+        }
+
+        //Moving
+        float moveDist = 100*dt;
+        if (shift) moveDist*=3;
+
+        if (input.isDown(Input.Keys.W)) {
+            viewRenderer.camX += (float) Math.cos(viewRenderer.camR) * moveDist;
+            viewRenderer.camY += (float) Math.sin(viewRenderer.camR) * moveDist;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.S)) {
+            viewRenderer.camX -= (float) Math.cos(viewRenderer.camR) * moveDist;
+            viewRenderer.camY -= (float) Math.sin(viewRenderer.camR) * moveDist;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.A)) {
+            viewRenderer.camX += (float) Math.cos(viewRenderer.camR + Math.PI/2) * moveDist;
+            viewRenderer.camY += (float) Math.sin(viewRenderer.camR + Math.PI/2) * moveDist;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.D)) {
+            viewRenderer.camX -= (float) Math.cos(viewRenderer.camR + Math.PI/2) * moveDist;
+            viewRenderer.camY -= (float) Math.sin(viewRenderer.camR + Math.PI/2) * moveDist;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.E)) {
+            viewRenderer.camZ += (shift ? 200 : 80) * dt;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.Q)) {
+            viewRenderer.camZ -= (shift ? 200 : 80) * dt;
+            //shouldUpdateViewRenderer = true;
+        }
+
+        if (/*shouldUpdateViewRenderer*/ true) {
+            viewRenderer.camCurrentSector = Physics.findCurrentSectorBranching(
+                    viewRenderer.camCurrentSector,
+                    viewRenderer.camX,
+                    viewRenderer.camY
+            );
+        }
+
+        //Temporary Zoom
+        if (input.isDown(Input.Keys.EQUALS)) {
+            viewRenderer.camFOV *= 1 + dt;
+            //shouldUpdateViewRenderer = true;
+        }
+        if (input.isDown(Input.Keys.MINUS)) {
+            viewRenderer.camFOV *= 1 - Math.min(1, dt);
+            //shouldUpdateViewRenderer = true;
+        }
+        if (viewRenderer.camFOV < 50) viewRenderer.camFOV = 50;
+        if (viewRenderer.camFOV > 1000) viewRenderer.camFOV = 1000;
+
     }
 }

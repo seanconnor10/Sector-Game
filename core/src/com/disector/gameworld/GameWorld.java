@@ -23,6 +23,8 @@ import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.sprites.Sprite;
 
+import java.util.Arrays;
+
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
 
@@ -72,6 +74,106 @@ public class GameWorld implements I_AppFocus{
     }
 
     final Array<Elevator> elevators = new Array<>();
+
+    static class Door {
+        private int sectorIndex;
+        private final Array<Wall> walls = new Array<>();
+
+        final static float SPEED = 8f;
+        final static float TIME_CYCLE = 1f;
+
+        float maxDistance = 64f;
+        float currentDistance = 0f;
+        float timeSpentThisState = 0f;
+        int state = 0; //0:StayOff 1:Forward 2:StayOn 3: Backward
+
+        SoundManager.PositionableSound movingSound;
+        Vector3 soundPosition;
+
+        Door(int sectorIndex, Sector sector, GameWorld world) {
+            this.sectorIndex = sectorIndex;
+            int[] wallIndices = sector.walls();
+            for (int wallIndex : wallIndices) {
+                this.walls.add(world.walls.get(wallIndex));
+            }
+            soundPosition = new Vector3(walls.get(0).x1, walls.get(0).y1, (sector.floorZ+sector.ceilZ)/2.f);
+        }
+
+        void step(float dt) {
+            soundPosition.x = walls.get(0).x1;
+            soundPosition.y =walls.get(0).y1;
+            float distance;
+            switch (state) {
+                case 0:
+                    timeSpentThisState += dt;
+                    if (timeSpentThisState > TIME_CYCLE) {
+                        timeSpentThisState = 0f;
+                        state = 1;
+                        startMovingSoundLoop();
+                        playStartMovingSound();
+                    }
+                    break;
+                case 1:
+                    if (currentDistance >= maxDistance) {
+                        currentDistance = maxDistance;
+                        timeSpentThisState = 0f;
+                        state = 2;
+                        stopMovingSoundLoop();
+                        playStopMovingSound();
+                        return;
+                    }
+                    distance = Math.min(SPEED * dt, maxDistance - currentDistance);
+                    for (Wall wall : walls) {
+                        wall.x1 -= distance;
+                        wall.x2 -= distance;
+                    }
+                    currentDistance += distance;
+                    break;
+                case 2:
+                    timeSpentThisState += dt;
+                    if (timeSpentThisState > TIME_CYCLE) {
+                        state = 3;
+                        timeSpentThisState = 0f;
+                        startMovingSoundLoop();
+                        playStartMovingSound();
+                    }
+                    break;
+                case 3:
+                    if (currentDistance <= 0f) {
+                        currentDistance = 0f;
+                        timeSpentThisState = 0f;
+                        state = 0;
+                        stopMovingSoundLoop();
+                        playStopMovingSound();
+                        return;
+                    }
+                    distance = Math.min(SPEED * dt, currentDistance);
+                    for (Wall wall : walls) {
+                        wall.x1 += distance;
+                        wall.x2 += distance;
+                    }
+                    currentDistance -= distance;
+                    break;
+            }
+        }
+
+        private void startMovingSoundLoop() {
+            movingSound = SoundManager.loopPosition(SoundManager.SFX_Mechanical, soundPosition, 400f);
+        }
+        private void stopMovingSoundLoop() {
+            if (movingSound != null) SoundManager.killLoopingPositionable(movingSound);
+        }
+
+        private void playStopMovingSound() {
+            SoundManager.playPosition(SoundManager.SFX_MetalDoorThud, soundPosition, 400f);
+        }
+
+        private void playStartMovingSound() {
+            SoundManager.playPosition(SoundManager.SFX_DoorLatch, soundPosition, 150f);
+        }
+    }
+
+    final Array<Door> doors = new Array<>();
 
     // ---------------------------
 
@@ -185,6 +287,10 @@ public class GameWorld implements I_AppFocus{
                 }
             }
             s.ceilZ = s.floorZ + 48;
+        }
+
+        for (Door door : doors) {
+            door.step(dt);
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -460,6 +566,13 @@ public class GameWorld implements I_AppFocus{
         elevators.clear();
         if (sectors.size >= 8) {
             elevators.add(new Elevator(7, -64, 128));
+        }
+
+        //Temporary Door
+        doors.clear();
+        int DOOR_SEC_IND = 4;
+        if (sectors.size >= DOOR_SEC_IND) {
+            doors.add(new Door(DOOR_SEC_IND, sectors.get(DOOR_SEC_IND), this));
         }
     }
 
