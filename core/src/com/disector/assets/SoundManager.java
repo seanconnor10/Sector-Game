@@ -121,7 +121,6 @@ public class SoundManager {
         float dist = (float) Math.sqrt(t_x*t_x + t_y*t_y);
         float newVol = 1.f - Math.min(1f, dist/range);
         snd.setVolume(inst, newVol);
-        System.out.println("Volume:" + newVol);
     }
 
     private static Sound initWav(String path, float length) {

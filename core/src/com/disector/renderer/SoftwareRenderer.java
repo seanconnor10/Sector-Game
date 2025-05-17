@@ -37,9 +37,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
     protected final int fogR_int = depthFogColor.toIntBits()  & 0xFF;
     protected final int fogG_int = depthFogColor.toIntBits() >> 8 & 0xFF;
     protected final int fogB_int = depthFogColor.toIntBits() >> 16  & 0xFF;
-    protected final float fogR = depthFogColor.r;
-    protected final float fogG = depthFogColor.g;
-    protected final float fogB = depthFogColor.b;
+    //protected final float fogR = depthFogColor.r;
+    //protected final float fogG = depthFogColor.g;
+    //protected final float fogB = depthFogColor.b;
 
     //protected final Color darkColor = new Color(0x10_00_40_FF);
 
@@ -239,9 +239,12 @@ public class SoftwareRenderer extends DimensionalRenderer {
         int portalDestIndex = (w.linkA == currentSectorIndex) ? w.linkB : w.linkA;
         float destCeiling = 100.f, destFloor = 0.f, upperWallCutoffV = 1.001f, lowerWallCutoffV = -0.001f;
 
+        boolean middleIsSky = false;
         Pixmap[] textures, texturesLow, texturesHigh;
         try {
-            textures = materials.get(w.mat).tex;
+            Material middleMaterial = materials.get(w.mat);
+            textures = middleMaterial.tex;
+            middleIsSky = middleMaterial.isSky;
             if (textures == null)
                 throw new NullPointerException("Material Exists yet Pixmap is null");
         } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
@@ -399,6 +402,16 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
                 if (isPortal && (v > lowerWallCutoffV && v < upperWallCutoffV) ) {
                     v += deltaV;
+                    continue;
+                }
+
+                //If middle portion isSky call drawCeiling over middle portion
+                if (middleIsSky && v>lowerWallCutoffV && v<upperWallCutoffV) {
+                    int middleBottom = (int)(quadBottom + lowerWallCutoffV*quadHeight);
+                    int middleTop = (int)(quadBottom + upperWallCutoffV*quadHeight);
+                    drawCeiling(tex, ceilDistances, true, drawX, fov, middleBottom, secCeilZ, playerSin, playerCos, 1f);
+                    v = upperWallCutoffV;
+                    drawY = middleTop;
                     continue;
                 }
 
@@ -578,6 +591,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
 
         ShortBuffer shortBuffer = buffer.getPixels().asShortBuffer();
 
+        int texWidth = tex.getWidth();
+        int texHeight = tex.getHeight();
+
         for (int drawY = Math.max(rasterTop, occlusionBottom[drawX]) + vOffset; drawY <= ceilEndScreenY; drawY++) {
 
             if (!isSky) {
@@ -606,7 +622,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 g *= light;
                 b *= light;
 
-		r = (int) ( r + fog * (fogR_int - r) );
+		        r = (int) ( r + fog * (fogR_int - r) );
                 g = (int) ( g + fog * (fogG_int - g) );
                 b = (int) ( b + fog * (fogB_int - b) );
 
@@ -617,15 +633,22 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     (g >> 4 & 0xF)
                 );
 
-                int i = Math.clamp( drawX + (drawY-vOffset)*frameWidth, 0, -1+frameWidth*frameHeight);
+                int i = Math.clamp((drawX + (long) (drawY - vOffset) *frameWidth), 0, -1+frameWidth*frameHeight);
                 shortBuffer.put(i, drawColor4bit);
 
             } else { //If isSky
+                int skyTexX = (int)((centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth)*texWidth);
 
-                int drawColor = tex.getPixel(
-                    (int)((centerScreenSkyU - (drawX-halfWidth)*portionImgToDraw/frameWidth)*tex.getWidth()),
-                    (int)((1.f - (drawY/(float)tex.getHeight()))*tex.getHeight())
-                );
+                //Repeatable Horizontally..
+                if (skyTexX >= texWidth) skyTexX -= tex.getWidth();
+                if (skyTexX < 0) skyTexX += tex.getWidth();
+
+                //Stretch texture vertically vaguely spherically
+                float distFromMiddleV = (drawY-(frameHeight/2f)) / frameHeight;
+                float v = 0.5f + Math.signum(distFromMiddleV) * (float) Math.log10(1f + Math.abs(distFromMiddleV));
+                int skyTexY = (int) (v * texHeight);
+
+                int drawColor = tex.getPixel(skyTexX, skyTexY);
 
                 int r = drawColor >> 24 & 0xFF;
                 int g = drawColor >> 16 & 0xFF;
