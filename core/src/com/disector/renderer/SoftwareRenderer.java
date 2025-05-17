@@ -644,8 +644,9 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 if (skyTexX < 0) skyTexX += tex.getWidth();
 
                 //Stretch texture vertically vaguely spherically
-                float distFromMiddleV = (drawY-(frameHeight/2f)) / frameHeight;
-                float v = 0.5f + Math.signum(distFromMiddleV) * (float) Math.log10(1f + Math.abs(distFromMiddleV));
+                float fovFactor = 184 / fov;
+                float distFromMiddleV = (drawY-(frameHeight/2f)) / texHeight;
+                float v = 0.5f + fovFactor * Math.signum(distFromMiddleV) * (float) Math.log10(1f + Math.abs(distFromMiddleV));
                 int skyTexY = (int) (v * texHeight);
 
                 int drawColor = tex.getPixel(skyTexX, skyTexY);
