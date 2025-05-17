@@ -236,6 +236,22 @@ public class TextFileMapLoader implements MapLoader {
                                     wallBuild.Upper_yScale = parseFloatOrDefault(in.next(), 1f);
                                     subMode = "NONE";
                                     break;
+                                case "PEG_LOWER_FRONT":
+                                    wallBuild.lowerFrontsidePeggedToTop = true;
+                                    subMode = "NONE";
+                                    break;
+                                case "PEG_LOWER_BACK":
+                                    wallBuild.lowerBacksidePeggedToTop = true;
+                                    subMode = "NONE";
+                                    break;
+                                case "PEG_UPPER_FRONT":
+                                    wallBuild.upperFrontsidePeggedToTop = true;
+                                    subMode = "NONE";
+                                    break;
+                                case "PEG_UPPER_BACK":
+                                    wallBuild.upperBacksidePeggedToTop = true;
+                                    subMode = "NONE";
+                                    break;
                                 default:
                                     break;
                             }
@@ -508,6 +524,19 @@ public class TextFileMapLoader implements MapLoader {
         if (w.Upper_xScale != 1f || w.Upper_yScale != 1f) {
             str.append("Scale_Upper ").append( fd4.format(w.Upper_xScale) ).append(" ")
                 .append( fd4.format(w.Upper_yScale) ).append(" :: ");
+        }
+
+        if(w.lowerFrontsidePeggedToTop) {
+            str.append("PEG_LOWER_FRONT :: ");
+        }
+        if(w.lowerBacksidePeggedToTop) {
+            str.append("PEG_LOWER_BACK :: ");
+        }
+        if(w.upperFrontsidePeggedToTop) {
+            str.append("PEG_UPPER_FRONT :: ");
+        }
+        if(w.upperBacksidePeggedToTop) {
+            str.append("PEG_UPPER_FRONT :: ");
         }
 
         str.append("\n");

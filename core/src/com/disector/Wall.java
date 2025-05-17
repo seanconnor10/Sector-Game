@@ -20,6 +20,10 @@ public class Wall {
     public float Upper_xScale = 1.f, Upper_yScale = 1.f;
     public float Lower_xOffset = 0.f, Lower_yOffset = 0.f;
     public float Lower_xScale = 1.f, Lower_yScale = 1.f;
+    public boolean lowerFrontsidePeggedToTop = false;
+    public boolean lowerBacksidePeggedToTop  = false;
+    public boolean upperFrontsidePeggedToTop = true;
+    public boolean upperBacksidePeggedToTop  = true;
 
     public PortalType type = PortalType.NORMAL;
 
@@ -75,6 +79,10 @@ public class Wall {
         this.Lower_yOffset = src.Lower_yOffset;
         this.Lower_xScale = src.Lower_xScale;
         this.Lower_yScale = src.Lower_yScale;
+        this.lowerFrontsidePeggedToTop = src.lowerFrontsidePeggedToTop;
+        this.lowerBacksidePeggedToTop  = src.lowerBacksidePeggedToTop;
+        this.upperFrontsidePeggedToTop = src.upperFrontsidePeggedToTop;
+        this.upperBacksidePeggedToTop  = src.upperBacksidePeggedToTop;
     }
 
     public float length() {

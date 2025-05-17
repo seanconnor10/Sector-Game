@@ -1,4 +1,11 @@
 ~~ TODO ~~ ------------------------------------------
+/*
+    Make Sectors Contain Their Lists of Walls (Walls don't exist independently)
+    Portals won't belong to two sectors and have two sets of texture properties for front and back
+    Portals link to another Portal...
+*/
+
+
 MAKE FLOOR AND CEIL DRAW horizontal scanlines to reduce dist/fog calculations
 BUTTON TO ALIGN TEXTURE TO ADJACENT WALL (APPLY TO ALL SELECTED WALLS IN A CHAIN)
 MOVING VERTICES GLITCHES

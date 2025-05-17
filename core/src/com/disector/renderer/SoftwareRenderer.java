@@ -208,7 +208,13 @@ public class SoftwareRenderer extends DimensionalRenderer {
         float p1_plotX = halfWidth - fov*y1/x1; //Plot edges of wall onto screen space
         float p2_plotX = halfWidth - fov*y2/x2;
 
-        if (!isPortal && p2_plotX < p1_plotX) return; //Avoid drawing backside of non portal wall
+        boolean isBacksidePortal = false;
+        if (p2_plotX < p1_plotX) {
+            if (!isPortal)
+                return; //Avoid drawing backside of non portal wall
+            else
+                isBacksidePortal = true;
+        }
 
         float leftEdgePrecise = Math.max(0, Math.min(p2_plotX,p1_plotX) );
         float rightEdgePrecise = Math.min( Math.max(p2_plotX,p1_plotX), frameWidth-1);
@@ -331,7 +337,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
             float dist, fog; //= getFogFactor( (x1 + hProgress*(x2-x1)) );
             {
                 float screenXProgress = (drawX-leftEdgePrecise) / (rightEdgePrecise-leftEdgePrecise);
-                dist = x1 + screenXProgress*(x2-x1);
+                dist = x1 + screenXProgress*(x2-x1); //Maybe should be weird 'u' value
                 fog = getFogFactor(dist);
             }
 
@@ -358,10 +364,12 @@ public class SoftwareRenderer extends DimensionalRenderer {
             float hProgressPlusOne = (drawX+1-p1_plotX) / (p2_plotX-p1_plotX);
             float uPlus1 = ((1 - hProgressPlusOne) * (leftClipU / x1) + hProgressPlusOne * (rightClipU / x2)) / ((1 - hProgressPlusOne) * (1 / x1) + hProgressPlusOne * (1 / x2));
 
+            //Get Horizontal Texture Coordinate and PixmapIndex for middle portion
             float texU=0;
             int pixmap_ind=0;
             {
-                texU = w.xOffset + u * (wallLength / (float)textures[0].getWidth() / w.xScale);
+                float texWidth = (float)textures[0].getWidth();
+                texU = w.xOffset/texWidth + u * (wallLength / texWidth / w.xScale);
                 float texX_PlusOne = uPlus1 * (wallLength / (float)textures[0].getWidth() / w.xScale);
                 float pixWidth = (texX_PlusOne - texU);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
@@ -374,25 +382,26 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 texU %= 1;
             }
 
-            float texX_Lower=0, texX_Upper=0;
+            float texU_Lower=0, texU_Upper=0;
             if (isPortal){
-                texX_Lower = w.Lower_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
-                float texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Lower_xScale);
-                float pixWidth = (texX_PlusOne - texX_Lower);
+                float texWidth = (float)texturesLow[0].getWidth();
+                texU_Lower = w.Lower_xOffset/texWidth + u * (wallLength / texWidth / w.Lower_xScale);
+                float texX_PlusOne = uPlus1/texWidth * (wallLength / texWidth / w.Lower_xScale);
+                float pixWidth = (texX_PlusOne - texU_Lower);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 texLower = texturesLow[pixmap_ind];
-                texX_Lower %= 1;
+                texU_Lower %= 1;
            
-                texX_Upper = w.Upper_xOffset + u * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
-                texX_PlusOne = uPlus1 * (wallLength / (float)texturesLow[0].getWidth() / w.Upper_xScale);
-                pixWidth = (texX_PlusOne - texX_Upper);
+                texU_Upper = w.Upper_xOffset/texWidth + u * (wallLength / (float)texturesHigh[0].getWidth() / w.Upper_xScale);
+                texX_PlusOne = w.Upper_xOffset/texWidth + uPlus1 * (wallLength / (float)texturesHigh[0].getWidth() / w.Upper_xScale);
+                pixWidth = (texX_PlusOne - texU_Upper);
                 pixmap_ind = Math.max(0, Math.min(MAX_MIP_IND, Math.round(
                         pixWidth - (AGGRESSIVE_MIPMAPS ? 0 : 1)
                 )));
                 texUpper = texturesHigh[pixmap_ind];
-                texX_Upper %= 1;
+                texU_Upper %= 1;
             }
 
             float deltaV = 1 / quadHeight;
@@ -429,11 +438,11 @@ public class SoftwareRenderer extends DimensionalRenderer {
                     light = lightMiddle;
                     texHeight = texHeightMid;
                     pickedTex = tex;
-                    texV = ( yOff + v*secHeight/texHeight/yScale ) % 1;
+                    texV = ( yOff/texHeight + v*secHeight/texHeight/yScale ) % 1;
                 } else if (v<lowerWallCutoffV) {
                     yOff = w.Lower_yOffset;
                     yScale = w.Lower_yScale;
-                    selected_texU = texX_Lower;
+                    selected_texU = texU_Lower;
                     light = lightLower;
 		            texHeight = texHeightLow;
                     pickedTex = texLower;
@@ -449,7 +458,7 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 } else {
                     yOff = w.Upper_yOffset;
                     yScale = w.Upper_yScale;
-                    selected_texU = texX_Upper;
+                    selected_texU = texU_Upper;
                     light = lightUpper;
 		            texHeight = texHeightUpper;
                     pickedTex = texUpper;
