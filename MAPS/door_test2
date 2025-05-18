@@ -10,7 +10,7 @@ MATERIAL (8) :: Img STARS :: Sky ::
 MATERIAL (9) :: Img WOOD_WINDOW :: 
 MATERIAL (10) :: Img SKY2 :: Sky :: 
 SECTOR (0) :: Height 0 100 :: Mat 6 10 :: Light 1.00 1.00 :: Has 0 1 2 3 4 5 6 7 16 17 18 19 20 21 22 23 24 25 85 86 93 94 98 101 102 104 105 106 107 108 109 110 111 ::
-SECTOR (1) :: Height -16 100 :: Mat 6 10 :: Light 1.00 1.00 :: Has 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 99 100 101 102 103 104 ::
+SECTOR (1) :: Height -16 100 :: Mat 6 10 :: Light 1.00 1.00 :: Has 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 99 100 101 102 103 104 125 126 127 128 ::
 SECTOR (2) :: Height -32 100 :: Mat 2 10 :: Light 1.00 1.00 :: Has 8 9 10 11 12 13 14 15 99 100 103 ::
 SECTOR (3) :: Height 0 64 :: Mat 6 3 :: Light 0.60 0.40 :: Has 24 26 32 33 34 35 36 37 38 39 40 41 ::
 SECTOR (4) :: Height 64 64 :: Mat 6 3 :: Light 1.00 1.00 :: Has 33 34 35 36 ::
@@ -30,12 +30,19 @@ SECTOR (17) :: Height 0 42 :: Mat 6 3 :: Light 0.60 0.60 :: Has 76 78 79 80 ::
 SECTOR (18) :: Height 0 42 :: Mat 6 3 :: Light 0.50 0.50 :: Has 79 81 82 83 ::
 SECTOR (19) :: Height 12 64 :: Mat 6 6 :: Light 0.60 0.60 :: Has 85 87 88 89 ::
 SECTOR (20) :: Height 32 100 :: Mat 6 10 :: Light 1.00 1.00 :: Has 3 90 91 92 ::
-SECTOR (21) :: Height -55.46842956542969 -7.4684295654296875 :: Mat 6 0 :: Light 1.00 1.00 :: Has 93 95 96 97 ::
+SECTOR (21) :: Height 64.17668914794922 112.17668914794922 :: Mat 6 0 :: Light 1.00 1.00 :: Has 93 95 96 97 ::
 SECTOR (22) :: Height 0 32 :: Mat 6 6 :: Light 0.80 0.50 :: Has 111 112 116 118 ::
-SECTOR (23) :: Height 0 48 :: Mat 3 6 :: Light 0.50 0.50 :: Has 117 113 114 115 119 121 122 123 124 ::
+SECTOR (23) :: Height 0 48 :: Mat 3 6 :: Light 0.50 0.50 :: Has 113 114 115 117 119 121 122 123 124 133 135 136 137 141 142 144 145 ::
 SECTOR (24) :: Height 0 48 :: Mat 3 6 :: Light 0.50 0.50 :: Has 115 ::
-SECTOR (25) :: Height 0 48 :: Mat 3 6 :: Light 0.80 0.50 :: Has 119 120 121 118 ::
-SECTOR (26) :: Height 0 48 :: Mat 3 6 :: Light 0.70 0.50 :: Has 122 123 124 120 ::
+SECTOR (25) :: Height 0 48 :: Mat 3 6 :: Light 0.80 0.50 :: Has 118 119 120 121 ::
+SECTOR (26) :: Height 0 48 :: Mat 3 6 :: Light 0.70 0.50 :: Has 120 122 123 124 ::
+SECTOR (27) :: Height -6 100 :: Mat 1 10 :: Light 1.00 1.00 :: Has 125 126 127 128 129 130 131 132 ::
+SECTOR (28) :: Height 32 100 :: Mat 2 10 :: Light 1.00 1.00 :: Has 129 130 131 132 ::
+SECTOR (29) :: Height -30 48 :: Mat 3 6 :: Light 0.50 0.50 :: Has 135 134 141 143 ::
+SECTOR (30) :: Height 0 48 :: Mat 3 6 :: Light 0.50 0.50 :: Has 134 ::
+SECTOR (31) :: Height -42 0 :: Mat 3 6 :: Light 0.30 0.25 :: Has 134 138 139 140 ::
+SECTOR (32) :: Height -20 48 :: Mat 3 6 :: Light 0.50 0.50 :: Has 143 142 144 146 ::
+SECTOR (33) :: Height -10 48 :: Mat 3 6 :: Light 0.50 0.50 :: Has 146 137 136 145 ::
 WALL (0) :: Pos -256 256 -128 256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (1) :: Pos 384 256 384 160 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (2) :: Pos 384 -256 -256 -256 :: Mat GRATE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.2500 0.1900 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
@@ -138,7 +145,7 @@ WALL (98) :: Pos -32 240 32 240 :: Mat EMBLEM_TRIM :: LowerMat TILE3 :: UpperMat
 WALL (99) :: Pos -128 0 -48 0 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (100) :: Pos -32 -128 256 -128 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (101) :: Pos -192 -32 -80 -32 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
-WALL (102) :: Pos -64 -192 320 -192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (102) :: Pos -64 -192 320 -192 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 2.0000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (103) :: Pos -48 0 -32 -16 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 2 -> 1 :: Offset_Lower 0.0000 0.2500 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (104) :: Pos -80 -32 -64 -48 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 1 -> 0 :: Offset_Lower 0.0000 0.1250 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (105) :: Pos -224 -64 -224 -224 :: Mat EMBLEM_TRIM :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.4000 0.3800 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
@@ -149,7 +156,7 @@ WALL (109) :: Pos -128 -64 -224 -64 :: Mat EMBLEM_TRIM :: LowerMat TILE3 :: Uppe
 WALL (110) :: Pos -120 -64 -128 -64 :: Mat EMBLEM_TRIM :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Scale 0.4000 0.3800 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (111) :: Pos -96 -88 -120 -64 :: Mat EMBLEM_TRIM :: LowerMat TILE3 :: UpperMat EMBLEM_TRIM :: Light 1.00 1.00 1.00 :: Port 0 -> 22 :: Scale 0.3800 0.3800 :: Offset_Upper 0.0000 0.6500 :: Scale_Upper 0.3800 0.3800 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (112) :: Pos -96 -88 -104 -96 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.40 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
-WALL (113) :: Pos -104 -216 -216 -216 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.40 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (113) :: Pos -104 -216 -168 -216 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.40 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (114) :: Pos -216 -216 -216 -72 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.40 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (115) :: Pos -216 -72 -128 -72 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat HOUSE :: Light 0.40 0.50 1.00 :: Scale 0.5000 0.5000 :: Scale_Upper 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (116) :: Pos -128 -72 -120 -64 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.40 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
@@ -161,5 +168,27 @@ WALL (121) :: Pos -160 -88 -128 -72 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat T
 WALL (122) :: Pos -128 -128 -136 -136 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 26 -> 23 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (123) :: Pos -136 -136 -160 -96 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 26 -> 23 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 WALL (124) :: Pos -160 -96 -160 -88 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 26 -> 23 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (125) :: Pos -16 -136 -16 -184 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 27 -> 1 :: Offset_Lower 0.0000 2.0000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (126) :: Pos -16 -184 120 -184 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 27 -> 1 :: Offset_Lower 0.0000 2.0000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (127) :: Pos 120 -184 120 -136 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 27 -> 1 :: Offset_Lower 0.0000 2.0000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (128) :: Pos 120 -136 -16 -136 :: Mat TILE3 :: LowerMat EMBLEM_TRIM :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 27 -> 1 :: Offset_Lower 0.0000 2.0000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (129) :: Pos -8 -144 -8 -176 :: Mat TILE3 :: LowerMat GRASS :: UpperMat TILE3 :: Light 1.00 0.70 0.70 :: Port 28 -> 27 :: Offset_Lower 0.2000 1.2400 :: Scale_Lower 0.2500 0.2500 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (130) :: Pos -8 -176 112 -176 :: Mat TILE3 :: LowerMat GRASS :: UpperMat TILE3 :: Light 1.00 0.60 0.60 :: Port 28 -> 27 :: Offset_Lower 0.2000 1.2400 :: Scale_Lower 0.2500 0.2500 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (131) :: Pos 112 -176 112 -144 :: Mat TILE3 :: LowerMat GRASS :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 28 -> 27 :: Offset_Lower 0.2000 1.2400 :: Scale_Lower 0.2500 0.2500 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (132) :: Pos 112 -144 -8 -144 :: Mat TILE3 :: LowerMat GRASS :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 28 -> 27 :: Offset_Lower 0.2000 1.2400 :: Scale_Lower 0.2500 0.2500 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (133) :: Pos -200 -216 -216 -216 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.40 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (134) :: Pos -168 -216 -200 -216 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat HOUSE :: Light 0.40 0.40 1.00 :: Port 29 -> 31 :: Scale 0.5000 0.5000 :: Offset_Upper 0.0400 9.5200 :: Scale_Upper 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (135) :: Pos -168 -216 -168 -200 :: Mat TILE3 :: LowerMat TILE :: UpperMat TILE3 :: Light 1.00 1.00 0.30 :: Port 29 -> 23 :: Offset_Lower 0.0000 1.0000 :: Scale_Lower 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (136) :: Pos -168 -168 -200 -168 :: Mat TILE3 :: LowerMat TILE :: UpperMat TILE3 :: Light 1.00 1.00 0.30 :: Port 33 -> 23 :: Offset_Lower 0.0000 1.0000 :: Scale_Lower 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (137) :: Pos -200 -168 -200 -184 :: Mat TILE3 :: LowerMat TILE :: UpperMat TILE3 :: Light 1.00 1.00 0.30 :: Port 33 -> 23 :: Offset_Lower 0.0000 1.0000 :: Scale_Lower 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (138) :: Pos -168 -216 -168 -280 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.20 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (139) :: Pos -168 -280 -200 -280 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.20 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (140) :: Pos -200 -280 -200 -216 :: Mat HOUSE :: LowerMat TILE3 :: UpperMat TILE3 :: Light 0.20 1.00 1.00 :: Scale 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (141) :: Pos -200 -200 -200 -216 :: Mat TILE3 :: LowerMat TILE :: UpperMat TILE3 :: Light 1.00 1.00 0.30 :: Port 29 -> 23 :: Offset_Lower 0.0000 1.0000 :: Scale_Lower 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (142) :: Pos -168 -200 -168 -184 :: Mat TILE3 :: LowerMat TILE :: UpperMat TILE3 :: Light 1.00 1.00 0.30 :: Port 32 -> 23 :: Offset_Lower 0.0000 1.0000 :: Scale_Lower 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (143) :: Pos -168 -200 -200 -200 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 32 -> 29 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (144) :: Pos -200 -184 -200 -200 :: Mat TILE3 :: LowerMat TILE :: UpperMat TILE3 :: Light 1.00 1.00 0.30 :: Port 32 -> 23 :: Offset_Lower 0.0000 1.0000 :: Scale_Lower 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (145) :: Pos -168 -184 -168 -168 :: Mat TILE3 :: LowerMat TILE :: UpperMat TILE3 :: Light 1.00 1.00 0.30 :: Port 33 -> 23 :: Offset_Lower 0.0000 1.0000 :: Scale_Lower 0.5000 0.5000 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
+WALL (146) :: Pos -168 -184 -200 -184 :: Mat TILE3 :: LowerMat TILE3 :: UpperMat TILE3 :: Light 1.00 1.00 1.00 :: Port 33 -> 32 :: PEG_UPPER_FRONT :: PEG_UPPER_FRONT :: 
 SPR_WALL :: Pos 104 248 136 248 12 :: Height  52 :: Mat WOOD_WINDOW :: 
 SPR_WALL :: Pos 136 248 104 248 12 :: Height  52 :: Mat WOOD_WINDOW :: 
