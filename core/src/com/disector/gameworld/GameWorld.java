@@ -470,14 +470,14 @@ public class GameWorld implements I_AppFocus{
     public void afterMapLoad() {
         //Temporary Elevator
         elevators.clear();
-        if (sectors.size >= 8) {
-            elevators.add(new Elevator(7, -64, 128));
+        if (sectors.size >  21) {
+            elevators.add(new Elevator(21, -64, 128));
         }
 
         //Temporary Door
         doors.clear();
         int DOOR_SEC_IND = 4;
-        if (sectors.size >= DOOR_SEC_IND) {
+        if (sectors.size > DOOR_SEC_IND) {
             doors.add(new Door(DOOR_SEC_IND, sectors.get(DOOR_SEC_IND), walls));
         }
     }
