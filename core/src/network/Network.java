@@ -63,7 +63,7 @@ public class Network {
 
         try {
             clientChannel = DatagramChannel.open();
-            serverChannel.configureBlocking(false);
+            clientChannel.configureBlocking(false);
         } catch (IOException e) {
             throw new NetworkException("Failed to create client socket");
         }
