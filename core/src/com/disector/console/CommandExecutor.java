@@ -308,8 +308,7 @@ public class CommandExecutor {
 
     @ConsoleCommand(helpText="Open Server")
     public String host() {
-        Network.Instance.openServer();
-        return null;
+        return Network.Instance.openServer();
     }
 
     @ConsoleCommand(helpText="Close server and/or client connection")
