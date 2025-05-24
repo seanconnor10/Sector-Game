@@ -19,6 +19,7 @@ public class Network {
     public DatagramChannel clientChannel;
 
     public InetAddress clientSendAddress;
+    public String sendAddressIp = "";
 
     public byte[] receivedData = new byte[1024];
     public byte[] sendData = new byte[1024];
@@ -44,7 +45,7 @@ public class Network {
         String address = "actually nope it failed";
         try {
             serverChannel = DatagramChannel.open();
-            serverChannel.bind(new InetSocketAddress(Inet4Address.getLocalHost(), SERVER_PORT));
+            serverChannel.bind(new InetSocketAddress("localhost", SERVER_PORT));
             serverChannel.configureBlocking(false);
             address = serverChannel.getLocalAddress().toString();
         } catch (IOException e) {
@@ -64,7 +65,7 @@ public class Network {
         close();
 
         try {
-            clientSendAddress = Inet4Address.getByName("address"/*+ SERVER_PORT*/);
+            clientSendAddress = Inet4Address.getByName(address/*+ SERVER_PORT*/);
         } catch (UnknownHostException e) {
             throw new NetworkException("Unknown host address given");
         }
@@ -82,6 +83,7 @@ public class Network {
         if (serverChannel != null) {
             try {
                 serverChannel.close();
+                serverChannel = null;
             } catch (IOException e) {
                 //throw new RuntimeException(e);
             }
@@ -89,6 +91,7 @@ public class Network {
         if (clientChannel != null) {
             try {
                 clientChannel.close();
+                clientChannel = null;
             } catch (IOException e) {
                 //throw new RuntimeException(e);
             }
@@ -105,7 +108,7 @@ public class Network {
 
         ByteBuffer bb = ByteBuffer.wrap(sendData);
         try {
-            clientChannel.send(bb, new InetSocketAddress(clientSendAddress, SERVER_PORT));
+            clientChannel.send(bb, new InetSocketAddress("localhost", SERVER_PORT));
         } catch (IOException e) {
             System.out.println("Exception sending as client");
         }
