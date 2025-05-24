@@ -1,5 +1,6 @@
 package com.disector.console;
 
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.disector.AppFocusTarget;
@@ -7,10 +8,13 @@ import com.disector.Application;
 import com.badlogic.gdx.Gdx;
 import com.disector.assets.SoundManager;
 import com.disector.gameworld.objects.LampMan;
+import network.Network;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.net.UnknownHostException;
 import java.util.*;
 
 public class CommandExecutor {
@@ -289,6 +293,28 @@ public class CommandExecutor {
     @ConsoleCommand(helpText="Stop All Looping Sounds")
     public String snd_kill_loops() {
         SoundManager.killLoops();
+        return null;
+    }
+
+    @ConsoleCommand(helpText="Connect to host")
+    public String connect(String hostAddress) {
+        try {
+            Network.Instance.connect(hostAddress);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return null;
+    }
+
+    @ConsoleCommand(helpText="Open Server")
+    public String host() {
+        Network.Instance.openServer();
+        return null;
+    }
+
+    @ConsoleCommand(helpText="Close server and/or client connection")
+    public String net_kill() {
+        Network.Instance.close();
         return null;
     }
 

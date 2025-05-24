@@ -31,6 +31,7 @@ import com.disector.renderer.GameMapRenderer;
 import com.disector.renderer.SoftwareRenderer;
 import com.disector.maploader.MapLoader;
 import com.disector.maploader.TextFileMapLoader;
+import network.Network;
 
 import java.util.Arrays;
 
@@ -145,6 +146,8 @@ public class Application extends ApplicationAdapter {
                 break;
             default: break;
         }
+
+        Network.Instance.step();
 
         console.updateAndDraw(deltaTime);
     }
