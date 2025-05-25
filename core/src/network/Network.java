@@ -12,8 +12,7 @@ import java.util.Enumeration;
 public class Network {
     public static Network Instance = new Network();
 
-    public static final int SERVER_PORT = 9571;
-    public static final int CLIENT_PORT = 9572;
+    public static final int SERVER_PORT = 41571;
 
     public DatagramChannel serverChannel;
 
@@ -67,10 +66,14 @@ public class Network {
         close();
 
         //try {
-            clientSendAddress = new InetSocketAddress(getWifiAddress(), SERVER_PORT);
+            clientSendAddress = new InetSocketAddress(address, SERVER_PORT);
         //} catch (UnknownHostException e) {
         //    throw new NetworkException("Unknown host address given");
         //}
+
+        if (clientSendAddress.isUnresolved()) {
+            return "Unresolved..";
+        }
 
         try {
             clientChannel = DatagramChannel.open();
