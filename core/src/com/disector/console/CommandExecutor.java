@@ -298,12 +298,13 @@ public class CommandExecutor {
 
     @ConsoleCommand(helpText="Connect to host")
     public String connect(String hostAddress) {
+        String returnValue = null;
         try {
-            Network.Instance.connect(hostAddress);
+            returnValue = Network.Instance.connect(hostAddress);
         } catch (Exception e) {
             return e.getMessage();
         }
-        return null;
+        return returnValue;
     }
 
     @ConsoleCommand(helpText="Open Server")
