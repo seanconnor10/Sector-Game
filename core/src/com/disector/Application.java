@@ -44,6 +44,8 @@ public class Application extends ApplicationAdapter {
 
     public GameWorld gameWorld;
 
+    public Pixmap[] ERROR_TEXTURE;
+
     private DimensionalRenderer renderer;
     private GameMapRenderer gameMapRenderer;
     private EditorInterface editor;
@@ -81,8 +83,11 @@ public class Application extends ApplicationAdapter {
 
     @Override
     public void create () {
+        System.out.println("Size of Float in bytes:" + Float.BYTES);
+
         System.out.println("Setting things up...");
 
+        System.out.println(CLI_ARGS.length + " CLI Arguments...");
         Arrays.stream(CLI_ARGS).forEach(System.out::println);
 
         long timeStamp = TimeUtils.millis();
@@ -112,6 +117,9 @@ public class Application extends ApplicationAdapter {
 
         SoundManager.init();
 
+        Pixmap pm = new Pixmap(Gdx.files.internal("assets/img/error_tex.png"));
+        ERROR_TEXTURE = PixmapContainer.makeMipMapSeries(pm);
+
         if (gameWorld==null) gameWorld = new GameWorld(this, mainInput);
         if (renderer==null) renderer = new SoftwareRenderer(this);
         if (gameMapRenderer==null) gameMapRenderer = new GameMapRenderer(this, gameWorld);
@@ -139,7 +147,10 @@ public class Application extends ApplicationAdapter {
         //Run Screen
         switch(focus) {
             case MENU: menu(); break;
-            case GAME: game(); break;
+            case GAME:
+                if (gameWorld != null) game();
+                else ScreenUtils.clear(Color.SLATE);
+                break;
             case EDITOR:
                 if (editor != null) editor();
                     else ScreenUtils.clear(Color.SLATE);
@@ -445,6 +456,14 @@ public class Application extends ApplicationAdapter {
         if (appInput == editor.getInputReference())
             appInput = null;
         editor = null;
+    }
+
+    public void destroyWorld() {
+        if (appInput == gameWorld.getInputReference())
+            appInput = null;
+        gameWorld = null;
+        renderer = null;
+        gameMapRenderer = null;
     }
 
     public void setRenderFov(int fov) {

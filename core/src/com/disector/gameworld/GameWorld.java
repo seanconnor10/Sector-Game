@@ -22,6 +22,12 @@ import com.disector.gameworld.objects.WallSpriteObject;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.renderer.sprites.Sprite;
+import network.ByteHelpers;
+import network.Network;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import static com.disector.Physics.containsPoint;
 import static com.disector.Physics.findCurrentSectorBranching;
@@ -97,6 +103,19 @@ public class GameWorld implements I_AppFocus{
            for (Door door : doors) {
                door.toggle();
            }
+       }
+
+       if (input.getActionInfo("FORWARD").isDown) {
+           ByteArrayOutputStream s = new ByteArrayOutputStream();
+           Vector3 v = getPlayerXYZ();
+           try {
+               s.write(ByteHelpers.asBytes(v.x));
+               s.write(ByteHelpers.asBytes(v.y));
+               s.write(ByteHelpers.asBytes(v.x));
+           } catch (IOException e) {
+               throw new RuntimeException(e);
+           }
+           Network.Instance.send(s.toByteArray());
        }
 
         this.dt = dt;
@@ -217,7 +236,7 @@ public class GameWorld implements I_AppFocus{
             grenades.add(grenade);
 
             //PAINT SPLOTCH ON WALL
-            /*Physics.RayCastReturnData hitscan = Physics.raycast(
+            Physics.RayCastReturnData hitscan = Physics.raycast(
                     getPlayerEyesXYZ(),
                     player1.currentSectorIndex,
                     player1.r,
@@ -231,7 +250,7 @@ public class GameWorld implements I_AppFocus{
                         hitscan.z(),
                         hitscan.wall().normalAngle
                 ));
-            }*/
+            }
         }
 
     }
@@ -463,11 +482,12 @@ public class GameWorld implements I_AppFocus{
         for (Array<?> arr : gameObjectArrays) {
             arr.clear();
         }
-        //lampMen.add(new LampMan());
-        //cameraScreens.add(new CameraScreen(app));
     }
 
     public void afterMapLoad() {
+        //lampMen.add(new LampMan());
+        //cameraScreens.add(new CameraScreen(app));
+
         //Temporary Elevator
         elevators.clear();
         if (sectors.size >  21) {

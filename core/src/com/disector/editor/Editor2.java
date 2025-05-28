@@ -3,18 +3,22 @@ package com.disector.editor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.Array;
-
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import com.disector.*;
+import com.disector.assets.PixmapContainer;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputChainStage;
@@ -39,6 +43,7 @@ public class Editor2 implements EditorInterface {
 
     public EditingSoftwareRenderer viewRenderer;
     Table viewPanel;
+    Table testMaterialBlock;
 
     public EditorMode mode = EditorMode.NORMAL;
     public enum EditorMode {
@@ -113,14 +118,53 @@ public class Editor2 implements EditorInterface {
 
         Texture viewTex = viewRenderer.copyPixelsAsTexture();
 
+        Array<Texture> toDispose = new Array<>();
+
         batch.begin();
         ScreenUtils.clear(Color.GRAY);
         stage.act();
         stage.draw();
+
+        //Draw 3D view
         batch.draw(viewTex, viewRect.x, viewRect.y, viewRect.width, viewRect.height,(int)(((1.f - regionW)*viewTex.getWidth())/2f), (int)(((1.f -regionH)*viewTex.getHeight())/2f), (int)(viewTex.getWidth()*regionW), (int)(viewTex.getHeight()*regionH), false, true);
+
+        toDispose.addAll(drawMaterialsPanel(batch));
+
         batch.end();
 
+        for (Texture t : toDispose) {
+            t.dispose();
+        }
         viewTex.dispose();
+    }
+
+
+    private Array<Texture> drawMaterialsPanel(SpriteBatch batch) {
+        Array<Texture> toDispose = new Array<>();
+        toDispose.add(drawMaterialBlock(testMaterialBlock, app.materials.get(0), batch));
+        return toDispose;
+    }
+
+    private Texture drawMaterialBlock(Table materialBlock, Material m, SpriteBatch batch) {
+        //Material m = app.materials.get();
+        Pixmap tex;
+
+        if (m == null) {
+            tex = app.ERROR_TEXTURE[0];
+        } else {
+            tex = m.tex[0];
+        }
+
+        Vector2 pos = materialBlock.localToScreenCoordinates(new Vector2());
+        pos.y = Gdx.graphics.getHeight() - pos.y;
+        Rectangle r = new Rectangle(pos.x, pos.y, materialBlock.getWidth(), materialBlock.getHeight());
+
+        //Gen and store texture preferably..
+        Texture toDispose = new Texture(tex);
+        batch.draw(toDispose, r.x, r.y, r.width, r.height);
+
+        return toDispose;
+
     }
 
     @Override
@@ -147,23 +191,27 @@ public class Editor2 implements EditorInterface {
                 new TextureAtlas(Gdx.files.local("assets/skin/2/skin2.atlas"))
         );
 
+        Color BG_COLOR = new Color(0.46f, 0.52f, 0.49f, 1.f);
+
         Table mainContainer = new Table(skin);
+        mainContainer.setColor(BG_COLOR);
         mainContainer.setFillParent(true);
         stage.addActor(mainContainer);
 
         Table topSection = new Table(skin);
         Table topToolbar = new Table(skin);
-        TextButton button1 = new TextButton("Button 1", skin);
-        TextButton button2 = new TextButton("Button 2", skin);
-        TextButton button11 = new TextButton("Button 11", skin);
-        TextButton button22 = new TextButton("Button 22", skin);
+        topToolbar.setBackground(skin.getDrawable("button-down-small"));
+        TextButton button1 = new TextButton(" Save ", skin, "red");
+        TextButton button2 = new TextButton(" Load ", skin, "red");
+        TextButton button11 = new TextButton(" Play ", skin, "red");
+        TextButton button22 = new TextButton(" Undo ", skin, "red");
         topToolbar.add(button1);
         topToolbar.add(button2);
         topToolbar.add(button11);
         topToolbar.add(button22);
         topSection.add(topToolbar).left().expand();
         Table topRightToolbar = new Table(skin);
-        TextButton closeButton = new TextButton("X", skin);
+        TextButton closeButton = new TextButton(" X ", skin, "red");
         closeButton.setFillParent(true);
         topRightToolbar.add(closeButton);
         topSection.add(topRightToolbar).right();
@@ -171,8 +219,8 @@ public class Editor2 implements EditorInterface {
         Table midSection = new Table(skin);
 
         Table midToolbar = new Table(skin);
-        TextButton button3 = new TextButton("3", skin);
-        TextButton button4 = new TextButton("4", skin);
+        TextButton button3 = new TextButton("3", skin, "red");
+        TextButton button4 = new TextButton("4", skin, "red");
         midToolbar.add(button3).width(50);
         midToolbar.row();
         midToolbar.add(button4).width(50);
@@ -180,27 +228,35 @@ public class Editor2 implements EditorInterface {
         Table main1 = new Table(skin);
         Table main2 = new Table(skin);
         Table main3 = new Table(skin);
+        Table main4 = setupMaterialsPanel();
+        main1.setColor(BG_COLOR);
+        main2.setColor(BG_COLOR);
+        main3.setColor(BG_COLOR);
+        main4.setColor(BG_COLOR);
         main1.setBackground("headerless_window");
         main2.setBackground("headerless_window");
         main3.setBackground("headerless_window");
-        Table midMainContainer = new Table(skin);
-        SplitPane midSecondarySplit = new SplitPane(main2, main3, true, skin);
-        SplitPane midMainSplit = new SplitPane(main1, midSecondarySplit, false, skin);
+        main4.setBackground("headerless_window");
+        Table midRightContainer = new Table(skin);
+        SplitPane midSecondarySplitR = new SplitPane(main2, main3, true, skin);
+        SplitPane midSecondarySplitL = new SplitPane(main4, main1, true, skin);
+        SplitPane midMainSplit = new SplitPane(midSecondarySplitL, midSecondarySplitR, false, skin);
         midMainSplit.setMinSplitAmount(0.1f);
-        midSecondarySplit.setMinSplitAmount(0.1f);
+        midSecondarySplitL.setMinSplitAmount(0.1f);
+        midSecondarySplitR.setMinSplitAmount(0.1f);
         midMainSplit.setMaxSplitAmount(0.9f);
-        midSecondarySplit.setMaxSplitAmount(0.9f);
-        //midMain.setStyle(skin.get("c-horizontal", SplitPane.SplitPaneStyle.class));
-        midMainContainer.add(midMainSplit).fill().expand();
+        midSecondarySplitR.setMaxSplitAmount(0.9f);
+        midSecondarySplitL.setMaxSplitAmount(0.9f);
+        midRightContainer.add(midMainSplit).fill().expand();
 
         midSection.add(midToolbar).width(50).top().expandY();
-        midSection.add(midMainContainer).right().expand().fill();
+        midSection.add(midRightContainer).right().expand().fill();
 
         Table lowerSection = new Table(skin);
-        TextButton button5 = new TextButton("5", skin);
-        TextButton button6 = new TextButton("6", skin);
-        TextButton button7 = new TextButton("7", skin);
-        TextButton button8 = new TextButton("8", skin);
+        TextButton button5 = new TextButton("5", skin, "red");
+        TextButton button6 = new TextButton("6", skin, "red");
+        TextButton button7 = new TextButton("7", skin, "red");
+        TextButton button8 = new TextButton("8", skin, "red");
 
         lowerSection.add(button5).width(50);
         lowerSection.add(button6).width(50);
@@ -217,10 +273,29 @@ public class Editor2 implements EditorInterface {
         viewPanel = main1;
     }
 
+    private Table setupMaterialsPanel() {
+        if (skin == null)
+            return null;
+
+        Table main = new Table(skin);
+
+        testMaterialBlock = setupMaterialBlock(app.materials.get(0));
+        main.add(testMaterialBlock).width(128).height(128);
+
+        return main;
+    }
+
+
+    private com.badlogic.gdx.scenes.scene2d.ui.Button setupMaterialBlock(Material mat) {
+        Button t = new Button(skin);
+        return t;
+    }
+
     private Rectangle getViewPanelRect() {
+        Vector2 pos = viewPanel.localToStageCoordinates(new Vector2());
         return new Rectangle(
-                viewPanel.getX() + viewPanel.getParent().getParent().getX(),
-                viewPanel.getY() + viewPanel.getParent().getParent().getParent().getY(),
+                pos.x,
+                pos.y,
                 viewPanel.getWidth(),
                 viewPanel.getHeight()
         );
@@ -228,7 +303,7 @@ public class Editor2 implements EditorInterface {
 
     private boolean mouseIn(Rectangle rect) {
         int x = Gdx.input.getX();
-        int y = Gdx.input.getY();
+        int y = Gdx.graphics.getHeight() - Gdx.input.getY();
         return x > rect.x && x < rect.x+rect.width && y > rect.y && y < rect.y+rect.height;
     }
 

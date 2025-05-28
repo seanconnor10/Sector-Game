@@ -17,6 +17,7 @@ public class CameraScreen implements Positionable, HasWallSprite {
         renderer = new SoftwareRenderer(appInstance);
         renderer.resizeFrame(128, 128);
         renderer.setFovFromDeg(100);
+        image = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
     }
 
     public void refreshImage(Vector3 pos, float r) {
@@ -26,14 +27,15 @@ public class CameraScreen implements Positionable, HasWallSprite {
         renderer.camR = r;
         renderer.camCurrentSector = Physics.findCurrentSectorBranching(-1, pos.x, pos.y);
         renderer.renderWorld();
-        Pixmap rendering = renderer.getBufferReference();
+        /*Pixmap rendering = renderer.getBufferReference();
         int w = rendering.getWidth(), h = rendering.getHeight();
         image = new Pixmap(w, h, Pixmap.Format.RGBA8888);
         for (int x=0; x<w; x++) {
             for (int y = 0; y < h; y++) {
                 image.drawPixel(x, y, rendering.getPixel(x, h - y));
             }
-        }
+        }*/
+        image = renderer.getBufferReference();
     }
 
     @Override

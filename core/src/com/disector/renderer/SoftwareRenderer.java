@@ -653,7 +653,11 @@ public class SoftwareRenderer extends DimensionalRenderer {
                 if (skyTexX < 0) skyTexX += tex.getWidth();
 
                 //Stretch texture vertically vaguely spherically
-                float fovFactor = 184 / fov;
+                float fovFactor = 500 / fov; //500 is arbitrary. Bigger number = more squashed image
+                //Having fov ^^ there makes it so when zoomin in we are looking a the same position of the sky texture
+                //Currently it's zooming only vertically...
+                //Maybe we need to store an 'unzoomed fov' and zoomed fov to handle things properly. Probably use
+                //only the zoom factor for this here..
                 float distFromMiddleV = (drawY-(frameHeight/2f)) / texHeight;
                 float v = 0.5f + fovFactor * Math.signum(distFromMiddleV) * (float) Math.log10(1f + Math.abs(distFromMiddleV));
                 int skyTexY = (int) (v * texHeight);

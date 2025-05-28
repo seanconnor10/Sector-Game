@@ -7,22 +7,23 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.ArrayDeque;
 import java.util.Enumeration;
+import java.util.Queue;
 
 public class Network {
     public static Network Instance = new Network();
 
     public static final int SERVER_PORT = 41571;
 
+    private Queue<byte[]> toSend = new ArrayDeque<>();
+    private Queue<byte[]> forGameWorldToProcess = new ArrayDeque<>();
+
     public DatagramChannel serverChannel;
 
     public DatagramChannel clientChannel;
 
     public InetSocketAddress clientSendAddress;
-    public String sendAddressIp = "";
-
-    public byte[] receivedData = new byte[1024];
-    public byte[] sendData = new byte[1024];
 
     public void step() {
         if (serverChannel != null && clientChannel != null) {
@@ -105,19 +106,38 @@ public class Network {
         }
     }
 
-    private boolean isHost() {
+    public boolean isHost() {
         return serverChannel != null;
     }
 
-    private void stepClient() {
-        String message = Gdx.input.isKeyPressed(Input.Keys.W) ? "Key Is Pressed!" : "nope";
-        sendData = message.getBytes();
+    public boolean isClient() {
+        return clientChannel != null;
+    }
 
-        ByteBuffer bb = ByteBuffer.wrap(sendData);
-        try {
-            clientChannel.send(bb, clientSendAddress);
-        } catch (IOException e) {
-            System.out.println("Exception sending as client");
+    public void send(byte[] data) {
+        if (!isClient() || isHost()) {
+            return;
+        }
+
+        toSend.add(data);
+    }
+
+    //////////////////////////////////
+
+    private void stepClient() {
+        int sends = 0;
+        while(!toSend.isEmpty()) {
+            byte[] data = toSend.poll();
+            try {
+                clientChannel.send(ByteBuffer.wrap(data), clientSendAddress);
+            } catch (IOException e) {
+                System.out.println("Exception sending as client");
+            }
+            sends++;
+            if (sends > 100) {
+                System.out.println("Over 100 Sends this frame");
+                break;
+            }
         }
     }
 
@@ -125,20 +145,26 @@ public class Network {
         try {
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             SocketAddress remoteAdd = serverChannel.receive(buffer);
-            String message = extractMessage(buffer);
-            System.out.println("Client at #" + remoteAdd + "  sent: " + message);
+            byte[] bytes = extractMessage(buffer);
+            String asString = new String(bytes);
+            if (remoteAdd != null) {
+                System.out.println("Client at " + remoteAdd + "  sent: " + asString);
+                if (forGameWorldToProcess.size() < 1024) {
+                    forGameWorldToProcess.add(bytes);
+                }
+            }
         } catch (IOException e) {
             System.out.println("Exception recieving messages");
         }
     }
 
-    private String extractMessage(ByteBuffer buffer) {
+    private byte[] extractMessage(ByteBuffer buffer) {
         buffer.flip();
 
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
 
-        return new String(bytes);
+        return bytes;
     }
 
     private InetAddress getWifiAddress() {

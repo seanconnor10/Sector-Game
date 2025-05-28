@@ -318,4 +318,10 @@ public class CommandExecutor {
         return null;
     }
 
+    @ConsoleCommand(helpText="Destroy GameWorld")
+    public String destroy_world() {
+        app.destroyWorld();
+        return null;
+    }
+
 }
