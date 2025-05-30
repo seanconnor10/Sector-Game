@@ -11,11 +11,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.DragScrollListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.disector.*;
@@ -26,7 +29,11 @@ import com.disector.inputrecorder.InputRecorder;
 import com.disector.renderer.EditingSoftwareRenderer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
+
+import static com.badlogic.gdx.math.MathUtils.floor;
 
 public class Editor2 implements EditorInterface {
     static BitmapFont font = new BitmapFont(Gdx.files.local("assets/font/fira.fnt"));
@@ -43,6 +50,7 @@ public class Editor2 implements EditorInterface {
     public Skin skin;
 
     private Table materialsPanel;
+    private Actor materialBlockContainer;
     private List<MaterialBlock> materialBlocks = new ArrayList<>();
 
     public ActiveSelection activeSelection;
@@ -51,6 +59,7 @@ public class Editor2 implements EditorInterface {
     Table viewPanel;
 
     public EditorMode mode = EditorMode.NORMAL;
+
     public enum EditorMode {
         NORMAL, VIEW_MOVEMENT;
     }
@@ -76,13 +85,16 @@ public class Editor2 implements EditorInterface {
 
     @Override
     public void step(float deltaTime) {
+        //Horrible temporay thing
+        //rearrangeMaterialsPanel();
+
         Rectangle viewRect = getViewPanelRect();
 
         if (mode == EditorMode.VIEW_MOVEMENT) {
             //shouldUpdateViewRenderer = true;
             viewRenderer.camR -= InputRecorder.mouseDeltaX / 250;
             viewRenderer.camVLook -= InputRecorder.mouseDeltaY / 2;
-            Gdx.input.setCursorPosition( (int) (viewRect.x + viewRect.width / 2), Gdx.graphics.getHeight() - (int) (viewRect.y + viewRect.height / 2) );
+            Gdx.input.setCursorPosition((int) (viewRect.x + viewRect.width / 2), Gdx.graphics.getHeight() - (int) (viewRect.y + viewRect.height / 2));
             if (!Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
                 mode = EditorMode.NORMAL;
             }
@@ -95,7 +107,7 @@ public class Editor2 implements EditorInterface {
             }
         }
 
-        if(mouseIn(viewRect)) {
+        if (mouseIn(viewRect)) {
             moveViewWithKeyBoard(deltaTime);
         }
     }
@@ -118,7 +130,7 @@ public class Editor2 implements EditorInterface {
             regionH = 1.f;
         } else {
             regionW = 1.f;
-            regionH =  viewAspectRatio / panelAspectRatio;
+            regionH = viewAspectRatio / panelAspectRatio;
         }
 
         Texture viewTex = viewRenderer.copyPixelsAsTexture();
@@ -131,7 +143,7 @@ public class Editor2 implements EditorInterface {
         stage.draw();
 
         //Draw 3D view
-        batch.draw(viewTex, viewRect.x, viewRect.y, viewRect.width, viewRect.height,(int)(((1.f - regionW)*viewTex.getWidth())/2f), (int)(((1.f -regionH)*viewTex.getHeight())/2f), (int)(viewTex.getWidth()*regionW), (int)(viewTex.getHeight()*regionH), false, true);
+        batch.draw(viewTex, viewRect.x, viewRect.y, viewRect.width, viewRect.height, (int) (((1.f - regionW) * viewTex.getWidth()) / 2f), (int) (((1.f - regionH) * viewTex.getHeight()) / 2f), (int) (viewTex.getWidth() * regionW), (int) (viewTex.getHeight() * regionH), false, true);
 
         toDispose.addAll(drawMaterialsPanel(batch));
 
@@ -285,17 +297,28 @@ public class Editor2 implements EditorInterface {
             return null;
 
         Table main = new Table(skin);
+        Table upper = new Table(skin);
+        upper.add(new Button(skin)).height(30);
+        Table lower = new Table(skin);
+        ScrollPane pane = new ScrollPane(lower);
+        materialBlockContainer = pane;
+        pane.setScrollbarsVisible(true);
 
-        int i=0;
+
+        int i = 0;
         for (Material m : app.materials) {
             i++;
             MaterialBlock block = setupMaterialBlock(m);
             materialBlocks.add(block);
-            main.add(block).width(96).height(96);
-            if (i%5 == 0) {
-                main.row();
+            lower.add(block).width(96).height(96).pad(4);
+            if (i % 4 == 0) {
+                lower.row();
             }
         }
+
+        main.add(upper);
+        main.row();
+        main.add(pane);
 
         return main;
     }
@@ -321,7 +344,42 @@ public class Editor2 implements EditorInterface {
     private boolean mouseIn(Rectangle rect) {
         int x = Gdx.input.getX();
         int y = Gdx.graphics.getHeight() - Gdx.input.getY();
-        return x > rect.x && x < rect.x+rect.width && y > rect.y && y < rect.y+rect.height;
+        return x > rect.x && x < rect.x + rect.width && y > rect.y && y < rect.y + rect.height;
+    }
+
+    private void rearrangeMaterialsPanel() {
+        SnapshotArray<Actor> snap = materialBlockContainer.getParent().getChildren();//materialsPanel.getChildren();
+
+        Actor[] actors = snap.begin();
+
+        //Get actors that are instanceof Material Block
+        Stream<Actor> stream = Arrays.stream(actors).filter((b) -> {
+            return b instanceof MaterialBlock;
+        });
+        MaterialBlock[] blocks = stream.toArray(MaterialBlock[]::new);
+
+        snap.end();
+
+        //Remove Material Block instances
+        for (MaterialBlock b : blocks) {
+            materialsPanel.removeActor(b);
+        }
+
+        //Temp fix remove all
+        materialsPanel.clear();
+
+        //Re-add blocks with differing column width
+        int columns = floor( (materialsPanel.getWidth()-96) / 96);
+        columns = Math.max(1, columns);
+        int i=0;
+        for(MaterialBlock b : blocks) {
+            i++;
+            materialsPanel.add(b).width(96).height(96);
+            if (i%columns == 0) {
+                materialsPanel.row();
+            }
+        }
+
     }
 
     private void moveViewWithKeyBoard(float dt) {
@@ -337,17 +395,17 @@ public class Editor2 implements EditorInterface {
             //shouldUpdateViewRenderer = true;
         }
         if (input.isDown(Input.Keys.LEFT)) {
-            viewRenderer.camR += 2*dt;
+            viewRenderer.camR += 2 * dt;
             //shouldUpdateViewRenderer = true;
         }
         if (input.isDown(Input.Keys.RIGHT)) {
-            viewRenderer.camR -= 2*dt;
+            viewRenderer.camR -= 2 * dt;
             //shouldUpdateViewRenderer = true;
         }
 
         //Moving
-        float moveDist = 100*dt;
-        if (shift) moveDist*=3;
+        float moveDist = 100 * dt;
+        if (shift) moveDist *= 3;
 
         if (input.isDown(Input.Keys.W)) {
             viewRenderer.camX += (float) Math.cos(viewRenderer.camR) * moveDist;
@@ -360,13 +418,13 @@ public class Editor2 implements EditorInterface {
             //shouldUpdateViewRenderer = true;
         }
         if (input.isDown(Input.Keys.A)) {
-            viewRenderer.camX += (float) Math.cos(viewRenderer.camR + Math.PI/2) * moveDist;
-            viewRenderer.camY += (float) Math.sin(viewRenderer.camR + Math.PI/2) * moveDist;
+            viewRenderer.camX += (float) Math.cos(viewRenderer.camR + Math.PI / 2) * moveDist;
+            viewRenderer.camY += (float) Math.sin(viewRenderer.camR + Math.PI / 2) * moveDist;
             //shouldUpdateViewRenderer = true;
         }
         if (input.isDown(Input.Keys.D)) {
-            viewRenderer.camX -= (float) Math.cos(viewRenderer.camR + Math.PI/2) * moveDist;
-            viewRenderer.camY -= (float) Math.sin(viewRenderer.camR + Math.PI/2) * moveDist;
+            viewRenderer.camX -= (float) Math.cos(viewRenderer.camR + Math.PI / 2) * moveDist;
+            viewRenderer.camY -= (float) Math.sin(viewRenderer.camR + Math.PI / 2) * moveDist;
             //shouldUpdateViewRenderer = true;
         }
         if (input.isDown(Input.Keys.E)) {
