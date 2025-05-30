@@ -13,17 +13,20 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.disector.*;
-import com.disector.assets.PixmapContainer;
 import com.disector.inputrecorder.InputChainInterface;
 import com.disector.inputrecorder.InputChainNode;
 import com.disector.inputrecorder.InputChainStage;
 import com.disector.inputrecorder.InputRecorder;
 import com.disector.renderer.EditingSoftwareRenderer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Editor2 implements EditorInterface {
     static BitmapFont font = new BitmapFont(Gdx.files.local("assets/font/fira.fnt"));
@@ -39,11 +42,13 @@ public class Editor2 implements EditorInterface {
     public InputChainStage stage;
     public Skin skin;
 
+    private Table materialsPanel;
+    private List<MaterialBlock> materialBlocks = new ArrayList<>();
+
     public ActiveSelection activeSelection;
 
     public EditingSoftwareRenderer viewRenderer;
     Table viewPanel;
-    Table testMaterialBlock;
 
     public EditorMode mode = EditorMode.NORMAL;
     public enum EditorMode {
@@ -141,27 +146,29 @@ public class Editor2 implements EditorInterface {
 
     private Array<Texture> drawMaterialsPanel(SpriteBatch batch) {
         Array<Texture> toDispose = new Array<>();
-        toDispose.add(drawMaterialBlock(testMaterialBlock, app.materials.get(0), batch));
+        for (MaterialBlock e : materialBlocks) {
+            toDispose.add(drawMaterialBlock(e, batch));
+        }
         return toDispose;
     }
 
-    private Texture drawMaterialBlock(Table materialBlock, Material m, SpriteBatch batch) {
-        //Material m = app.materials.get();
-        Pixmap tex;
+    private class MaterialBlock extends Table {
+        Material mat;
 
-        if (m == null) {
-            tex = app.ERROR_TEXTURE[0];
-        } else {
-            tex = m.tex[0];
-        }
+    }
+
+    private Texture drawMaterialBlock(MaterialBlock materialBlock, SpriteBatch batch) {
+        //Material m = app.materials.get();
+        Pixmap tex = materialBlock.mat.tex[0];
 
         Vector2 pos = materialBlock.localToScreenCoordinates(new Vector2());
         pos.y = Gdx.graphics.getHeight() - pos.y;
         Rectangle r = new Rectangle(pos.x, pos.y, materialBlock.getWidth(), materialBlock.getHeight());
 
-        //Gen and store texture preferably..
+        //Gen and store texture preferably...
         Texture toDispose = new Texture(tex);
-        batch.draw(toDispose, r.x, r.y, r.width, r.height);
+        //batch.draw(toDispose, r.x, r.y, r.width, r.height);
+        //batch.draw(toDispose, r.x, r.y, r.width, r.height);
 
         return toDispose;
 
@@ -228,18 +235,18 @@ public class Editor2 implements EditorInterface {
         Table main1 = new Table(skin);
         Table main2 = new Table(skin);
         Table main3 = new Table(skin);
-        Table main4 = setupMaterialsPanel();
+        materialsPanel = setupMaterialsPanel();
         main1.setColor(BG_COLOR);
         main2.setColor(BG_COLOR);
         main3.setColor(BG_COLOR);
-        main4.setColor(BG_COLOR);
+        materialsPanel.setColor(BG_COLOR);
         main1.setBackground("headerless_window");
         main2.setBackground("headerless_window");
         main3.setBackground("headerless_window");
-        main4.setBackground("headerless_window");
+        materialsPanel.setBackground("headerless_window");
         Table midRightContainer = new Table(skin);
         SplitPane midSecondarySplitR = new SplitPane(main2, main3, true, skin);
-        SplitPane midSecondarySplitL = new SplitPane(main4, main1, true, skin);
+        SplitPane midSecondarySplitL = new SplitPane(materialsPanel, main1, true, skin);
         SplitPane midMainSplit = new SplitPane(midSecondarySplitL, midSecondarySplitR, false, skin);
         midMainSplit.setMinSplitAmount(0.1f);
         midSecondarySplitL.setMinSplitAmount(0.1f);
@@ -279,16 +286,26 @@ public class Editor2 implements EditorInterface {
 
         Table main = new Table(skin);
 
-        testMaterialBlock = setupMaterialBlock(app.materials.get(0));
-        main.add(testMaterialBlock).width(128).height(128);
+        int i=0;
+        for (Material m : app.materials) {
+            i++;
+            MaterialBlock block = setupMaterialBlock(m);
+            materialBlocks.add(block);
+            main.add(block).width(96).height(96);
+            if (i%5 == 0) {
+                main.row();
+            }
+        }
 
         return main;
     }
 
-
-    private com.badlogic.gdx.scenes.scene2d.ui.Button setupMaterialBlock(Material mat) {
-        Button t = new Button(skin);
-        return t;
+    private MaterialBlock setupMaterialBlock(Material mat) {
+        MaterialBlock block = new MaterialBlock();
+        block.mat = mat;
+        Image img = new Image(new Scene2DTexture(mat.tex[0]));
+        block.add(img).width(96).height(96);
+        return block;
     }
 
     private Rectangle getViewPanelRect() {
